@@ -10,9 +10,11 @@ const UserSchema = new Schema(
       type: String,
       required: false,
     },
-    password: { type: String, required: true },
+    password: { 
+      type: String, 
+      required: true },
     phone: {
-      type: Number,
+      type: String,
       required: true,
       unique: true,
     },
@@ -24,7 +26,7 @@ const UserSchema = new Schema(
       type: String,
       required: false,
     },
-    post: [
+    posts: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "post",
