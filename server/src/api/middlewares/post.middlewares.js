@@ -1,36 +1,35 @@
-import multer from "multer";
-import Joi from "joi";
-
+import multer from 'multer';
+import fs from 'fs';
 const postMiddleware = {
   formatFileUpload: (nameUpload, options) => {
-    const DIR = "./public/";
+    const DIR = '/src/api/upload/';
     const storage = multer.diskStorage({
       destination: (req, file, cb) => {
-        cb(null, DIR);
+        cb(null, process.cwd() + DIR);
       },
       filename: (req, file, cb) => {
-        const fileName = file.originalname.toLowerCase().split(" ").join("-");
-        cb(null, Date.now() + "-" + fileName);
+        const fileName = file.originalname.toLowerCase().split(' ').join('-');
+        cb(null, Date.now() + '-' + fileName);
       },
     });
     const upload = multer({
       storage,
       fileFilter: (req, file, cb) => {
         if (
-          file.mimetype == "image/png" ||
-          file.mimetype == "image/jpg" ||
-          file.mimetype == "image/jpeg"
+          file.mimetype == 'image/png' ||
+          file.mimetype == 'image/jpg' ||
+          file.mimetype == 'image/jpeg'
         ) {
           cb(null, true);
         } else {
           cb(null, false);
-          return cb(new Error("Only .png, .jpg and .jpeg format allowed!"));
+          return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
         }
       },
     });
-    if (options === "single") {
+    if (options === 'single') {
       return upload.single(nameUpload);
-    } else if (options === "multiple") {
+    } else if (options === 'multiple') {
       return upload.array(nameUpload);
     }
   },

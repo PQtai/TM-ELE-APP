@@ -1,40 +1,57 @@
-import { Post } from "../models/index.js";
-import errorFunction from "../utils/errorFunction.js";
+import { Post } from '../models/index.js';
+import errorFunction from '../utils/errorFunction.js';
+import fs from 'fs';
+import path from 'path';
 
 const postControllers = {
+  // [Get]/all
   index: async (req, res, next) => {
     try {
-      const users = await User.find({});
-      res.status(200).json(users);
+      const posts = await Post.find({});
+      res
+        .status(200)
+        .json(errorFunction(false, 200, 'Find post is succesfully', posts));
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json(errorFunction(true, 500, error.message));
     }
   },
-  // [Get]/user/:id
+  // [Get]/post/:id
   show: async (req, res, next) => {
     try {
-      const user = await User.findOne({ _id: req.params.id });
-      res.status(201).json(user);
+      const post = await Post.findOne({ _id: req.params.id });
+      res
+        .status(201)
+        .json(
+          errorFunction(false, 201, 'Find detail post is succesfully', post)
+        );
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json(errorFunction(true, 500, error.message));
     }
   },
   //[Post]file/upload
   upload: async (req, res, next) => {
     try {
-      const url = req.protocol + "://" + req.get("host");
+      const __dirname = path.resolve();
+      const _url = req.protocol + '://' + req.get('host');
       const listImg = req.files.map((img) => {
-        return (img.filename = url + "/public/" + img.filename);
+        return {
+          url:
+            _url +
+            fs.readFileSync(
+              path.join(__dirname + '/src/api/upload/' + img.filename)
+            ),
+          contentType: img.mimetype,
+        };
       });
       const post = await Post.create({
         ...req.body,
-        image: listImg,
+        images: listImg,
       });
       post.save().then((newPost) => {
         res
           .status(201)
           .json(
-            errorFunction(false, 201, "Create post is succesfully", newPost)
+            errorFunction(false, 201, 'Create post is succesfully', newPost)
           );
       });
     } catch (error) {
