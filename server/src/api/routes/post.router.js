@@ -6,14 +6,14 @@ import validateMiddleware from '../middlewares/validate.middleware.js';
 const router = express.Router();
 router.post(
   '/create',
-  validateMiddleware('body', postSchemas),
-  formatFileUpload('postImgs', 'multiple'),
+  formatFileUpload('image', 'multiple'),
+  validateMiddleware('body', postSchemas.postCreate),
   postControllers.upload
 );
-router.get('/', (req, res, next) => {
-  res.status(200).json({
-    code: 1,
-    mess: 'hello may con vo',
-  });
-});
+router.get(
+  '/:id',
+  validateMiddleware('params', postSchemas.postDetail),
+  postControllers.show
+);
+router.get('/', postControllers.index);
 export default router;
