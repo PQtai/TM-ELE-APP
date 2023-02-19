@@ -10,6 +10,8 @@ router.post(
   validateMiddleware('body', postSchemas.postCreate),
   postControllers.upload
 );
+router.delete('/delete', postControllers.delete);
+
 router.get(
   '/:id',
   validateMiddleware('params', postSchemas.postDetail),

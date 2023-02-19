@@ -3,10 +3,10 @@ const { Schema } = mongoose;
 const PostSchema = new Schema(
   {
     title: { type: String, required: true },
-    address: { type: String, required: true, unique: true },
+    address: { type: String, required: true },
     images: [
       {
-        url: Buffer,
+        url: { type: String },
         contentType: { type: String },
       },
     ],
