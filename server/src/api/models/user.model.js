@@ -12,13 +12,19 @@ const UserSchema = new Schema(
     },
     password: { 
       type: String, 
-      required: true },
+      required: true 
+    },
     phone: {
       type: String,
       required: true,
       unique: true,
     },
-    isAdmin: {
+    email: {
+      type: String,
+      required: false,
+      unique: true,
+    },
+    role: {
       type: String,
       default: "user",
     },
@@ -32,6 +38,15 @@ const UserSchema = new Schema(
         ref: "post",
       },
     ],
+    isLocked: {
+      type: Boolean,
+      default: false,
+    },
+    evaluate: {
+      type: Number,
+      maximum: 5,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

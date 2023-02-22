@@ -8,11 +8,6 @@ const CommentSchema = new Schema(
       ref: "user",
       require: true,
     },
-    post: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "post",
-      require: true,
-    },
     des: { type: "string", minlength: 2, maxlength: 50 },
     message: [
       {
