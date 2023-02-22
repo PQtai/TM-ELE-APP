@@ -1,7 +1,8 @@
 import { Post } from '../models/index.js';
 import errorFunction from '../utils/errorFunction.js';
 import fs from 'fs';
-import path from 'path';
+import uploads from '../utils/cloudinary.js';
+// import path from 'path';
 
 const postControllers = {
   // [Get]/all
@@ -31,18 +32,22 @@ const postControllers = {
   //[Post]file/upload
   upload: async (req, res, next) => {
     try {
-      const __dirname = path.resolve();
-      const _url = req.protocol + '://' + req.get('host');
-      const listImg = req.files.map((img) => {
-        return {
-          url:
-            _url +
-            fs.readFileSync(
-              path.join(__dirname + '/src/api/upload/' + img.filename)
-            ),
-          contentType: img.mimetype,
-        };
-      });
+      const uploader = async (path) => await uploads(path, 'Images');
+      const files = req.files;
+      const listImg = [];
+      for (const file of files) {
+        const { path, mimetype } = file;
+        const newPath = await uploader(path);
+        const _link = newPath.url;
+        console.log('_link', _link);
+        fs.unlinkSync(path);
+        listImg.push({
+          url: _link,
+          contentType: mimetype,
+        });
+      }
+      console.log('listImg', listImg);
+
       const post = await Post.create({
         ...req.body,
         images: listImg,
@@ -57,6 +62,18 @@ const postControllers = {
     } catch (error) {
       res.status(500).json(error.message);
     }
+  },
+  // /[Delete]/delete
+  delete: async (req, res, next) => {
+    Post.deleteMany()
+      .then(function () {
+        res
+          .status(201)
+          .json(errorFunction(false, 201, 'delete all post is succesfully'));
+      })
+      .catch(function (error) {
+        res.status(500).json(error.message);
+      });
   },
 };
 export default postControllers;
