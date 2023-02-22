@@ -10,13 +10,21 @@ const UserSchema = new Schema(
       type: String,
       required: false,
     },
-    password: { type: String, required: true },
+    password: { 
+      type: String, 
+      required: true 
+    },
     phone: {
-      type: Number,
+      type: String,
       required: true,
       unique: true,
     },
-    isAdmin: {
+    email: {
+      type: String,
+      required: false,
+      unique: true,
+    },
+    role: {
       type: String,
       default: "user",
     },
@@ -24,12 +32,21 @@ const UserSchema = new Schema(
       type: String,
       required: false,
     },
-    post: [
+    posts: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "post",
       },
     ],
+    isLocked: {
+      type: Boolean,
+      default: false,
+    },
+    evaluate: {
+      type: Number,
+      maximum: 5,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
