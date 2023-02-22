@@ -1,5 +1,4 @@
-const bycrypt = require("bcryptjs");
-import bycrypt from "bcryptjs";
+import bycrypt from "bcrypt";
 
 const encryptionPassword = async (password) => {
   const salt = await bycrypt.genSalt(10);
