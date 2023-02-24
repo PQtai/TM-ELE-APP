@@ -1,16 +1,16 @@
 @import 'normalize.css';
 
 :root {
-   --primary: #fe2c55;
+   --primary: #ffc96f;
+   --background-color: #fffbf2;
    --black: #000;
    --white: #fff;
    --text-color: #161823;
    --font-family: 'Quicksand', sans-serif;
 
    // Default layout
-   --default-layout-header-height: 60px;
-   // 1824px
-   --default-layout-width: 114rem;
+   --default-layout-space-header: 20px;
+   --default-layout-width: 1824px;
    --default-layout-horizontal-spacer: 24px;
 }
 
@@ -59,6 +59,24 @@ input,
 a {
    color: var(--text-color);
    text-decoration: none;
+}
+.wrapper {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.container {
+   width: var(--default-layout-width);
+   max-width: 100%;
+   padding: 0 var(--default-layout-horizontal-spacer);
+   margin: var(--default-layout-space-header) 0;
+   display: flex;
+   flex-direction: column;
+}
+
+.content {
+   flex: 1;
 }
 
 // // Fonts emmbeded

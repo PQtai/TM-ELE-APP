@@ -1,6 +1,6 @@
 import React from 'react';
 
-const overview = () => {
+const overview: React.FC = () => {
    return <div>overview</div>;
 };
 

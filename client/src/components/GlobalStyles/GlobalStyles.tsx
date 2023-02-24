@@ -1,17 +1,10 @@
 import PropTypes from 'prop-types';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
+import { IChildrenComponentProps } from '~/types/models/global';
 import './GlobalStyles.scss';
 
-interface ParentComponentProps {
-   children: ReactNode;
-}
-
-function GlobalStyles({ children }: ParentComponentProps) {
-   return <div>{children}</div>;
-}
-
-GlobalStyles.propTypes = {
-   children: PropTypes.node.isRequired,
+const GlobalStyles: React.FC<IChildrenComponentProps> = ({ children }) => {
+   return <>{children}</>;
 };
 
 export default GlobalStyles;
