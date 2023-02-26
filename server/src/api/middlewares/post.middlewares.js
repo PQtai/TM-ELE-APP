@@ -1,5 +1,4 @@
 import multer from 'multer';
-import fs from 'fs';
 const postMiddleware = {
   formatFileUpload: (nameUpload, options) => {
     const DIR = '/src/api/upload/';
