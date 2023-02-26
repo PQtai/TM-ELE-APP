@@ -7,19 +7,27 @@ const postSchemas = {
     images: [Joi.string().min(2)],
     otherInfo: Joi.number(),
     status: {
-      code: Joi.number().valid(0, 1, 2).default(2),
-      mess: Joi.string().default('Đợi duyệt'),
+      code: Joi.number().valid(0, 1, 2, 9).default(2),
     },
     acreage: Joi.number().positive().precision(2),
     price: Joi.number().positive(),
     deposit: Joi.number().positive(),
     description: Joi.string().min(10).max(1500).required(),
     evaluate: Joi.number().positive().precision(2),
-    // user: Joi.string().required(),
+    userId: Joi.string().required(),
+  }),
+  postEditStatus: Joi.object().keys({
+    code: Joi.number().valid(0, 1, 2, 9).default(2),
+    postId: Joi.string().required(),
+    mess: Joi.string().when('code', {
+      is: Joi.valid(0),
+      then: Joi.string().required(),
+      otherwise: Joi.forbidden(),
+    }),
   }),
   postList: Joi.object().keys({
-    page: Joi.number().required(),
-    pageSize: Joi.number().required(),
+    page: Joi.number().min(1).required(),
+    pageSize: Joi.number().max(20).required(),
   }),
   postDetail: Joi.object({
     id: Joi.string().min(1).required(),
