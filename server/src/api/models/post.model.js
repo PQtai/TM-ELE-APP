@@ -13,7 +13,7 @@ const PostSchema = new Schema(
     otherInfo: { type: Number },
     status: {
       code: { type: Number, default: 2 },
-      mess: { type: String, default: 'Đợi duyệt' },
+      mess: { type: String, minlength: 10 },
     },
     acreage: { type: Number, required: true },
     price: { type: Number, required: true },
@@ -25,10 +25,10 @@ const PostSchema = new Schema(
       maxLength: 15000,
     },
     evaluate: { type: Number, max: 5, default: 0 },
-    // user: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'user',
-    // },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+    },
   },
   { timestamps: true }
 );
@@ -38,3 +38,4 @@ export { Post, PostSchema };
 // 0 từ chôi
 // 1 xác nhận
 // 2 đợi duyệt
+// 9 tin bị ẩn
