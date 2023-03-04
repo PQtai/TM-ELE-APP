@@ -2,16 +2,19 @@
 
 :root {
    --primary: #ffc96f;
-   --background-color: #fffbf2;
+   --background-color: #f0f2f5;
+   --background-color-sidebar: #3d3d44;
    --black: #000;
    --white: #fff;
    --text-color: #161823;
    --font-family: 'Quicksand', sans-serif;
-
+   --icon-color: #7b809a;
    // Default layout
-   --default-layout-space-header: 20px;
+   --default-layout-height-nav: 36px;
    --default-layout-width: 1824px;
    --default-layout-horizontal-spacer: 24px;
+   //height
+   --navbar-height: 70px;
 }
 
 * {
@@ -48,12 +51,16 @@ html *::-webkit-scrollbar-track {
    border-radius: 0;
    background-color: rgba(0, 0, 0, 0);
 }
+button {
+   cursor: pointer;
+}
 
 button,
 input,
 [tabindex] {
    outline: none;
    border: none;
+   background-color: transparent;
 }
 
 a {
@@ -65,64 +72,19 @@ a {
    flex-direction: column;
    align-items: center;
 }
+ul,
+li {
+   list-style: none;
+}
 
 .container {
    width: var(--default-layout-width);
    max-width: 100%;
    padding: 0 var(--default-layout-horizontal-spacer);
-   margin: var(--default-layout-space-header) 0;
    display: flex;
    flex-direction: column;
 }
 
 .content {
    flex: 1;
-}
-
-// // Fonts emmbeded
-// @font-face {
-//    font-family: ProximaNova;
-//    src: url('/assets/fonts/Proxima-Nova-Regular.woff2');
-//    font-weight: 400;
-// }
-
-// @font-face {
-//    font-family: ProximaNova;
-//    src: url('/assets/fonts/ProximaNova-Semibold.woff2');
-//    font-weight: 600;
-// }
-
-// @font-face {
-//    font-family: ProximaNova;
-//    src: url('/assets/fonts/Proxima-Nova-Bold.woff');
-//    font-weight: 700;
-// }
-
-// @font-face {
-//    font-family: SofiaPro;
-//    src: url('/assets/fonts/sofiapro-bold.woff');
-//    font-weight: 700;
-// }
-
-// Custom tippy tooltip
-body {
-   .tippy-box {
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 1.6rem;
-      line-height: 2.2rem;
-      background-color: rgba(84, 84, 84, 0.92);
-   }
-
-   .tippy-arrow {
-      color: rgba(84, 84, 84, 0.92);
-   }
-
-   .tippy-content {
-      padding: 8px 9px;
-   }
-
-   .tippy-box[data-placement^='bottom'] > .tippy-arrow:before {
-      top: -8px;
-   }
 }
