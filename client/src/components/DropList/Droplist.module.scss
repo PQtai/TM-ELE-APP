@@ -1,0 +1,9 @@
+.dropList {
+   display: flex;
+   flex-direction: column;
+   .dropShow {
+      svg {
+         transition: transform 0.2s linear;
+      }
+   }
+}

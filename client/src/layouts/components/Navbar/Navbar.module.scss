@@ -1,0 +1,58 @@
+.navbarWrap {
+   color: #111;
+   position: fixed;
+   top: 30px;
+   width: calc((9.6 * 100%) / 12);
+   height: var(--navbar-height);
+   right: 0;
+   transition: width 0.5s ease-in-out;
+
+   .navbar {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 20px 0 20px;
+      button {
+         padding: 10px;
+         font-size: 1.8rem;
+         color: var(--icon-color);
+      }
+      .btnCustomSidebar {
+      }
+      .navSetting {
+         display: flex;
+         .btnNotif {
+            position: relative;
+            margin-right: 20px;
+            > span {
+               position: absolute;
+               bottom: 60%;
+               background-color: red;
+               padding: 2px 6px;
+               text-align: center;
+               color: #ffffff;
+               font-size: 1.4rem;
+               right: -6px;
+               border-radius: 50%;
+            }
+         }
+      }
+   }
+}
+.navbarFixed {
+   top: 20px;
+   .navbar {
+      z-index: 999;
+      box-shadow: rgba(255, 255, 255, 0.9) 0rem 0rem 0.0625rem 0.0625rem inset,
+         rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem;
+      backdrop-filter: saturate(200%) blur(1.875rem);
+      background-color: rgba(255, 255, 255, 0.3);
+      color: rgb(52, 71, 103);
+      border-radius: 0.75rem;
+      padding: 0.5rem 0px;
+   }
+}
+.navbarWrap.customNav {
+   width: calc((11 * 100%) / 12);
+}
