@@ -20,8 +20,3 @@ const CommentSchema = new Schema(
 );
 const Comment = mongoose.model('comment', CommentSchema);
 export { Comment, CommentSchema };
-
-// message: {
-//     from : {type : "userPost/userComment"},
-//     text : {type : "string" , minlength : 2 , maxlength : 50}
-// }
