@@ -5,25 +5,19 @@ import { encryptionPassword } from "../utils/encryption.js";
 import { response } from "express";
 import bycrypt from "bcryptjs";
 import nodemailer from "nodemailer";
-
-var transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: "minhhieu.tran.mcs@gmail.com",
-    pass: "fbgpttxpfsoavkms",
-  },
-});
+import mailer from "../utils/mailer.js";
+import generateToken from "../utils/generateToken.js";
 
 let refreshTokens = [];
 
 const userControllers = {
   //REGISTER
+  // ở hàm register cần nghiên cứu thêm về tính năng verify email.
+  // tạo 1 biến hashedEmail dùng bcrypt để hash email sau đó so sánh
+  // sử dụng nodeMailer để gửi email và so sánh, nếu trùng thì gửi token verify...
   registerAccount: async (req, res, next) => {
     try {
-      const { firstName, lastName,  avatar, role, email, phone, password } =
-        req.body;
+      const { firstName, lastName, avatar, email, phone, password } = req.body;
 
       // Check account already exists?
       const existingPhone = await User.findOne({
@@ -41,7 +35,6 @@ const userControllers = {
           email,
           phone,
           avatar,
-          role
         });
         // const newUser = await User.create(req.body)
         if (newUser) {
@@ -58,29 +51,29 @@ const userControllers = {
     }
   },
 
-  // GENERATE ACCESS TOKEN
-  generateAccessToken: (user) => {
-    return jwt.sign(
-      {
-        id: user.id,
-        role: user.role,
-      },
-      process.env.JWT_ACCESSTOKEN_KEY,
-      { expiresIn: "3d" }
-    );
-  },
+  // // GENERATE ACCESS TOKEN
+  // generateAccessToken: (user) => {
+  //   return jwt.sign(
+  //     {
+  //       id: user.id,
+  //       role: user.role,
+  //     },
+  //     process.env.JWT_ACCESSTOKEN_KEY,
+  //     { expiresIn: "3d" }
+  //   );
+  // },
 
-  // GENERATE REFRESH TOKEN
-  generateRefreshToken: (user) => {
-    return jwt.sign(
-      {
-        id: user.id,
-        role: user.role,
-      },
-      process.env.JWT_REFRESHTOKEN_KEY,
-      { expiresIn: "30d" }
-    );
-  },
+  // // GENERATE REFRESH TOKEN
+  // generateRefreshToken: (user) => {
+  //   return jwt.sign(
+  //     {
+  //       id: user.id,
+  //       role: user.role,
+  //     },
+  //     process.env.JWT_REFRESHTOKEN_KEY,
+  //     { expiresIn: "30d" }
+  //   );
+  // },
 
   // LOGIN
   login: async (req, res) => {
@@ -97,7 +90,9 @@ const userControllers = {
         if (user) {
           // check account lock status
           if (user.isLocked === true) {
-            return res.status(405).json(errorFunction(false, 405, 'Account has been locked'));
+            return res
+              .status(405)
+              .json(errorFunction(false, 405, "Account has been locked"));
           }
           // check password
           bycrypt.compare(password, user.password, function (err, result) {
@@ -106,8 +101,8 @@ const userControllers = {
             }
             if (result) {
               // create access token and refresh token
-              const accessToken = userControllers.generateAccessToken(user);
-              const refreshToken = userControllers.generateRefreshToken(user);
+              const accessToken = generateToken.accessToken(user);
+              const refreshToken = generateToken.refreshToken(user);
               refreshTokens.push(refreshToken);
 
               // Set cookies
@@ -141,6 +136,8 @@ const userControllers = {
     }
   },
 
+  loginWithOAuth: async (req, res) => {},
+
   requestRefreshToken: async (req, res) => {
     // Take refresh token from user
     const refreshToken = req.cookies.refreshToken;
@@ -154,8 +151,8 @@ const userControllers = {
       }
       refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
       // Create a new access token and refresh token
-      const newAccessToken = userControllers.generateAccessToken(user);
-      const newRefreshToken = userControllers.generateRefreshToken(user);
+      const newAccessToken = generateToken.accessToken(user);
+      const newRefreshToken = generateToken.refreshToken(user);
       refreshTokens.push(newRefreshToken);
       res.cookie("refreshToken", newRefreshToken, {
         httpOnly: true,
@@ -195,14 +192,43 @@ const userControllers = {
   // GET ALL USERS
   getAllUsers: async (req, res) => {
     try {
-      const result = await User.find({}).populate(
-        "posts",
-        "_id title images status price"
-      );
-      if (result.length > 0) {
+      const {
+        pageSize = 11,
+        pageNumber = 1,
+        role = "",
+        userByColumn,
+        userByDirection = "desc",
+      } = req.query;
+      const filter = {
+        $and: [
+          {
+            role: {
+              $regex: role,
+              $options: "$i",
+            },
+          },
+        ],
+      };
+      const filterUsers = await User.find(filter)
+      .populate("favourite", "_id title images status price")
+      .sort(`${userByDirection === 'asc' ? '' : '-'}${userByColumn}`)
+      .limit(pageSize * 1)
+      .skip((pageNumber - 1) * pageSize);
+
+      const allUsers = await User.find(filter)
+      let totalPage = 0
+      if (allUsers.length % pageSize === 0) {
+          totalPage = allUsers.length / pageSize
+      } else {
+          totalPage = parseInt(allUsers.length / pageSize) + 1
+      }
+      if (allUsers.length > 0) {
         res.status(200).json({
-          totalUsers: result.length,
-          users: result.reverse(),
+          totalPage: totalPage,
+          totalUsers: allUsers.length,
+          users: userByDirection && userByColumn 
+          ? filterUsers
+          : filterUsers.reverse(),
         });
       } else {
         res.status(200).json({
@@ -211,8 +237,9 @@ const userControllers = {
         });
       }
     } catch (error) {
+      console.log(error)
       res.status(500);
-      return res.json(errorFunction(true, 500, "Bad Request"));
+      return res.json(errorFunction(true, 500, error.massage));
     }
   },
 
@@ -260,13 +287,11 @@ const userControllers = {
       user.isLocked = true;
       await user.save();
 
-      const mailOptions = {
-        from: "minhhieu.tran.mcs@gmail.com",
-        to: user.email,
-        subject: "THÔNG BÁO VỀ VIỆC KHÓA TÀI KHOẢN",
-        text: "Buồn quá!",
-        html:
-          '<div style=" color: #721c24; padding: 1rem;">' +
+      mailer.sendMail(
+        user.email,
+        "THÔNG BÁO VỀ VIỆC KHÓA TÀI KHOẢN",
+        "Thật đáng tiếc!",
+        '<div style=" color: #721c24; padding: 1rem;">' +
           '<h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Tài khoản của bạn đã bị khóa</h2>' +
           '<h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Thông tin tài khoản bị khóa</h3>' +
           '<ul style="list-style-type: none; padding: 0; margin: 0;">' +
@@ -284,16 +309,43 @@ const userControllers = {
           '<li style="font-weight: bold;">Hotline: 0934968108</li>' +
           '<li style="font-weight: bold;">Email: HI.U@abc.com or phamquoctai@deptrai.com</li>' +
           "</ul>" +
-          "</div>",
-      };
+          "</div>"
+      );
 
-      transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          console.log("error: ", error);
-        } else {
-          console.log("Email sent: ", info.response);
-        }
-      });
+      // const mailOptions = {
+      //   from: "minhhieu.tran.mcs@gmail.com",
+      //   to: user.email,
+      //   subject: "THÔNG BÁO VỀ VIỆC KHÓA TÀI KHOẢN",
+      //   text: "Buồn quá!",
+      //   html:
+      //     '<div style=" color: #721c24; padding: 1rem;">' +
+      //     '<h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Tài khoản của bạn đã bị khóa</h2>' +
+      //     '<h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Thông tin tài khoản bị khóa</h3>' +
+      //     '<ul style="list-style-type: none; padding: 0; margin: 0;">' +
+      //     '<li style="font-weight: bold;">Email:</li>' +
+      //     "<li>" +
+      //     user.email +
+      //     "</li>" +
+      //     '<li style="font-weight: bold;">Số điện thoại:</li>' +
+      //     "<li>" +
+      //     user.phone +
+      //     "</li>" +
+      //     "</ul>" +
+      //     '<h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Thông tin liên hệ: </h3>' +
+      //     '<ul style="list-style-type: none; padding: 0; margin: 0;">' +
+      //     '<li style="font-weight: bold;">Hotline: 0934968108</li>' +
+      //     '<li style="font-weight: bold;">Email: HI.U@abc.com or phamquoctai@deptrai.com</li>' +
+      //     "</ul>" +
+      //     "</div>",
+      // };
+
+      // transporter.sendMail(mailOptions, function (error, info) {
+      //   if (error) {
+      //     console.log("error: ", error);
+      //   } else {
+      //     console.log("Email sent: ", info.response);
+      //   }
+      // });
       res
         .status(200)
         .json(
@@ -381,13 +433,11 @@ const userControllers = {
           if (!data) {
             return res.json(errorFunction(false, 404, "Bad request"));
           } else {
-            const mailOptions = {
-              from: "minhhieu.tran.mcs@gmail.com",
-              to: req.body.email,
-              subject: "Cung cấp lại mật khẩu Omoday",
-              text: "That was easy!",
-              html:
-                "<p>Đây là email tự động được gửi từ Omoday. Mật khẩu của bạn đã được cập nhật.</p><ul><li>Username: " +
+            mailer.sendMail(
+              req.body.email,
+              "Cung cấp lại mật khẩu Omoday",
+              "Đừng quên nữa nha :>",
+              "<p>Đây là email tự động được gửi từ Omoday. Mật khẩu của bạn đã được cập nhật.</p><ul><li>Username: " +
                 existingUser.phone +
                 "</li><li>Email: " +
                 existingUser.email +
@@ -395,16 +445,33 @@ const userControllers = {
                 randomPassword +
                 "</li></ul>" +
                 "<p>Để đảm bảo an toàn thông tin cá nhân, vui lòng đổi mật khẩu.</p>" +
-                "<p>Trân trọng!</p>",
-            };
+                "<p>Trân trọng!</p>"
+            );
 
-            transporter.sendMail(mailOptions, function (error, info) {
-              if (error) {
-                console.log("error: ", error);
-              } else {
-                console.log("Email sent: ", info.response);
-              }
-            });
+            // const mailOptions = {
+            //   from: "minhhieu.tran.mcs@gmail.com",
+            //   to: req.body.email,
+            //   subject: "Cung cấp lại mật khẩu Omoday",
+            //   text: "That was easy!",
+            //   html:
+            //     "<p>Đây là email tự động được gửi từ Omoday. Mật khẩu của bạn đã được cập nhật.</p><ul><li>Username: " +
+            //     existingUser.phone +
+            //     "</li><li>Email: " +
+            //     existingUser.email +
+            //     "</li><li>Password: " +
+            //     randomPassword +
+            //     "</li></ul>" +
+            //     "<p>Để đảm bảo an toàn thông tin cá nhân, vui lòng đổi mật khẩu.</p>" +
+            //     "<p>Trân trọng!</p>",
+            // };
+
+            // transporter.sendMail(mailOptions, function (error, info) {
+            //   if (error) {
+            //     console.log("error: ", error);
+            //   } else {
+            //     console.log("Email sent: ", info.response);
+            //   }
+            // });
             return res.json(
               errorFunction(false, 200, "Updated user's password successfully!")
             );
@@ -420,9 +487,13 @@ const userControllers = {
   // LOGOUT
   logout: async (req, res) => {
     res.clearCookie("refreshToken");
-    refreshTokens = refreshTokens.filter(token => token !== req.cookies.refreshToken);
-    return res.status(200).json(errorFunction(false, 200, "Logout successful!!!"))
-  }
+    refreshTokens = refreshTokens.filter(
+      (token) => token !== req.cookies.refreshToken
+    );
+    return res
+      .status(200)
+      .json(errorFunction(false, 200, "Logout successful!!!"));
+  },
 };
 
 export default userControllers;
