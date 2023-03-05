@@ -5,7 +5,7 @@ import { encryptionPassword } from "../utils/encryption.js";
 import { response } from "express";
 import bycrypt from "bcryptjs";
 import nodemailer from "nodemailer";
-import mailer from "../utils/mailer.js"
+import mailer from "../utils/mailer.js";
 import generateToken from "../utils/generateToken.js";
 
 let refreshTokens = [];
@@ -17,8 +17,7 @@ const userControllers = {
   // sử dụng nodeMailer để gửi email và so sánh, nếu trùng thì gửi token verify...
   registerAccount: async (req, res, next) => {
     try {
-      const { firstName, lastName,  avatar, email, phone, password } =
-        req.body;
+      const { firstName, lastName, avatar, email, phone, password } = req.body;
 
       // Check account already exists?
       const existingPhone = await User.findOne({
@@ -35,7 +34,7 @@ const userControllers = {
           password: hashedPassword,
           email,
           phone,
-          avatar
+          avatar,
         });
         // const newUser = await User.create(req.body)
         if (newUser) {
@@ -91,7 +90,9 @@ const userControllers = {
         if (user) {
           // check account lock status
           if (user.isLocked === true) {
-            return res.status(405).json(errorFunction(false, 405, 'Account has been locked'));
+            return res
+              .status(405)
+              .json(errorFunction(false, 405, "Account has been locked"));
           }
           // check password
           bycrypt.compare(password, user.password, function (err, result) {
@@ -135,9 +136,7 @@ const userControllers = {
     }
   },
 
-  loginWithOAuth: async (req, res) => {
-    
-  },
+  loginWithOAuth: async (req, res) => {},
 
   requestRefreshToken: async (req, res) => {
     // Take refresh token from user
@@ -193,14 +192,43 @@ const userControllers = {
   // GET ALL USERS
   getAllUsers: async (req, res) => {
     try {
-      const result = await User.find({}).populate(
-        "posts",
-        "_id title images status price"
-      );
-      if (result.length > 0) {
+      const {
+        pageSize = 11,
+        pageNumber = 1,
+        role = "",
+        userByColumn,
+        userByDirection = "desc",
+      } = req.query;
+      const filter = {
+        $and: [
+          {
+            role: {
+              $regex: role,
+              $options: "$i",
+            },
+          },
+        ],
+      };
+      const filterUsers = await User.find(filter)
+      .populate("favourite", "_id title images status price")
+      .sort(`${userByDirection === 'asc' ? '' : '-'}${userByColumn}`)
+      .limit(pageSize * 1)
+      .skip((pageNumber - 1) * pageSize);
+
+      const allUsers = await User.find(filter)
+      let totalPage = 0
+      if (allUsers.length % pageSize === 0) {
+          totalPage = allUsers.length / pageSize
+      } else {
+          totalPage = parseInt(allUsers.length / pageSize) + 1
+      }
+      if (allUsers.length > 0) {
         res.status(200).json({
-          totalUsers: result.length,
-          users: result.reverse(),
+          totalPage: totalPage,
+          totalUsers: allUsers.length,
+          users: userByDirection && userByColumn 
+          ? filterUsers
+          : filterUsers.reverse(),
         });
       } else {
         res.status(200).json({
@@ -209,8 +237,9 @@ const userControllers = {
         });
       }
     } catch (error) {
+      console.log(error)
       res.status(500);
-      return res.json(errorFunction(true, 500, "Bad Request"));
+      return res.json(errorFunction(true, 500, error.massage));
     }
   },
 
@@ -259,8 +288,8 @@ const userControllers = {
       await user.save();
 
       mailer.sendMail(
-        user.email, 
-        "THÔNG BÁO VỀ VIỆC KHÓA TÀI KHOẢN", 
+        user.email,
+        "THÔNG BÁO VỀ VIỆC KHÓA TÀI KHOẢN",
         "Thật đáng tiếc!",
         '<div style=" color: #721c24; padding: 1rem;">' +
           '<h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Tài khoản của bạn đã bị khóa</h2>' +
@@ -280,7 +309,8 @@ const userControllers = {
           '<li style="font-weight: bold;">Hotline: 0934968108</li>' +
           '<li style="font-weight: bold;">Email: HI.U@abc.com or phamquoctai@deptrai.com</li>' +
           "</ul>" +
-          "</div>",)
+          "</div>"
+      );
 
       // const mailOptions = {
       //   from: "minhhieu.tran.mcs@gmail.com",
@@ -404,8 +434,8 @@ const userControllers = {
             return res.json(errorFunction(false, 404, "Bad request"));
           } else {
             mailer.sendMail(
-              req.body.email, 
-              "Cung cấp lại mật khẩu Omoday", 
+              req.body.email,
+              "Cung cấp lại mật khẩu Omoday",
               "Đừng quên nữa nha :>",
               "<p>Đây là email tự động được gửi từ Omoday. Mật khẩu của bạn đã được cập nhật.</p><ul><li>Username: " +
                 existingUser.phone +
@@ -416,14 +446,14 @@ const userControllers = {
                 "</li></ul>" +
                 "<p>Để đảm bảo an toàn thông tin cá nhân, vui lòng đổi mật khẩu.</p>" +
                 "<p>Trân trọng!</p>"
-              )
+            );
 
             // const mailOptions = {
             //   from: "minhhieu.tran.mcs@gmail.com",
             //   to: req.body.email,
             //   subject: "Cung cấp lại mật khẩu Omoday",
             //   text: "That was easy!",
-            //   html: 
+            //   html:
             //     "<p>Đây là email tự động được gửi từ Omoday. Mật khẩu của bạn đã được cập nhật.</p><ul><li>Username: " +
             //     existingUser.phone +
             //     "</li><li>Email: " +
@@ -457,9 +487,13 @@ const userControllers = {
   // LOGOUT
   logout: async (req, res) => {
     res.clearCookie("refreshToken");
-    refreshTokens = refreshTokens.filter(token => token !== req.cookies.refreshToken);
-    return res.status(200).json(errorFunction(false, 200, "Logout successful!!!"))
-  }
+    refreshTokens = refreshTokens.filter(
+      (token) => token !== req.cookies.refreshToken
+    );
+    return res
+      .status(200)
+      .json(errorFunction(false, 200, "Logout successful!!!"));
+  },
 };
 
 export default userControllers;
