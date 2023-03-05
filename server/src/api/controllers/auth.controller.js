@@ -237,7 +237,6 @@ const userControllers = {
         });
       }
     } catch (error) {
-      console.log(error)
       res.status(500);
       return res.json(errorFunction(true, 500, error.massage));
     }
