@@ -1,22 +1,97 @@
-import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { privateRoutesAdmin, publicRoutes, privateRoutesUser } from '~/routes';
+import AdminLayout from '~/layouts/Admin/LayoutAdmin';
 import './App.css';
+import { IRoutes } from './types/models/global';
+import React, { Fragment } from 'react';
+import DefaultLayout from '~/layouts/Client/DefaultLayout/DefaultLayout';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 
-function App() {
+const App: React.FC = () => {
+   let role: string | null = localStorage.getItem('role');
+   if (typeof role === 'string') {
+      role = JSON.parse(role);
+   }
    return (
-      <div className="App">
-         <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <p>
-               Edit <code>src/App.tsx</code> and save to reload.
-            </p>
+      <Router>
+         <div className="App">
+            <Routes>
+               {publicRoutes.map((route, index) => {
+                  const Page = route.component;
+                  let Layout = DefaultLayout;
 
-            <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-               Learn React
-            </a>
-         </header>
-      </div>
+                  if (route.layout) {
+                     Layout = route.layout;
+                  } else if (route.layout === null) {
+                     Layout = Fragment;
+                  }
+
+                  return (
+                     <Route
+                        key={index}
+                        path={route.path}
+                        element={
+                           <Layout>
+                              <Page />
+                           </Layout>
+                        }
+                     />
+                  );
+               })}
+               {privateRoutesUser.map((route: IRoutes, index) => {
+                  const Page = route.component;
+                  let Layout = AdminLayout;
+
+                  if (route.layout) {
+                     Layout = route.layout;
+                  } else if (route.layout === null) {
+                     Layout = Fragment;
+                  }
+
+                  return (
+                     <Route
+                        key={index}
+                        element={
+                           <PrivateRoute
+                              isAuthenticated={true}
+                              path={route.path}
+                              component={Layout}
+                              children={<Page />}
+                           />
+                        }
+                     />
+                  );
+               })}
+               {true ? (
+                  privateRoutesAdmin.map((route: IRoutes, index) => {
+                     const Page = route.component;
+                     let Layout = AdminLayout;
+
+                     if (route.layout) {
+                        Layout = route.layout;
+                     } else if (route.layout === null) {
+                        Layout = Fragment;
+                     }
+
+                     return (
+                        <Route
+                           key={index}
+                           path={route.path}
+                           element={
+                              <Layout>
+                                 <Page />
+                              </Layout>
+                           }
+                        />
+                     );
+                  })
+               ) : (
+                  <Fragment />
+               )}
+            </Routes>
+         </div>
+      </Router>
    );
-}
+};
 
 export default App;
