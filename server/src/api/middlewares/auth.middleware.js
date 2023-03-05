@@ -18,8 +18,8 @@ const authMiddleware = {
         }
     },
 
-    //auth admin
-    authIsAdmin : (req , res , next) => {
+    // Auth admin
+    authIsAdminOrIsAuthor : (req , res , next) => {
         authMiddleware.verifyToken(req , res , ()=>{
             if(req.user.id === req.params.id || req.user.role === 'admin'){
                 next();
@@ -27,6 +27,24 @@ const authMiddleware = {
                 res.status(403).json("You are not authorized to do this");
             }
         });
-    }
+    },
+    authIsAdmin: (req, res, next) => {
+        authMiddleware.verifyToken(req, res, () => {
+          if (req.user.role === 'admin') {
+            next();
+          } else {
+            res
+              .status(403)
+              .json(errorFunction(true, 403, 'You are not authorized to do this'));
+          }
+        });
+      },
+    // Middleware to check the account field
+    checkRole: (req, res, next) => {
+        if(req.body.role){
+            return res.status(403).json('You cannot register as role')
+        }
+        next();
+    },
 }
 export default authMiddleware;

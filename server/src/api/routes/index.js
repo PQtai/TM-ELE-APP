@@ -1,7 +1,7 @@
 import postRouter from './post.router.js';
-import userRouter from './user.router.js'
+import authRouter from './auth.router.js';
 const routes = (app) => {
-  app.use('/user', userRouter);
+  app.use('/auth', authRouter);
   app.use('/post', postRouter);
 };
 

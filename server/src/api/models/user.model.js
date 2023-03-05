@@ -21,18 +21,19 @@ const UserSchema = new Schema(
     },
     email: {
       type: String,
-      required: false,
+      required: true,
       unique: true,
     },
     role: {
       type: String,
+      enum: ['user', 'admin'],
       default: "user",
     },
     avatar: {
       type: String,
       required: false,
     },
-    posts: [
+    favourite: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "post",
@@ -47,6 +48,20 @@ const UserSchema = new Schema(
       maximum: 5,
       default: 0,
     },
+    googleId: {
+      type: String,
+      required: false,
+    },
+    facebookId: {
+      type: String,
+      required: false,
+    },
+    conversations: [
+      {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "conversation",
+      },
+  ],
   },
   { timestamps: true }
 );
