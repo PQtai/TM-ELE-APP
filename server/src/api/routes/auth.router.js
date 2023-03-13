@@ -3,8 +3,9 @@ import userControllers from '../controllers/auth.controller.js'
 import authMiddleware from '../middlewares/auth.middleware.js'
 import userValidation from '../helpers/userValidation.js'
 import validateMiddleware from '../middlewares/validate.middleware.js';
+import passport from "passport";
+import '../middlewares/passport.js';
 const router = express.Router();
-
 
 // Route add user
 router.post(
@@ -63,5 +64,7 @@ router.post(
 router.post(
     '/logout', 
     authMiddleware.verifyToken, userControllers.logout);
+
+router.get('/secret', passport.authenticate('jwt', { session: false }), userControllers.getAllUsers)
 
 export default router;
