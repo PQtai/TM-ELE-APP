@@ -24,7 +24,6 @@ const PostSchema = new Schema(
       minLength: 10,
       maxLength: 15000,
     },
-    evaluate: { type: Number, max: 5, default: 0 },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'user',

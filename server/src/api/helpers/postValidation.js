@@ -4,7 +4,7 @@ const postSchemas = {
   postCreate: Joi.object().keys({
     title: Joi.string().min(2).max(50).required(),
     address: Joi.string().required(),
-    images: [Joi.string().min(2)],
+    images: Joi.array().items(Joi.string().min(2)).required(),
     otherInfo: Joi.number(),
     status: {
       code: Joi.number().valid(0, 1, 2, 9).default(2),
@@ -13,7 +13,6 @@ const postSchemas = {
     price: Joi.number().positive(),
     deposit: Joi.number().positive(),
     description: Joi.string().min(10).max(1500).required(),
-    evaluate: Joi.number().positive().precision(2),
     userId: Joi.string().required(),
   }),
   postEditStatus: Joi.object().keys({

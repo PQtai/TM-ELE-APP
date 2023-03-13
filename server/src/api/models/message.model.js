@@ -1,23 +1,23 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const MessageSchema = new mongoose.Schema(
   {
     conversationId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "conversation",
+      ref: 'conversation',
       require: true,
     },
-    sender: {
+    senderId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      ref: 'user',
       require: true,
     },
-    text: {
+    message: {
       type: String,
     },
   },
   { timestamps: true }
 );
 
-const Message = mongoose.model("message", MessageSchema);
+const Message = mongoose.model('message', MessageSchema);
 export { Message, MessageSchema };
