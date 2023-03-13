@@ -36,10 +36,13 @@ const userControllers = {
           phone,
           avatar,
         });
+
+
         // const newUser = await User.create(req.body)
         if (newUser) {
-          res.status(201);
-          return res.json(errorFunction(false, 201, "User Created", newUser));
+          res.status(201).json(errorFunction(false, 201, "Registration is successful, the system will automatically log in", newUser));
+          // Call the login function with the email or phone of the newly registered user
+          return userControllers.login(req, res, email || phone);
         } else {
           res.status(403);
           return res.json(errorFunction(false, 403, "Error Creating User"));
@@ -51,41 +54,18 @@ const userControllers = {
     }
   },
 
-  // // GENERATE ACCESS TOKEN
-  // generateAccessToken: (user) => {
-  //   return jwt.sign(
-  //     {
-  //       id: user.id,
-  //       role: user.role,
-  //     },
-  //     process.env.JWT_ACCESSTOKEN_KEY,
-  //     { expiresIn: "3d" }
-  //   );
-  // },
-
-  // // GENERATE REFRESH TOKEN
-  // generateRefreshToken: (user) => {
-  //   return jwt.sign(
-  //     {
-  //       id: user.id,
-  //       role: user.role,
-  //     },
-  //     process.env.JWT_REFRESHTOKEN_KEY,
-  //     { expiresIn: "30d" }
-  //   );
-  // },
-
   // LOGIN
-  login: async (req, res) => {
+  login: async (req, res, phoneOrEmail) => {
     try {
       // var username = req.body.username
       // var email = req.body.email
       // var password = req.body.password
+
       const { emailOrPhone, password } = req.body;
 
       //Check emailOrPhone to identify logged in user with email or phone number
       User.findOne({
-        $or: [{ email: emailOrPhone }, { phone: emailOrPhone }],
+        $or: [{ email: emailOrPhone || phoneOrEmail }, { phone: emailOrPhone || phoneOrEmail}],
       }).then((user) => {
         if (user) {
           // check account lock status
@@ -112,6 +92,7 @@ const userControllers = {
                 path: "/",
                 sameSite: "strict",
               });
+              // res.setHeader("accessToken", accessToken)
 
               // Returns access token and user information
               const { password, ...others } = user._doc;
@@ -311,40 +292,6 @@ const userControllers = {
           "</div>"
       );
 
-      // const mailOptions = {
-      //   from: "minhhieu.tran.mcs@gmail.com",
-      //   to: user.email,
-      //   subject: "THÔNG BÁO VỀ VIỆC KHÓA TÀI KHOẢN",
-      //   text: "Buồn quá!",
-      //   html:
-      //     '<div style=" color: #721c24; padding: 1rem;">' +
-      //     '<h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Tài khoản của bạn đã bị khóa</h2>' +
-      //     '<h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Thông tin tài khoản bị khóa</h3>' +
-      //     '<ul style="list-style-type: none; padding: 0; margin: 0;">' +
-      //     '<li style="font-weight: bold;">Email:</li>' +
-      //     "<li>" +
-      //     user.email +
-      //     "</li>" +
-      //     '<li style="font-weight: bold;">Số điện thoại:</li>' +
-      //     "<li>" +
-      //     user.phone +
-      //     "</li>" +
-      //     "</ul>" +
-      //     '<h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Thông tin liên hệ: </h3>' +
-      //     '<ul style="list-style-type: none; padding: 0; margin: 0;">' +
-      //     '<li style="font-weight: bold;">Hotline: 0934968108</li>' +
-      //     '<li style="font-weight: bold;">Email: HI.U@abc.com or phamquoctai@deptrai.com</li>' +
-      //     "</ul>" +
-      //     "</div>",
-      // };
-
-      // transporter.sendMail(mailOptions, function (error, info) {
-      //   if (error) {
-      //     console.log("error: ", error);
-      //   } else {
-      //     console.log("Email sent: ", info.response);
-      //   }
-      // });
       res
         .status(200)
         .json(
@@ -447,30 +394,6 @@ const userControllers = {
                 "<p>Trân trọng!</p>"
             );
 
-            // const mailOptions = {
-            //   from: "minhhieu.tran.mcs@gmail.com",
-            //   to: req.body.email,
-            //   subject: "Cung cấp lại mật khẩu Omoday",
-            //   text: "That was easy!",
-            //   html:
-            //     "<p>Đây là email tự động được gửi từ Omoday. Mật khẩu của bạn đã được cập nhật.</p><ul><li>Username: " +
-            //     existingUser.phone +
-            //     "</li><li>Email: " +
-            //     existingUser.email +
-            //     "</li><li>Password: " +
-            //     randomPassword +
-            //     "</li></ul>" +
-            //     "<p>Để đảm bảo an toàn thông tin cá nhân, vui lòng đổi mật khẩu.</p>" +
-            //     "<p>Trân trọng!</p>",
-            // };
-
-            // transporter.sendMail(mailOptions, function (error, info) {
-            //   if (error) {
-            //     console.log("error: ", error);
-            //   } else {
-            //     console.log("Email sent: ", info.response);
-            //   }
-            // });
             return res.json(
               errorFunction(false, 200, "Updated user's password successfully!")
             );
