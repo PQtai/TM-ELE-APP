@@ -28,7 +28,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCloseSidebar }) => {
                title="Phạm Quốc Tài"
                icon={<PersonPinIcon />}
                datas={[
-                  { title: 'My Profile', icon: 'T' },
+                  { title: 'My Profile', icon: 'M' },
                   { title: 'Setting', icon: 'S' },
                   { title: 'Logout', icon: 'L' },
                ]}
@@ -44,9 +44,17 @@ const Sidebar: React.FC<SidebarProps> = ({ isCloseSidebar }) => {
                title="Quản lý"
                icon={<AdminPanelSettingsIcon />}
                datas={[
-                  { title: 'Tài khoản', icon: <GroupAddIcon /> },
-                  { title: 'Tin đăng', icon: <MarkAsUnreadSharpIcon /> },
-                  { title: 'Danh mục', icon: <CategoryRoundedIcon /> },
+                  { title: 'Tài khoản', icon: <GroupAddIcon />, path: '/admin/manage/account' },
+                  {
+                     title: 'Tin đăng',
+                     icon: <MarkAsUnreadSharpIcon />,
+                     path: '/admin/manage/post',
+                  },
+                  {
+                     title: 'Danh mục',
+                     icon: <CategoryRoundedIcon />,
+                     path: '/admin/manage/category',
+                  },
                ]}
             />
          </div>

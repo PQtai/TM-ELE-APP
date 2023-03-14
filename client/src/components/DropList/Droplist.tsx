@@ -5,6 +5,7 @@ import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 export interface ObjPropsList {
    title: string;
    icon: React.ReactNode;
+   path?: string;
 }
 
 export interface DataChildren {
@@ -12,6 +13,7 @@ export interface DataChildren {
    icon: React.ReactNode | string;
    datas?: ObjPropsList[];
    stylesProps?: { [key: string]: string };
+   path?: string;
 }
 
 const Droplist: React.FC<DataChildren> = ({ icon, title, datas, stylesProps }) => {
@@ -41,7 +43,15 @@ const Droplist: React.FC<DataChildren> = ({ icon, title, datas, stylesProps }) =
          </div>
          <ul className={`${customStyles.listItem} ${open ? customStyles.open : customStyles.close}`}>
             {datas?.map((data, index) => {
-               return <DropItem stylesProps={customStyles} key={index} title={data.title} icon={data.icon} />;
+               return (
+                  <DropItem
+                     path={data.path}
+                     stylesProps={customStyles}
+                     key={index}
+                     title={data.title}
+                     icon={data.icon}
+                  />
+               );
             })}
          </ul>
       </div>

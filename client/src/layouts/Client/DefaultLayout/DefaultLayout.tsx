@@ -1,5 +1,5 @@
 import React from 'react';
-import { IChildrenComponentProps } from '~/types/models/global';
+import { IChildrenComponentProps } from '~/shared/model/global';
 import styles from './DefaultLayout.module.scss';
 const DefaultLayout: React.FC<IChildrenComponentProps> = ({ children }) => {
    return (
