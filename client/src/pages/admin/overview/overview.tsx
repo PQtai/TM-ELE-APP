@@ -1,7 +1,7 @@
 import React from 'react';
 
-const overview: React.FC = () => {
-   return <div>overview</div>;
+const Overview: React.FC = () => {
+   return <div>Trang tổng quan</div>;
 };
 
-export default overview;
+export default Overview;

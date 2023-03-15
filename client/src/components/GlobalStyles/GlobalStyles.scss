@@ -2,6 +2,8 @@
 
 :root {
    --primary: #ffc96f;
+   --warning: #ffc96f;
+   --background-color-client: #f8f1e2;
    --background-color: #f0f2f5;
    --background-color-sidebar: #3d3d44;
    --black: #000;
@@ -13,8 +15,15 @@
    --default-layout-height-nav: 36px;
    --default-layout-width: 1824px;
    --default-layout-horizontal-spacer: 24px;
-   //height
+   //nav
    --navbar-height: 70px;
+   --space-navbar-right: 18px;
+   --space-navbar-left: 15px;
+   //button
+   --background-btn-admin: #2881ea;
+   --background-btn-default: rgba(241, 241, 241, 0.5);
+   // item-account
+   --size-avatar-item: 80px;
 }
 
 * {

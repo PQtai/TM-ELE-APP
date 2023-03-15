@@ -6,6 +6,7 @@ import { IRoutes } from './types/models/global';
 import React, { Fragment } from 'react';
 import DefaultLayout from '~/layouts/Client/DefaultLayout/DefaultLayout';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+import Error404 from './pages/error-404/error-404';
 
 const App: React.FC = () => {
    let role: string | null = localStorage.getItem('role');
@@ -40,7 +41,7 @@ const App: React.FC = () => {
                })}
                {privateRoutesUser.map((route: IRoutes, index) => {
                   const Page = route.component;
-                  let Layout = AdminLayout;
+                  let Layout = DefaultLayout;
 
                   if (route.layout) {
                      Layout = route.layout;
@@ -51,10 +52,10 @@ const App: React.FC = () => {
                   return (
                      <Route
                         key={index}
+                        path={route.path}
                         element={
                            <PrivateRoute
                               isAuthenticated={true}
-                              path={route.path}
                               component={Layout}
                               children={<Page />}
                            />
@@ -88,6 +89,14 @@ const App: React.FC = () => {
                ) : (
                   <Fragment />
                )}
+               <Route
+                  path="*"
+                  element={
+                     <DefaultLayout>
+                        <Error404 />
+                     </DefaultLayout>
+                  }
+               />
             </Routes>
          </div>
       </Router>

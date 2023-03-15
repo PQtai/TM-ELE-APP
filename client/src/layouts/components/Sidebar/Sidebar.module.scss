@@ -46,7 +46,8 @@
          background-repeat: no-repeat;
          padding-bottom: 13px;
          .dropShow,
-         .itemDrop {
+         .itemDrop > .dropLink {
+            color: #ffffff;
             display: flex;
             align-items: center;
             border-radius: 6px;
@@ -83,19 +84,39 @@
          }
          .itemDrop {
             white-space: nowrap;
-            > span {
+            .itemLeft,
+            .itemRight {
                white-space: nowrap;
                max-width: 100px;
-               &:first-child {
-                  display: block;
-                  font-size: 1.5rem;
-                  font-weight: 600;
-                  margin: 0 28px 0 7px;
-               }
-               &:last-child {
-                  animation: fadeIn 0.6s ease-in;
-               }
             }
+            .itemLeft {
+               display: flex;
+               align-items: center;
+               justify-content: center;
+               font-size: 1.5rem;
+               font-weight: 600;
+               margin: 0 28px 0 7px;
+               width: 10px;
+            }
+            .itemRight {
+               animation: fadeIn 0.6s ease-in;
+            }
+            // > span {
+            //    white-space: nowrap;
+            //    max-width: 100px;
+            //    &:first-child {
+            //       display: flex;
+            //       align-items: center;
+            //       justify-content: center;
+            //       font-size: 1.5rem;
+            //       font-weight: 600;
+            //       margin: 0 28px 0 7px;
+            //       width: 10px;
+            //    }
+            //    &:last-child {
+            //       animation: fadeIn 0.6s ease-in;
+            //    }
+            // }
          }
          .listItem {
             transition: max-height 0.5s linear;

@@ -1,0 +1,21 @@
+.pagination {
+   margin-top: 70px;
+   ul {
+      > li {
+         button,
+         div {
+            font-size: 1.8rem;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            > svg {
+               font-size: 1.8rem;
+            }
+         }
+         div {
+            display: flex;
+            align-items: center;
+         }
+      }
+   }
+}
