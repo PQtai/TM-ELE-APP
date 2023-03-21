@@ -98,7 +98,7 @@ const userControllers = {
               // Returns access token and user information
               const { password, ...rest } = user._doc;
               
-              res.json(errorFunction(false, 200 ,'Login Success', {...rest, accessToken}));
+              res.json(errorFunction(false, 200 ,'Login Success', {user: {...rest}, accessToken}));
             } else {
               res.json(
                 errorFunction(true, 401, "Password does not matched!!!")
