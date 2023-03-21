@@ -1,12 +1,12 @@
-import { User, Post } from '../models/index.js';
-import errorFunction from '../utils/errorFunction.js';
-import jwt from 'jsonwebtoken';
-import { encryptionPassword } from '../utils/encryption.js';
-import { response } from 'express';
-import bycrypt from 'bcryptjs';
-import nodemailer from 'nodemailer';
-import mailer from '../utils/mailer.js';
-import generateToken from '../utils/generateToken.js';
+import { User, Post } from "../models/index.js";
+import errorFunction from "../utils/errorFunction.js";
+import jwt from "jsonwebtoken";
+import { encryptionPassword } from "../utils/encryption.js";
+import { response } from "express";
+import bycrypt from "bcryptjs";
+import nodemailer from "nodemailer";
+import mailer from "../utils/mailer.js";
+import generateToken from "../utils/generateToken.js";
 
 let refreshTokens = [];
 
@@ -25,7 +25,7 @@ const userControllers = {
       }).lean(true);
       if (existingPhone) {
         res.status(403);
-        return res.json(errorFunction(true, 403, 'User Already Exist'));
+        return res.json(errorFunction(true, 403, "User Already Exist"));
       } else {
         const hashedPassword = await encryptionPassword(password);
         const newUser = await User.create({
@@ -36,12 +36,12 @@ const userControllers = {
           phone,
           avatar,
         });
-        if (req.user?.role === 'admin') {
+        if (req.user?.role === "admin") {
           // Nếu là admin thì tạo user mới và thông báo thành công
           res
             .status(201)
             .json(
-              errorFunction(false, 201, 'New account registration successful')
+              errorFunction(false, 201, "New account registration successful")
             );
         } else {
           //Nếu người dùng đăng ký 1 tài khoản login luôn tại đây
@@ -51,7 +51,7 @@ const userControllers = {
       }
     } catch (error) {
       res.status(500);
-      return res.json(errorFunction(true, 500, 'Error Adding User'));
+      return res.json(errorFunction(true, 500, "Error Adding User"));
     }
   },
 
@@ -73,12 +73,12 @@ const userControllers = {
           if (user.isLocked === true) {
             return res
               .status(405)
-              .json(errorFunction(false, 405, 'Account has been locked'));
+              .json(errorFunction(false, 405, "Account has been locked"));
           }
           // check password
           bycrypt.compare(password, user.password, function (err, result) {
             if (err) {
-              res.json(errorFunction(true, 400, 'Bad request'));
+              res.json(errorFunction(true, 400, "Bad request"));
             }
             if (result) {
               // create access token and refresh token
@@ -87,34 +87,31 @@ const userControllers = {
               refreshTokens.push(refreshToken);
 
               // Set cookies
-              res.cookie('refreshToken', refreshToken, {
+              res.cookie("refreshToken", refreshToken, {
                 httpOnly: true,
                 secure: true, // When deploy will reset to true
-                path: '/',
-                sameSite: 'strict',
+                path: "/",
+                sameSite: "strict",
               });
-              res.setHeader('accessToken', accessToken);
+              res.set("Authorization", `Bearer ${accessToken}`);
 
               // Returns access token and user information
               const { password, ...rest } = user._doc;
-              res.json(
-                errorFunction(false, 200, 'Login successfully!', {
-                  ...rest,
-                })
-              );
+              
+              res.json(errorFunction(false, 200 ,'Login Success', {...rest, accessToken}));
             } else {
               res.json(
-                errorFunction(true, 401, 'Password does not matched!!!')
+                errorFunction(true, 401, "Password does not matched!!!")
               );
             }
           });
         } else {
-          res.json(errorFunction(true, 400, 'User not found'));
+          res.json(errorFunction(true, 400, "User not found"));
         }
       });
     } catch (err) {
       res.status(500);
-      return res.json(errorFunction(true, 500, 'Bad request'));
+      return res.json(errorFunction(true, 500, "Bad request"));
     }
   },
 
@@ -125,7 +122,7 @@ const userControllers = {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) return res.status(401).json("You're not authenticated");
     if (!refreshTokens.includes(refreshToken)) {
-      return res.status(403).json('Refresh token is not valid');
+      return res.status(403).json("Refresh token is not valid");
     }
     jwt.verify(refreshToken, process.env.JWT_ACCESSTOKEN_KEY, (err, user) => {
       if (err) {
@@ -136,11 +133,11 @@ const userControllers = {
       const newAccessToken = generateToken.accessToken(user);
       const newRefreshToken = generateToken.refreshToken(user);
       refreshTokens.push(newRefreshToken);
-      res.cookie('refreshToken', newRefreshToken, {
+      res.cookie("refreshToken", newRefreshToken, {
         httpOnly: true,
         secure: true,
-        path: '/',
-        sameSite: 'strict',
+        path: "/",
+        sameSite: "strict",
       });
       return res.status(200).json({ accessToken: newAccessToken });
     });
@@ -150,8 +147,8 @@ const userControllers = {
   getUserById: async (req, res) => {
     try {
       const userResult = await User.findById(req.params.id).populate(
-        'posts',
-        '_id title images status price'
+        "posts",
+        "_id title images status price"
       );
       if (userResult) {
         const { password, ...others } = userResult._doc;
@@ -162,12 +159,12 @@ const userControllers = {
       } else {
         res.json({
           statusCode: 204,
-          message: 'This user Id have not in the database',
+          message: "This user Id have not in the database",
           user: {},
         });
       }
     } catch (error) {
-      res.status(500).json(errorFunction(true, 500, 'Bad Request'));
+      res.status(500).json(errorFunction(true, 500, "Bad Request"));
     }
   },
 
@@ -177,23 +174,23 @@ const userControllers = {
       const {
         pageSize = 11,
         pageNumber = 1,
-        role = '',
+        role = "",
         userByColumn,
-        userByDirection = 'desc',
+        userByDirection = "desc",
       } = req.query;
       const filter = {
         $and: [
           {
             role: {
               $regex: role,
-              $options: '$i',
+              $options: "$i",
             },
           },
         ],
       };
       const filterUsers = await User.find(filter)
-        .populate('favourite', '_id title images status price')
-        .sort(`${userByDirection === 'asc' ? '' : '-'}${userByColumn}`)
+        .populate("favourite", "_id title images status price")
+        .sort(`${userByDirection === "asc" ? "" : "-"}${userByColumn}`)
         .limit(pageSize * 1)
         .skip((pageNumber - 1) * pageSize);
 
@@ -215,7 +212,7 @@ const userControllers = {
         });
       } else {
         res.status(200).json({
-          message: 'No results',
+          message: "No results",
           users: [],
         });
       }
@@ -233,20 +230,20 @@ const userControllers = {
       if (isBodyEmpty === 0) {
         return res.send({
           statusCode: 403,
-          massage: 'Body request can not empty!',
+          massage: "Body request can not empty!",
         });
       }
       User.findByIdAndUpdate(userId, req.body).then((data) => {
         if (data) {
-          res.status(200).json(errorFunction(false, 200, 'Successfully'));
+          res.status(200).json(errorFunction(false, 200, "Successfully"));
         } else {
           res.json(
-            errorFunction(false, 204, 'This User Id have not in the database')
+            errorFunction(false, 204, "This User Id have not in the database")
           );
         }
       });
     } catch (error) {
-      return res.status(500).json(errorFunction(true, 500, 'Bad Request'));
+      return res.status(500).json(errorFunction(true, 500, "Bad Request"));
     }
   },
 
@@ -259,45 +256,45 @@ const userControllers = {
       if (!user) {
         return res
           .status(404)
-          .json(errorFunction(false, 404, 'User not found'));
+          .json(errorFunction(false, 404, "User not found"));
       }
       if (user.isLocked === true) {
         return res
           .status(406)
-          .json(errorFunction(false, 406, 'The user has been locked', user));
+          .json(errorFunction(false, 406, "The user has been locked", user));
       }
       user.isLocked = true;
       await user.save();
 
       mailer.sendMail(
         user.email,
-        'THÔNG BÁO VỀ VIỆC KHÓA TÀI KHOẢN',
-        'Thật đáng tiếc!',
+        "THÔNG BÁO VỀ VIỆC KHÓA TÀI KHOẢN",
+        "Thật đáng tiếc!",
         '<div style=" color: #721c24; padding: 1rem;">' +
           '<h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Tài khoản của bạn đã bị khóa</h2>' +
           '<h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Thông tin tài khoản bị khóa</h3>' +
           '<ul style="list-style-type: none; padding: 0; margin: 0;">' +
           '<li style="font-weight: bold;">Email:</li>' +
-          '<li>' +
+          "<li>" +
           user.email +
-          '</li>' +
+          "</li>" +
           '<li style="font-weight: bold;">Số điện thoại:</li>' +
-          '<li>' +
+          "<li>" +
           user.phone +
-          '</li>' +
-          '</ul>' +
+          "</li>" +
+          "</ul>" +
           '<h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Thông tin liên hệ: </h3>' +
           '<ul style="list-style-type: none; padding: 0; margin: 0;">' +
           '<li style="font-weight: bold;">Hotline: 0934968108</li>' +
           '<li style="font-weight: bold;">Email: HI.U@abc.com or phamquoctai@deptrai.com</li>' +
-          '</ul>' +
-          '</div>'
+          "</ul>" +
+          "</div>"
       );
 
       res
         .status(200)
         .json(
-          errorFunction(false, 200, 'User locked successfully!!!', user.phone)
+          errorFunction(false, 200, "User locked successfully!!!", user.phone)
         );
     } catch (err) {
       next(err);
@@ -311,7 +308,7 @@ const userControllers = {
       const existingUser = await User.findById(userId);
       if (!existingUser) {
         res.status(403);
-        return res.json(errorFunction(false, 403, 'User is not exist'));
+        return res.json(errorFunction(false, 403, "User is not exist"));
       } else {
         // Compare oldPassword vs newPassword in DB
         const encryptedPassword = await bycrypt.compareSync(
@@ -329,7 +326,7 @@ const userControllers = {
             useFindAndModify: false,
           }).then((data) => {
             if (!data) {
-              return res.json(errorFunction(false, 404, 'Bad request'));
+              return res.json(errorFunction(false, 404, "Bad request"));
             } else {
               res.status(200);
               return res.json(
@@ -344,13 +341,13 @@ const userControllers = {
         } else {
           res.status(403);
           return res.json(
-            errorFunction(false, 403, 'Password does not match!')
+            errorFunction(false, 403, "Password does not match!")
           );
         }
       }
     } catch (error) {
       res.status(400);
-      return res.json(errorFunction(false, 400, 'Bad request'));
+      return res.json(errorFunction(false, 400, "Bad request"));
     }
   },
 
@@ -362,7 +359,7 @@ const userControllers = {
       }).lean(true);
       if (!existingUser) {
         res.status(403);
-        return res.json(errorFunction(false, 403, 'User does not exists!'));
+        return res.json(errorFunction(false, 403, "User does not exists!"));
       } else {
         // Random a new password
         const randomPassword = Math.random().toString(36).slice(2, 10);
@@ -379,21 +376,21 @@ const userControllers = {
           useFindAndModify: false,
         }).then((data) => {
           if (!data) {
-            return res.json(errorFunction(false, 404, 'Bad request'));
+            return res.json(errorFunction(false, 404, "Bad request"));
           } else {
             mailer.sendMail(
               req.body.email,
-              'Cung cấp lại mật khẩu Omoday',
-              'Đừng quên nữa nha :>',
-              '<p>Đây là email tự động được gửi từ Omoday. Mật khẩu của bạn đã được cập nhật.</p><ul><li>Username: ' +
+              "Cung cấp lại mật khẩu Omoday",
+              "Đừng quên nữa nha :>",
+              "<p>Đây là email tự động được gửi từ Omoday. Mật khẩu của bạn đã được cập nhật.</p><ul><li>Username: " +
                 existingUser.phone +
-                '</li><li>Email: ' +
+                "</li><li>Email: " +
                 existingUser.email +
-                '</li><li>Password: ' +
+                "</li><li>Password: " +
                 randomPassword +
-                '</li></ul>' +
-                '<p>Để đảm bảo an toàn thông tin cá nhân, vui lòng đổi mật khẩu.</p>' +
-                '<p>Trân trọng!</p>'
+                "</li></ul>" +
+                "<p>Để đảm bảo an toàn thông tin cá nhân, vui lòng đổi mật khẩu.</p>" +
+                "<p>Trân trọng!</p>"
             );
 
             return res.json(
@@ -403,20 +400,20 @@ const userControllers = {
         });
       }
     } catch (error) {
-      console.log('debug', error);
-      res.json(errorFunction(true, 404, 'Bad request'));
+      console.log("debug", error);
+      res.json(errorFunction(true, 404, "Bad request"));
     }
   },
 
   // LOGOUT
   logout: async (req, res) => {
-    res.clearCookie('refreshToken');
+    res.clearCookie("refreshToken");
     refreshTokens = refreshTokens.filter(
       (token) => token !== req.cookies.refreshToken
     );
     return res
       .status(200)
-      .json(errorFunction(false, 200, 'Logout successful!!!'));
+      .json(errorFunction(false, 200, "Logout successful!!!"));
   },
 };
 
