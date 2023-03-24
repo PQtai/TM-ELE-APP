@@ -28,7 +28,7 @@ const userControllers = {
         return res.json(errorFunction(true, 403, "User Already Exist"));
       } else {
         const hashedPassword = await encryptionPassword(password);
-        const newUser = await User.create({
+        const user = await User.create({
           firstName,
           lastName,
           password: hashedPassword,
@@ -36,32 +36,77 @@ const userControllers = {
           phone,
           avatar,
         });
-        if (req.user?.role === "admin") {
-          // Nếu là admin thì tạo user mới và thông báo thành công
-          res
-            .status(201)
-            .json(
-              errorFunction(false, 201, "New account registration successful")
-            );
-        } else {
-          //Nếu người dùng đăng ký 1 tài khoản login luôn tại đây
-          req.body.emailOrPhone = email;
-          return userControllers.login(req, res, next);
-        }
+
+        // Generate verification token
+        const verificationToken = generateToken.verificationToken(user);
+
+        // Send verification email
+        const verificationLink = `http://localhost:5000/auth/verify-email/${verificationToken}`;
+        await mailer.sendMail(
+          user.email,
+          "XÁC THỰC EMAIL",
+          "Email gửi với mục đích yêu cầu người dùng xác thực email nhập vào lúc đăng ký",
+          `<p>Cảm ơn bạn đã đăng ký tài khoản!</p>
+          <p>Để hoàn tất quá trình đăng ký, vui lòng nhấn vào liên kết sau để xác thực địa chỉ email của bạn:</p>
+          <a href="${verificationLink}">Xác thực tài khoản</a>
+          <p>Lưu ý: Liên kết trên chỉ có hiệu lực trong vòng 30 phút. Sau 30 phút bạn cần gửi yêu cầu xác thực email lại!</p>`
+        );
+
+        res
+          .status(201)
+          .json(
+            errorFunction(false, 201, "An Email sent to your account please check your email and verify")
+          );
+
+        // if (req.user?.role === "admin") {
+        //   // Nếu là admin thì tạo user mới và thông báo thành công
+        //   res
+        //     .status(201)
+        //     .json(
+        //       errorFunction(false, 201, "New account registration successful")
+        //     );
+        // } else {
+        //   //Nếu người dùng đăng ký 1 tài khoản login luôn tại đây
+        //   req.body.emailOrPhone = email;
+        //   return userControllers.login(req, res, next);
+        // }
       }
     } catch (error) {
       res.status(500);
-      return res.json(errorFunction(true, 500, "Error Adding User"));
+      return res.json(errorFunction(true, 500, "Internal server error"));
+    }
+  },
+
+  
+
+  // Verify email
+  verifyEmail: async (req, res, next) => {
+    try {
+      const { token } = req.params;
+      // Verify token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      // Find user
+      const user = await User.findById(decoded.id);
+      if (!user) {
+        res.status(404);
+        return res.json({ error: "User not found" });
+      }
+
+      // Update user
+      user.isVerified = true;
+      await user.save();
+
+      res.json({ message: "Email verified successfully" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal server error" });
     }
   },
 
   // LOGIN
   login: async (req, res, next) => {
     try {
-      // var username = req.body.username
-      // var email = req.body.email
-      // var password = req.body.password
-
       const { emailOrPhone, password } = req.body;
 
       //Check emailOrPhone to identify logged in user with email or phone number
@@ -75,6 +120,7 @@ const userControllers = {
               .status(405)
               .json(errorFunction(false, 405, "Account has been locked"));
           }
+
           // check password
           bycrypt.compare(password, user.password, function (err, result) {
             if (err) {
@@ -97,8 +143,13 @@ const userControllers = {
 
               // Returns access token and user information
               const { password, ...rest } = user._doc;
-              
-              res.json(errorFunction(false, 200 ,'Login Success', {user: {...rest}, accessToken}));
+
+              res.json(
+                errorFunction(false, 200, "Login Success", {
+                  user: { ...rest },
+                  accessToken,
+                })
+              );
             } else {
               res.json(
                 errorFunction(true, 401, "Password does not matched!!!")

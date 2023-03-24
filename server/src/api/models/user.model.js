@@ -61,7 +61,11 @@ const UserSchema = new Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "conversation",
       },
-  ],
+    ],
+    isVerified: {
+      type: Boolean,
+      default: false,
+    }
   },
   { timestamps: true }
 );
