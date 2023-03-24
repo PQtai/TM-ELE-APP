@@ -24,6 +24,16 @@ const generateToken = {
       { expiresIn: "30d" }
     );
   },
+  verificationToken: (payload) => {
+    return jwt.sign(
+      {
+        id: payload.id,
+        role: payload.role,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    )
+  },
 };
 
 export default generateToken;
