@@ -15,8 +15,11 @@ router.post(
   userControllers.registerAccount
 );
 
-// verify email
+// Verify email
 router.get('/verify-email/:token', userControllers.verifyEmail);
+
+// Resend verification email
+router.post('/resend-email', userControllers.resendVerificationEmail);
 
 // Route register for Admin
 router.post(

@@ -31,7 +31,7 @@ const generateToken = {
         role: payload.role,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "30m" }
     )
   },
 };
