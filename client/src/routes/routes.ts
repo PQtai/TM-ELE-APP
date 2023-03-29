@@ -9,9 +9,9 @@ import Chat from '~/pages/client/Chat/Chat';
 import Home from '~/pages/client/Home';
 import PostPage from '~/pages/client/Post';
 import Profile from '~/pages/client/Profile/Profile';
-import Login from '~/pages/Login/login';
-import Register from '~/pages/Register/register';
-import VerifyEmail from '~/pages/Register/verifyEmail';
+import Login from '~/pages/login/login';
+import Register from '~/pages/register/register';
+import VerifyEmail from '~/pages/register/verifyEmail';
 import { IRoutes } from '~/shared/model/global';
 
 // Public routes

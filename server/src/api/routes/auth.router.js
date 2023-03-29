@@ -15,6 +15,12 @@ router.post(
   userControllers.registerAccount
 );
 
+// Verify email
+router.get('/verify-email/:token', userControllers.verifyEmail);
+
+// Resend verification email
+router.post('/resend-email', userControllers.resendVerificationEmail);
+
 // Route register for Admin
 router.post(
   '/admin-register',
@@ -42,6 +48,7 @@ router.get(
 
 // Route user all
 router.get('/get-all', authMiddleware.authIsAdmin, userControllers.getAllUsers);
+router.get('/get-allllll', userControllers.getAllUsers) 
 
 // Route lock user
 router.patch('/:id/lock', authMiddleware.authIsAdmin, userControllers.lockUser);
