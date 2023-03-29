@@ -97,14 +97,14 @@ const userControllers = {
       // Find user
       const user = await User.findById(decoded.id);
       if (!user) {
-        return res.json("User not found");
+        return res.status(401).json("User not found");
       }
 
       // Update user
       user.isVerified = true;
       await user.save();
 
-      res.json(errorFunction(false, 200, "Email verified successfully"));
+      res.status(200).json(errorFunction(false, 200, "Email verified successfully"));
     } catch (error) {
       console.error(error);
       return res
@@ -129,7 +129,7 @@ const userControllers = {
             user.password,
             async function (err, result) {
               if (err) {
-                res.json(errorFunction(true, 400, "Bad request"));
+                res.status(400).json(errorFunction(true, 400, "Bad request"));
               }
               if (result) {
                 // check account lock status
@@ -149,7 +149,7 @@ const userControllers = {
                   await sendVerificationEmail(user.email, verificationToken);
 
                   // Return error message
-                  return res.json(
+                  return res.status(401).json(
                     errorFunction(
                       true,
                       401,
@@ -175,14 +175,14 @@ const userControllers = {
                 // Returns access token and user information
                 const { password, ...rest } = user._doc;
 
-                res.json(
+                res.status(200).json(
                   errorFunction(false, 200, "Login Success", {
                     user: { ...rest },
                     accessToken,
                   })
                 );
               } else {
-                res.json(
+                res.status(401).json(
                   errorFunction(true, 401, "Password does not matched!!!")
                 );
               }
@@ -243,7 +243,7 @@ const userControllers = {
       // Send new verification email
       await sendVerificationEmail(user.email, verificationToken);
 
-      res.json(
+      res.status(200).json(
         errorFunction(false, 200, "New verification email sent successfully!")
       );
     } catch (error) {
@@ -294,7 +294,7 @@ const userControllers = {
           ...others,
         });
       } else {
-        res.json({
+        res.status(204).json({
           statusCode: 204,
           message: "This user Id have not in the database",
           user: {},
@@ -365,7 +365,7 @@ const userControllers = {
       const userId = req.params.id;
       const isBodyEmpty = Object.keys(req.body).length;
       if (isBodyEmpty === 0) {
-        return res.send({
+        return res.status(403).send({
           statusCode: 403,
           massage: "Body request can not empty!",
         });
@@ -374,7 +374,7 @@ const userControllers = {
         if (data) {
           res.status(200).json(errorFunction(false, 200, "Successfully"));
         } else {
-          res.json(
+          res.status(204).json(
             errorFunction(false, 204, "This User Id have not in the database.")
           );
         }
@@ -463,7 +463,7 @@ const userControllers = {
             useFindAndModify: false,
           }).then((data) => {
             if (!data) {
-              return res.json(errorFunction(false, 404, "Bad request"));
+              return res.status(404).json(errorFunction(false, 404, "Bad request"));
             } else {
               res.status(200);
               return res.json(
@@ -513,7 +513,7 @@ const userControllers = {
           useFindAndModify: false,
         }).then((data) => {
           if (!data) {
-            return res.json(errorFunction(false, 404, "Bad request"));
+            return res.status(404).json(errorFunction(false, 404, "Bad request"));
           } else {
             mailer.sendMail(
               req.body.email,
@@ -530,7 +530,7 @@ const userControllers = {
                 "<p>Trân trọng!</p>"
             );
 
-            return res.json(
+            return res.status(200).json(
               errorFunction(false, 200, "Updated user's password successfully!")
             );
           }
