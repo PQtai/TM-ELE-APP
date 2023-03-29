@@ -2,7 +2,7 @@ import config from '~/config';
 import Auth from '~/layouts/Auth/Auth';
 import NavOnly from '~/layouts/Client/NavOnly/NavOnly';
 import AccountManager from '~/pages/admin/accountManager/accountManager';
-import Category from '~/pages/admin/category/Category';
+import Category from '~/pages/admin/category/category';
 import Overview from '~/pages/admin/overview/overview';
 import PostManager from '~/pages/admin/postManager/postManager';
 import Chat from '~/pages/client/Chat/chat';
