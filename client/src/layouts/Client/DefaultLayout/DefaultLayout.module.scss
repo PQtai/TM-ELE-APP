@@ -1,17 +1,5 @@
-.wrapper {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-}
-
-.container {
-   width: var(--default-layout-width);
-   max-width: 100%;
-   padding: 0 var(--default-layout-horizontal-spacer);
-   margin-top: var(--default-layout-header-height);
-   display: flex;
-}
-
-.content {
-   flex: 1;
+.layoutClient {
+   // background-color: var(--background-color-client);
+   background-color: #ffffff;
+   height: 1000vh;
 }

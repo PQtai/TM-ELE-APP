@@ -11,12 +11,14 @@
    --text-color: #161823;
    --font-family: 'Quicksand', sans-serif;
    --icon-color: #7b809a;
+   --title-color: #777777;
    // Default layout
    --default-layout-height-nav: 36px;
-   --default-layout-width: 1824px;
+   --default-layout-width: 1204px;
    --default-layout-horizontal-spacer: 24px;
    //nav
    --navbar-height: 70px;
+   --navbar-height-client: 70px;
    --space-navbar-right: 18px;
    --space-navbar-left: 15px;
    //button
@@ -87,13 +89,30 @@ li {
 }
 
 .container {
-   width: var(--default-layout-width);
-   max-width: 100%;
-   padding: 0 var(--default-layout-horizontal-spacer);
+   margin-top: var(--navbar-height-client);
+   // width: var(--default-layout-width);
+
+   width: 100%;
+   // padding: 0 var(--default-layout-horizontal-spacer);
    display: flex;
    flex-direction: column;
 }
 
 .content {
    flex: 1;
+}
+
+.disable {
+   user-select: none;
+   opacity: 0.6;
+   preventdefault: true !important;
+   pointer-events: none;
+   cursor: not-allowed !important;
+   -webkit-touch-callout: none; /* iOS Safari */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Old versions of Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+   user-select: none; /* Non-prefixed version, currently
+                               supported by Chrome, Edge, Opera and Firefox */
 }

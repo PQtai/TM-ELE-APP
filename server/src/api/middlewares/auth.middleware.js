@@ -1,10 +1,10 @@
-import jwt from "jsonwebtoken";
-import errorFunction from "../utils/errorFunction.js";
+import jwt from 'jsonwebtoken';
+import errorFunction from '../utils/errorFunction.js';
 const authMiddleware = {
   verifyToken: (req, res, next) => {
     const token = req.headers.token;
     if (token) {
-      const accessToken = token.split(" ")[1];
+      const accessToken = token.split(' ')[1];
       jwt.verify(accessToken, process.env.JWT_ACCESSTOKEN_KEY, (err, user) => {
         if (err) {
           res.status(403).json(errorFunction(true, 403, err));
@@ -23,29 +23,29 @@ const authMiddleware = {
   // Auth is admin or is author
   authIsAdminOrIsAuthor: (req, res, next) => {
     authMiddleware.verifyToken(req, res, () => {
-      if (req.user.id === req.params.id || req.user.role === "admin") {
+      if (req.user.id === req.params.id || req.user.role === 'admin') {
         next();
       } else {
-        res.status(403).json("You are not authorized to do this");
+        res.status(403).json('You are not authorized to do this');
       }
     });
   },
   // Auth admin
   authIsAdmin: (req, res, next) => {
     authMiddleware.verifyToken(req, res, () => {
-      if (req.user.role === "admin") {
+      if (req.user.role === 'admin') {
         next();
       } else {
         res
           .status(403)
-          .json(errorFunction(true, 403, "You are not authorized to do this"));
+          .json(errorFunction(true, 403, 'You are not authorized to do this'));
       }
     });
   },
   // Middleware to check the account field
   checkRole: (req, res, next) => {
     if (req.body.role) {
-      return res.status(403).json("You cannot register as role");
+      return res.status(403).json('You cannot register as role');
     }
     next();
   },
