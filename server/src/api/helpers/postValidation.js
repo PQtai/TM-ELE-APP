@@ -4,7 +4,10 @@ const postSchemas = {
   postCreate: Joi.object().keys({
     title: Joi.string().min(2).max(50).required(),
     address: Joi.string().required(),
-    images: Joi.array().items(Joi.string().min(2)).required(),
+    images: Joi.any()
+      .meta({ swaggerType: 'file' })
+      .optional()
+      .description('Image File'),
     otherInfo: Joi.number(),
     status: {
       code: Joi.number().valid(0, 1, 2, 9).default(2),
