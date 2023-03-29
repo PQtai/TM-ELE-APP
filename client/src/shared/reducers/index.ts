@@ -1,4 +1,4 @@
-import accountManager from '~/pages/admin/AccountManager/accountManager.reducer';
+import accountManager from '~/pages/admin/accountManager/accountManager.reducer';
 import register from '~/pages/register/register.reducer';
 import login from '~/pages/login/login.reducer';
 import postSlice from '~/pages/client/Post/post.reducer';
