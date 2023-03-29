@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
-import styles from './Register.module.scss';
+import styles from './register.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 // import FacebookIcon from '@mui/icons-material/Facebook';
@@ -12,10 +12,16 @@ import Button from '~/components/Button/Button';
 import { emailRegex, phoneRegex } from '~/utils/regexConfig';
 import { FormErrorsRegister, FormValuesRegister } from '~/shared/model/register';
 import ButtonCustom from '~/components/Button/ButtonCustom';
+import { useAppDispatch, useAppSelector } from '~/config/store';
+import { createAccount } from './register.reducer';
+import { useEffect } from 'react';
+import Logo from '~/components/Logo/Logo';
 
 const Register = () => {
-   // const dispatch = useDispatch();
-   // const navigate = useNavigate();
+   const navigate = useNavigate();
+
+   const dispatch = useAppDispatch();
+   const status = useAppSelector((state) => state.register.infoState.status);
    const formik = useFormik({
       initialValues: {
          email: '',
@@ -38,11 +44,18 @@ const Register = () => {
             .oneOf([Yup.ref('password')], 'Mật khẩu không trùng khớp'),
       }),
       onSubmit: (userRegister) => {
-         console.log(userRegister);
-
+         const { confirmPassword, ...infoFormat } = userRegister;
+         dispatch(createAccount({ ...infoFormat }));
          // authRequest.registerUser(userRegister, dispatch);
       },
    });
+
+   useEffect(() => {
+      if (status === 200) {
+         navigate('/email-verify');
+      }
+   }, [status, navigate]);
+
    const handelBlurInput = (field: keyof FormValuesRegister) => {
       return formik.touched[field] && formik.errors[field as keyof FormErrorsRegister] ? (
          <span className={styles.errMess}>{formik.errors[field as keyof FormErrorsRegister]}</span>
@@ -56,12 +69,7 @@ const Register = () => {
          className={styles.registerWrapper}
       >
          <form className={styles.registerForm} onSubmit={formik.handleSubmit}>
-            <div className={styles.formLogo}>
-               <h2>
-                  <span>TMELE </span>
-                  <span className={styles.logoColor}>HOMES</span>
-               </h2>
-            </div>
+            <Logo />
             <div className={styles.formTitle}>
                <h3>Đăng ký</h3>
             </div>
@@ -71,7 +79,7 @@ const Register = () => {
                      id="emailOrPhone"
                      type="text"
                      // autoComplete="on"
-                     placeholder="your email"
+                     placeholder="email của bạn"
                      {...formik.getFieldProps('email')}
                   />
                   {handelBlurInput('email')}
@@ -83,7 +91,7 @@ const Register = () => {
                      id="phone"
                      type="text"
                      // autoComplete="on"
-                     placeholder="your phone"
+                     placeholder="số điện thoại của bạn"
                      {...formik.getFieldProps('phone')}
                   />
                   {handelBlurInput('phone')}
@@ -95,7 +103,7 @@ const Register = () => {
                      id="password"
                      type="password"
                      // autoComplete="on"
-                     placeholder="password"
+                     placeholder="mật khẩu"
                      {...formik.getFieldProps('password')}
                   />
                   {handelBlurInput('password')}
@@ -105,9 +113,9 @@ const Register = () => {
                <div className={styles.groupField}>
                   <input
                      id="confirmPassword"
-                     type="confirmPassword"
+                     type="password"
                      // autoComplete="on"
-                     placeholder="confirm password"
+                     placeholder="xác thực mật khẩu"
                      {...formik.getFieldProps('confirmPassword')}
                   />
                   {handelBlurInput('confirmPassword')}

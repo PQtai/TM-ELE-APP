@@ -8,7 +8,7 @@ import { IChildrenComponentProps } from '~/shared/model/global';
 const LayoutAdmin: React.FC<IChildrenComponentProps> = ({ children }) => {
    const [isCloseSidebar, SetIsCloseSidebar] = useState(false);
    return (
-      <div className="wrapper">
+      <div className={`${styles.layoutAdmin} wrapper`}>
          <Sidebar isCloseSidebar={isCloseSidebar} />
          <Navbar isCloseSidebar={isCloseSidebar} SetIsCloseSidebar={SetIsCloseSidebar}></Navbar>
          <div className={styles.wrapperChildren}>

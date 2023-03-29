@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
-import styles from './Login.module.scss';
+import styles from './login.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
 // import FacebookIcon from '@mui/icons-material/Facebook';
 // import GoogleIcon from '@mui/icons-material/Google';
@@ -9,9 +9,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FormErrorsLogin, FormValuesLogin } from '~/shared/model/login';
 import Button from '~/components/Button/Button';
 import { emailRegex } from '~/utils/regexConfig';
+import { useAppDispatch, useAppSelector } from '~/config/store';
+import { useEffect } from 'react';
+import { loginAccount } from './login.reducer';
+import BasicAlerts from '~/components/Alerts/Alerts';
+import Logo from '~/components/Logo/Logo';
 const Login = () => {
-   // const dispatch = useDispatch();
-   // const navigate = useNavigate();
+   const navigate = useNavigate();
+
+   const dispatch = useAppDispatch();
+   const dataLogin = useAppSelector((state) => state.login.infoState.data);
+   const statusLogin = useAppSelector((state) => state.login.infoState.status);
    const formik = useFormik({
       initialValues: {
          emailOrPhone: '',
@@ -25,9 +33,9 @@ const Login = () => {
             .required('Trường này không được để trống')
             .min(8, 'Tối thiểu 8 ký tự'),
       }),
-      onSubmit: (userLogin) => {
-         console.log(userLogin);
-
+      onSubmit: async (userLogin) => {
+         await dispatch(loginAccount(userLogin));
+         navigate('/');
          // authRequest.loginUser(userLogin, dispatch);
       },
    });
@@ -36,6 +44,9 @@ const Login = () => {
          <span className={styles.errMess}>{formik.errors[field as keyof FormErrorsLogin]}</span>
       ) : null;
    };
+   useEffect(() => {
+      dataLogin && console.log(dataLogin);
+   }, [dataLogin]);
    return (
       <div
          onClick={(e) => {
@@ -44,12 +55,7 @@ const Login = () => {
          className={styles.loginWrapper}
       >
          <form className={styles.loginForm} onSubmit={formik.handleSubmit}>
-            <div className={styles.formLogo}>
-               <h2>
-                  <span>TMELE </span>
-                  <span className={styles.logoColor}>HOMES</span>
-               </h2>
-            </div>
+            <Logo />
             <div className={styles.formTitle}>
                <h3>Đăng nhập</h3>
             </div>
@@ -59,7 +65,7 @@ const Login = () => {
                      id="emailOrPhone"
                      type="text"
                      // autoComplete="on"
-                     placeholder="email or your phone"
+                     placeholder="Nhập email hoặc số điện thoại của bạn"
                      {...formik.getFieldProps('emailOrPhone')}
                   />
                   {handelBlurInput('emailOrPhone')}
@@ -71,7 +77,7 @@ const Login = () => {
                      id="password"
                      type="password"
                      // autoComplete="on"
-                     placeholder="password"
+                     placeholder="Nhập mật khẩu"
                      {...formik.getFieldProps('password')}
                   />
                   {handelBlurInput('password')}
@@ -90,7 +96,7 @@ const Login = () => {
                <p className={styles.forgotPasswrod}>Quên mật khẩu?</p>
             </div>
             <Button className={styles.btnLogin} type="submit">
-               Sign in
+               Login
             </Button>
             <div className={styles.aboutRegister}>
                <span className={styles.titleRegister}>Bạn chưa là thành viên?</span>
@@ -99,6 +105,11 @@ const Login = () => {
                </Link>
             </div>
          </form>
+         <BasicAlerts
+            isOpenProps={statusLogin === 200 ? true : false}
+            info="success"
+            message="login is successfully"
+         />
       </div>
    );
 };

@@ -538,7 +538,7 @@ const userControllers = {
       }
     } catch (error) {
       console.log("debug", error);
-      res.json(errorFunction(true, 404, "Bad request"));
+      res.status(404).json(errorFunction(true, 404, "Bad request"));
     }
   },
 

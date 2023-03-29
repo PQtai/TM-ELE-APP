@@ -8,7 +8,7 @@ const router = express.Router();
 router.post(
   '/create',
   authMiddleware.verifyToken,
-  formatFileUpload('image', 'multiple'),
+  formatFileUpload('images', 'multiple'),
   validateMiddleware('body', postSchemas.postCreate),
   postControllers.upload
 );

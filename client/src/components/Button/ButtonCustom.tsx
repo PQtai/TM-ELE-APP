@@ -7,12 +7,14 @@ interface PropsTypeButton {
    to?: string;
    // css
    primary?: boolean;
+   primaryClient?: boolean;
    active?: boolean;
    rounded?: boolean;
    disabled?: boolean;
    small?: boolean;
    large?: boolean;
    warning?: boolean;
+   transparent?: boolean;
    // variable
    type?: 'button' | 'submit' | 'reset';
    title?: string;
@@ -31,9 +33,11 @@ const ButtonCustom: React.FC<PropsTypeButton> = ({
    to,
    title,
    primary = false,
+   primaryClient = false,
    active = false,
    rounded = false,
    disabled = false,
+   transparent = false,
    small = false,
    large = false,
    warning = false,
@@ -62,15 +66,16 @@ const ButtonCustom: React.FC<PropsTypeButton> = ({
       props.to = to;
       Comp = Link;
    }
-   const classes = `${styles.wrapper} ${primary ? styles.primary : ''} ${
-      active ? styles.active : ''
-   } ${disabled ? styles.disabled : ''} ${warning ? styles.warning : ''}
+   const classes = `${styles.wrapper} ${primary ? styles.primary : ''} 
+   ${active ? styles.active : ''} ${transparent ? styles.transparent : ''}
+    ${disabled ? styles.disabled : ''} ${warning ? styles.warning : ''}
+    ${primaryClient ? styles.primaryClient : ''}
       ${rounded ? styles.rounded : ''} ${small ? styles.small : ''} ${large ? styles.large : ''} ${
       className ? className : ''
    }`;
 
    return (
-      <Comp className={classes} {...props}>
+      <Comp className={classes.trim()} {...props}>
          {leftIcon && <span className={styles.icon}>{leftIcon}</span>}
          <span className={styles.title}>{title}</span>
          {rightIcon && <span className={styles.icon}>{rightIcon}</span>}

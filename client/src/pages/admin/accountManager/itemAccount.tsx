@@ -35,13 +35,14 @@ const ItemAccount = () => {
                className={styles.itemBtn}
             >
                <MoreVertIcon />
-               <ul
-                  onClick={(e) => {
-                     e.stopPropagation();
-                  }}
-                  className={`${styles.listBtnCustom} ${isOpenListBtn ? styles.active : ''}`}
-               >
-                  <li className={styles.itemBtnCustom}>
+               <ul className={`${styles.listBtnCustom} ${isOpenListBtn ? styles.active : ''}`}>
+                  <li
+                     onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                     }}
+                     className={styles.itemBtnCustom}
+                  >
                      <ButtonCustom className={styles.itemBtn} large title="Quản lý tài khoản" />
                   </li>
                   <li className={styles.itemBtnCustom}>

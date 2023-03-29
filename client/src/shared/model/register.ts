@@ -5,11 +5,22 @@ export interface FormValuesRegister {
    confirmPassword: string;
 }
 
+export interface AccountUser {
+   firstName?: string;
+   lastName?: string;
+   phone?: string;
+   email?: string;
+   role?: string;
+   avatar?: string;
+   favourite?: string[];
+   isLocked?: boolean;
+   evaluate?: Number;
+   conversations?: string[];
+}
 export interface FormErrorsRegister extends FormValuesRegister {}
 
-export interface IResultResponse {
+export interface IResultResponseRegister {
    is_error: boolean;
    statusCode: number;
    message: string;
-   data: any;
 }
