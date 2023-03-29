@@ -1,14 +1,13 @@
 import React from 'react';
+import NavClient from '~/layouts/components/NavClient/NavClient';
 import { IChildrenComponentProps } from '~/shared/model/global';
 import styles from './DefaultLayout.module.scss';
 const DefaultLayout: React.FC<IChildrenComponentProps> = ({ children }) => {
    return (
-      <div className="wrapper">
-         <div className="container">
-            <h1>Navbar</h1>
-            {children}
-            <footer>footer</footer>
-         </div>
+      <div className={`${styles.layoutClient} wrapper`}>
+         <NavClient />
+         <div className="container">{children}</div>
+         <footer>footer</footer>
       </div>
    );
 };

@@ -1,0 +1,39 @@
+.itemTextField {
+   width: 100%;
+   min-height: 50px;
+   position: relative;
+   display: flex;
+   align-items: center;
+   overflow: hidden;
+   .inputTextField {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      padding: 20px 0 0 20px;
+      font-size: 1.6rem;
+      border: 0.5px solid #ccc;
+      border-radius: 4px;
+      &::placeholder {
+         opacity: 0;
+      }
+      &:not(:placeholder-shown) ~ .inputTextFieldCustom {
+         top: 0;
+      }
+      &:focus {
+         border: 0.5px solid;
+         border-color: orange;
+      }
+      &:focus ~ .inputTextFieldCustom {
+         top: 0;
+      }
+   }
+   .inputTextFieldCustom {
+      position: absolute;
+      left: 20px;
+      height: 30px;
+      transition: all 0.5s linear;
+      .inputIconRequired {
+         color: red;
+      }
+   }
+}

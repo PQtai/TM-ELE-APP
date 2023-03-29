@@ -3,9 +3,11 @@ const routes = {
    home: '/',
    login: '/login',
    register: '/register',
+   emailVerify: '/email-verify',
    // private routes
    profile: '/profile',
    chat: '/chat',
+   post: '/post',
 
    //    adminClient
    homeAdmin: '/admin',

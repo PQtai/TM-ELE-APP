@@ -29,7 +29,7 @@ const postMiddleware = {
     if (options === 'single') {
       return upload.single(nameUpload);
     } else if (options === 'multiple') {
-      return upload.array(nameUpload);
+      return upload.array(nameUpload, 6);
     }
   },
 };
