@@ -40,20 +40,34 @@ const FormRest = () => {
             .matches(/^.{8,1500}$/, 'Tối thiểu 8 ký tự và ít hơn 1500 kí tự'),
       }),
       onSubmit: async (userLogin) => {
+         const infoPostFormat = {
+            ...userLogin,
+            price: parseInt(userLogin.price.replace(/,/g, '')),
+            deposit: parseInt(userLogin.deposit.replace(/,/g, '')),
+         };
          const formData = new FormData();
+         const { images, ...rest } = initsate;
+         images.forEach((image) => {
+            formData.append('images', image);
+         });
 
-         // images.forEach((image) => {
-         //    formData.append('images', image);
+         const datas = JSON.stringify({
+            ...rest,
+            ...infoPostFormat,
+         });
+         formData.append('datas', datas);
+
+         // Object.entries(initsate.address).forEach((state) => {
+         //    formData.append(state[0], state[1]);
          // });
-         Object.entries(initsate.address).forEach((state) => {
-            formData.append(state[0], state[1]);
-         });
-         Object.entries(initsate).forEach((state) => {
-            formData.append(state[0], state[1]);
-         });
-         Object.entries(userLogin).forEach((state) => {
-            formData.append(state[0], state[1]);
-         });
+         // Object.entries(initsate).forEach((state) => {
+         //    if (state[0] !== 'address') {
+         //       formData.append(state[0], state[1]);
+         //    }
+         // });
+         // Object.entries(userLogin).forEach((state) => {
+         //    formData.append(state[0], state[1]);
+         // });
          dispatch(setLoading(true));
 
          const response = await dispatch(createPost(formData));
@@ -61,9 +75,9 @@ const FormRest = () => {
          dispatch(setLoading(false));
          console.log(response);
 
-         // for (const data of formData.entries()) {
-         //    console.log(data);
-         // }
+         for (const data of formData.entries()) {
+            console.log(data);
+         }
       },
    });
    const handelBlurInput = (field: keyof FormValuesPost) => {

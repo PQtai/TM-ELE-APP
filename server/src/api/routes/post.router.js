@@ -4,12 +4,13 @@ import postSchemas from '../helpers/postValidation.js';
 import authMiddleware from '../middlewares/auth.middleware.js';
 import { formatFileUpload } from '../middlewares/post.middlewares.js';
 import validateMiddleware from '../middlewares/validate.middleware.js';
+import validateFormData from '../utils/validateFormData.js';
 const router = express.Router();
 router.post(
   '/create',
   authMiddleware.verifyToken,
   formatFileUpload('images', 'multiple'),
-  validateMiddleware('body', postSchemas.postCreate),
+  validateFormData('body', postSchemas.postCreate),
   postControllers.upload
 );
 router.delete('/delete', authMiddleware.authIsAdmin, postControllers.delete);
