@@ -16,6 +16,7 @@ import paymentOl from '~/assets/images/online-payment.jpg';
 import rentalImg from '~/assets/images/rich.jpg';
 import SelectOnly from './selectOnly';
 import FormRest from './formRest';
+import Map from '~/components/Map/Map';
 
 const PostPage = () => {
    const dispatch = useAppDispatch();
@@ -216,6 +217,7 @@ const PostPage = () => {
             </Grid>
          </div>
          {isDisplayOverlay && ChildrenItem && <Overlay children={ChildrenItem}></Overlay>}
+         {/* <Map /> */}
       </div>
    );
 };

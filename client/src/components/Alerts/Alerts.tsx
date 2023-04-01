@@ -1,22 +1,25 @@
 import * as React from 'react';
 import Alert from '@mui/material/Alert';
-import Stack from '@mui/material/Stack';
 import styles from './Alerts.module.scss';
 import { Snackbar } from '@mui/material';
-interface ITypeAlerts {
-   isOpenProps: boolean;
-   info: 'error' | 'warning' | 'info' | 'success';
-   message: string;
-}
+import { useAppDispatch, useAppSelector } from '~/config/store';
+import { setInfoAlert } from './Alerts.reducer';
 
-export default function BasicAlerts({ isOpenProps, info, message }: ITypeAlerts) {
-   const [isOpen, setIsOpen] = React.useState(false);
+export default function BasicAlerts() {
+   const isOpen = useAppSelector((state) => state.alertSlice.isOpen);
+   const mess = useAppSelector((state) => state.alertSlice.mess);
+   const info = useAppSelector((state) => state.alertSlice.info);
 
-   React.useEffect(() => {
-      setIsOpen(isOpenProps);
-   }, [isOpenProps]);
+   const dispatch = useAppDispatch();
+
    const handleCloseAlert = () => {
-      setIsOpen(false);
+      dispatch(
+         setInfoAlert({
+            isOpen: false,
+            mess: '',
+            info: 'success',
+         }),
+      );
    };
    return (
       <Snackbar
@@ -28,7 +31,7 @@ export default function BasicAlerts({ isOpenProps, info, message }: ITypeAlerts)
          key={'bottom' + 'left'}
       >
          <Alert variant="outlined" severity={info}>
-            {message}
+            {mess}
          </Alert>
       </Snackbar>
    );

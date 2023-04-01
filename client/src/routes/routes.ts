@@ -11,7 +11,7 @@ import PostPage from '~/pages/client/Post';
 import Profile from '~/pages/client/Profile/profile';
 import Login from '~/pages/login/login';
 import Register from '~/pages/register/register';
-import VerifyEmail from '~/pages/register/verifyEmail';
+import VerifiEmailSuccess from '~/pages/verifiEmailSuccess/verifiEmailSuccess';
 import { IRoutes } from '~/shared/model/global';
 
 // Public routes
@@ -19,7 +19,7 @@ const publicRoutes: IRoutes[] = [
    { path: config.routes.home, component: Home },
    { path: config.routes.login, component: Login, layout: Auth },
    { path: config.routes.register, component: Register, layout: Auth },
-   { path: config.routes.emailVerify, component: VerifyEmail },
+   { path: config.routes.verifyEmailSuccess, component: VerifiEmailSuccess, layout: NavOnly },
 ];
 
 const privateRoutesUser: IRoutes[] = [

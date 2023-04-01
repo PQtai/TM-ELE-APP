@@ -16,12 +16,20 @@ import { useAppDispatch, useAppSelector } from '~/config/store';
 import { createAccount } from './register.reducer';
 import { useEffect } from 'react';
 import Logo from '~/components/Logo/Logo';
+import Overlay from '~/components/Overlay';
+import { setLoading } from '~/components/Loading/Loading.reducer';
+import { setInfoAlert } from '~/components/Alerts/Alerts.reducer';
+import { setDisplayOverlay } from '~/components/Overlay/overlay.reducer';
+import ModalVerifyEmail from '~/components/ModalVerifyEmail/ModalVerifyEmail';
 
 const Register = () => {
    const navigate = useNavigate();
 
+   const isDisplayOverlay = useAppSelector((state) => state.OverlaySlice.isDisplay);
+   const ChildrenItem = useAppSelector((state) => state.OverlaySlice.children);
+   const statusRegister = useAppSelector((state) => state.register.infoState.status);
+
    const dispatch = useAppDispatch();
-   const status = useAppSelector((state) => state.register.infoState.status);
    const formik = useFormik({
       initialValues: {
          email: '',
@@ -43,18 +51,45 @@ const Register = () => {
             .required('Bắt buộc')
             .oneOf([Yup.ref('password')], 'Mật khẩu không trùng khớp'),
       }),
-      onSubmit: (userRegister) => {
+      onSubmit: async (userRegister) => {
+         dispatch(setLoading(true));
+
          const { confirmPassword, ...infoFormat } = userRegister;
          dispatch(createAccount({ ...infoFormat }));
-         // authRequest.registerUser(userRegister, dispatch);
+         dispatch(setLoading(false));
       },
    });
 
    useEffect(() => {
-      if (status === 200) {
+      // if (statusRegister === 201) {
+      //    dispatch(
+      //       setInfoAlert({
+      //          isOpen: true,
+      //          info: 'success',
+      //          mess: 'Đăng ký thành công',
+      //       }),
+      //    );
+      //    navigate('/login');
+      //    return;
+      // }
+
+      if (statusRegister === 201) {
+         dispatch(
+            setDisplayOverlay({
+               isDisplay: true,
+               children: <ModalVerifyEmail />,
+            }),
+         );
+         navigate('/login');
+         return;
+      }
+   }, [statusRegister]);
+
+   useEffect(() => {
+      if (statusRegister === 200) {
          navigate('/email-verify');
       }
-   }, [status, navigate]);
+   }, [statusRegister, navigate]);
 
    const handelBlurInput = (field: keyof FormValuesRegister) => {
       return formik.touched[field] && formik.errors[field as keyof FormErrorsRegister] ? (
@@ -131,6 +166,7 @@ const Register = () => {
                title="Đăng nhập"
             />
          </form>
+         {isDisplayOverlay && ChildrenItem && <Overlay children={ChildrenItem}></Overlay>}
       </div>
    );
 };
