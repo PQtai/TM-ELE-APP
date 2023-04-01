@@ -3,7 +3,12 @@ const { Schema } = mongoose;
 const PostSchema = new Schema(
   {
     title: { type: String, required: true },
-    address: { type: String, required: true },
+    address: {
+      province: { type: String, required: true },
+      district: { type: String, required: true },
+      wards: { type: String, required: true },
+      addressDetails: { type: String, required: true },
+    },
     images: [
       {
         url: { type: String },
@@ -24,6 +29,8 @@ const PostSchema = new Schema(
       minLength: 10,
       maxLength: 15000,
     },
+    typeCategory: { type: String, required: true },
+    typePost: { type: Number, required: true },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'user',

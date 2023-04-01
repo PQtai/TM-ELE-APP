@@ -18,7 +18,7 @@ interface IInfoCreate {
    typeCategory: string;
    typePost: number | null;
    address: IStateAddress;
-   otherInfo: number | null;
+   otherInfo?: number | null;
 }
 
 interface IInitState {
@@ -45,7 +45,6 @@ const initialState: IInitState = {
       typeCategory: '',
       typePost: null,
       address: { province: '', district: '', wards: '', addressDetails: '' },
-      otherInfo: null,
    },
 };
 

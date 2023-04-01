@@ -35,39 +35,34 @@ const postControllers = {
   //[Post]file/upload
   upload: async (req, res, next) => {
     try {
-      if (req.user.id === req.body.userId) {
-        const uploader = async (path) => await uploads(path, 'Posts');
-        const files = req.files;
-        const listImg = [];
-        for (const file of files) {
-          const { path, mimetype } = file;
-          const newPath = await uploader(path);
-          const _link = newPath.url;
-          console.log('_link', _link);
-          fs.unlinkSync(path);
-          listImg.push({
-            url: _link,
-            contentType: mimetype,
-          });
-        }
-        console.log('listImg', listImg);
-
-        const post = await Post.create({
-          ...req.body,
-          images: listImg,
+      const uploader = async (path) => await uploads(path, 'Posts');
+      const files = req.files;
+      const listImg = [];
+      for (const file of files) {
+        const { path, mimetype } = file;
+        const newPath = await uploader(path);
+        const _link = newPath.url;
+        console.log('_link', _link);
+        fs.unlinkSync(path);
+        listImg.push({
+          url: _link,
+          contentType: mimetype,
         });
-        post.save().then((newPost) => {
-          res
-            .status(201)
-            .json(
-              errorFunction(false, 201, 'Create post is succesfully', newPost)
-            );
-        });
-      } else {
-        res
-          .status(403)
-          .json(errorFunction(true, 403, 'You are not authorized to do this'));
       }
+      console.log('listImg', listImg);
+
+      const post = await Post.create({
+        ...req.body,
+        userId: req.user.id,
+        images: listImg,
+      });
+      post.save().then((newPost) => {
+        res
+          .status(201)
+          .json(
+            errorFunction(false, 201, 'Create post is succesfully', newPost)
+          );
+      });
     } catch (error) {
       res.status(500).json(error.message);
     }

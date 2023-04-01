@@ -2,21 +2,32 @@ import Joi from 'joi';
 
 const postSchemas = {
   postCreate: Joi.object().keys({
-    title: Joi.string().min(2).max(50).required(),
-    address: Joi.string().required(),
     images: Joi.any()
       .meta({ swaggerType: 'file' })
       .optional()
-      .description('Image File'),
-    otherInfo: Joi.number(),
-    status: {
-      code: Joi.number().valid(0, 1, 2, 9).default(2),
-    },
-    acreage: Joi.number().positive().precision(2),
-    price: Joi.number().positive(),
-    deposit: Joi.number().positive(),
-    description: Joi.string().min(10).max(1500).required(),
-    userId: Joi.string().required(),
+      .description('Image File')
+      .required(),
+    datas: Joi.object().keys({
+      typeCategory: Joi.string().required(),
+      typePost: Joi.number().required(),
+      title: Joi.string().min(2).max(50).required(),
+      address: {
+        province: Joi.string().required(),
+        district: Joi.string().required(),
+        wards: Joi.string().required(),
+        addressDetails: Joi.string().required(),
+      },
+      otherInfo: Joi.number(),
+      status: {
+        code: Joi.number().valid(0, 1, 2, 9).default(2),
+      },
+      acreage: Joi.string()
+        .pattern(/^\d{1,10}(,\d{1,3})?$/)
+        .required(),
+      price: Joi.number().positive().required(),
+      deposit: Joi.number().positive(),
+      description: Joi.string().min(10).max(1500).required(),
+    }),
   }),
   postEditStatus: Joi.object().keys({
     code: Joi.number().valid(0, 1, 2, 9).default(2),
