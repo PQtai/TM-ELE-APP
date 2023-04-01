@@ -4,14 +4,13 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useAppSelector } from '~/config/store';
 
 export default function SimpleBackdrop() {
-   const loadingLogin = useAppSelector((state) => state.login.infoState.loading);
-   const loadingRegister = useAppSelector((state) => state.register.infoState.loading);
+   const loading = useAppSelector((state) => state.loadingSlice.loading);
 
    return (
       <div>
          <Backdrop
             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={loadingLogin || loadingRegister}
+            open={loading}
          >
             <CircularProgress color="inherit" />
          </Backdrop>

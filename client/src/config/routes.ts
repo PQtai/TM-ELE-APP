@@ -4,6 +4,7 @@ const routes = {
    login: '/login',
    register: '/register',
    emailVerify: '/email-verify',
+   verifyEmailSuccess: '/auth/verify-email/:token',
    // private routes
    profile: '/profile',
    chat: '/chat',

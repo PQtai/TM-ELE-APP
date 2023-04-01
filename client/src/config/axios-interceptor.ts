@@ -6,6 +6,8 @@ axios.defaults.timeout = TIMEOUT;
 axios.defaults.baseURL = SERVER_API_URL;
 
 const setupAxiosInterceptors = () => {
+   console.log('chay vao day');
+
    const onRequestSuccess = (config: any) => {
       let token: string | null = localStorage.getItem('token');
       if (typeof token === 'string') {
@@ -14,21 +16,21 @@ const setupAxiosInterceptors = () => {
       }
       return config;
    };
-   //   const onResponseSuccess = (response : any) => {
-   //     const contentType = 'application/force-download';
-   //     if (response?.headers?.['content-type'] === contentType) {
-   //       const url = window.URL.createObjectURL(new Blob([response.data], { type: contentType }));
-   //       const link = document.createElement('a');
-   //       link.href = url;
-   //       link.setAttribute('download', `${response?.config?.headers?.excelName}.xlsx`);
-   //       document.body.appendChild(link);
-   //       link.click();
-   //       link.remove();
-   //     }
-   //     return response;
-   //   };
+   const onResponseSuccess = (response: any) => {
+      return response;
+   };
+   const onResponseError = (err: any) => {
+      console.log(err);
+
+      const status = err.status || (err.response ? err.response.status : 0);
+      if (status === 403 || status === 401) {
+         //   onUnauthenticated();
+      }
+      return Promise.reject(err);
+   };
 
    axios.interceptors.request.use(onRequestSuccess);
+   axios.interceptors.response.use(onResponseSuccess, onResponseError);
 };
 
 export default setupAxiosInterceptors;

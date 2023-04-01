@@ -14,12 +14,19 @@ import { useEffect } from 'react';
 import { loginAccount } from './login.reducer';
 import BasicAlerts from '~/components/Alerts/Alerts';
 import Logo from '~/components/Logo/Logo';
+import Overlay from '~/components/Overlay';
+import { setLoading } from '~/components/Loading/Loading.reducer';
+import { setInfoAlert } from '~/components/Alerts/Alerts.reducer';
+import ModalVerifyEmail from '~/components/ModalVerifyEmail/ModalVerifyEmail';
+import { setDisplayOverlay } from '~/components/Overlay/overlay.reducer';
 const Login = () => {
    const navigate = useNavigate();
 
    const dispatch = useAppDispatch();
-   const dataLogin = useAppSelector((state) => state.login.infoState.data);
+   const isDisplayOverlay = useAppSelector((state) => state.OverlaySlice.isDisplay);
+   const ChildrenItem = useAppSelector((state) => state.OverlaySlice.children);
    const statusLogin = useAppSelector((state) => state.login.infoState.status);
+   console.log(statusLogin);
    const formik = useFormik({
       initialValues: {
          emailOrPhone: '',
@@ -34,19 +41,42 @@ const Login = () => {
             .min(8, 'Tối thiểu 8 ký tự'),
       }),
       onSubmit: async (userLogin) => {
+         console.log(statusLogin);
+         dispatch(setLoading(true));
          await dispatch(loginAccount(userLogin));
-         navigate('/');
-         // authRequest.loginUser(userLogin, dispatch);
+         dispatch(setLoading(false));
+         console.log(statusLogin);
       },
    });
+   useEffect(() => {
+      if (statusLogin === 200) {
+         dispatch(
+            setInfoAlert({
+               isOpen: true,
+               info: 'success',
+               mess: 'Đăng nhập thành công',
+            }),
+         );
+         navigate('/');
+         return;
+      }
+      if (statusLogin === 401) {
+         console.log('hihi');
+
+         dispatch(
+            setDisplayOverlay({
+               isDisplay: true,
+               children: <ModalVerifyEmail />,
+            }),
+         );
+         return;
+      }
+   }, [statusLogin]);
    const handelBlurInput = (field: keyof FormValuesLogin) => {
       return formik.touched[field] && formik.errors[field as keyof FormErrorsLogin] ? (
          <span className={styles.errMess}>{formik.errors[field as keyof FormErrorsLogin]}</span>
       ) : null;
    };
-   useEffect(() => {
-      dataLogin && console.log(dataLogin);
-   }, [dataLogin]);
    return (
       <div
          onClick={(e) => {
@@ -105,11 +135,7 @@ const Login = () => {
                </Link>
             </div>
          </form>
-         <BasicAlerts
-            isOpenProps={statusLogin === 200 ? true : false}
-            info="success"
-            message="login is successfully"
-         />
+         {isDisplayOverlay && ChildrenItem && <Overlay children={ChildrenItem}></Overlay>}
       </div>
    );
 };

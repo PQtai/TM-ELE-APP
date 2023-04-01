@@ -1,0 +1,70 @@
+.verifiEmail {
+   height: 100vh;
+   margin: auto;
+   width: var(--default-layout-width);
+   display: flex;
+   position: relative;
+   > button {
+      position: absolute;
+      top: 20px;
+      left: 30px;
+   }
+   .btnVerifyWrap {
+      display: flex;
+      max-width: 300px;
+      margin: auto;
+      text-align: center;
+      justify-content: center;
+      flex-direction: column;
+      width: 100%;
+      .btnVerify {
+         padding: 20px;
+         background-color: #85f6b6;
+         font-size: 1.6rem;
+         font-weight: 600;
+         border-radius: 10px;
+         margin-bottom: 20px;
+      }
+   }
+   .verifiEmailWrap {
+      margin: auto;
+      position: relative;
+      //   height: 90%;
+      min-width: 300px;
+      width: 30%;
+      //   min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      border-radius: 30% 70% 50% 20% /50%;
+      background-color: #4caf50;
+      background-image: linear-gradient(to bottom, #b2feb5, #1ac062);
+
+      .verifiEmailTitle {
+         position: absolute;
+         bottom: 100%;
+         left: 0;
+         right: 0;
+         text-align: center;
+         padding: 20px;
+         background-color: #ffffff;
+         display: flex;
+         align-items: center;
+         > svg {
+            margin-left: 20px;
+            color: #4caf50;
+            font-size: 20px;
+         }
+         //  margin-bottom: 200px;
+      }
+      .verifiEmailImg {
+         margin: auto;
+         height: 40%;
+         min-height: 260px;
+         width: 40%;
+         min-width: 260px;
+         background-position: center;
+         background-repeat: no-repeat;
+         background-size: contain;
+      }
+   }
+}

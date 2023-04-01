@@ -61,16 +61,12 @@ const RegisterSlice = createSlice({
    extraReducers(builder) {
       builder
          .addMatcher(isFulfilled(createAccount), (state, action) => {
+            console.log(action.payload.data.statusCode);
+
             state.infoState.status = action.payload.data.statusCode;
             state.infoState.loading = false;
             state.infoState.mess = action.payload.data.message;
             state.infoState.error = action.payload.data.is_error;
-            const info = action.payload;
-            console.log(info);
-
-            // const accessToken = action.payload.headers.authorization.split(' ')[1];
-            // // Lưu access_token vào localStorage hoặc làm bất kỳ việc gì khác cần thiết
-            // localStorage.setItem('access_token', accessToken);
          })
          .addMatcher(isPending(createAccount), (state) => {
             state.infoState.loading = true;
@@ -78,9 +74,13 @@ const RegisterSlice = createSlice({
             state.infoState.mess = '';
             state.infoState.error = false;
          })
-         .addMatcher(isRejected(createAccount), (state) => {
+         .addMatcher(isRejected(createAccount), (state, action) => {
             state.infoState.loading = false;
             state.infoState.error = true;
+            if (action?.error) {
+               const { response } = action.error as { response: any };
+               state.infoState.status = response.status;
+            }
          });
    },
    reducers: {

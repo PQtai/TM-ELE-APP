@@ -6,6 +6,8 @@ import { priceRegex } from '~/utils/regexConfig';
 import { useAppDispatch, useAppSelector } from '~/config/store';
 import { FormValuesPost } from '~/shared/model/post';
 import ItemTextField from '~/components/TextField';
+import { setLoading } from '~/components/Loading/Loading.reducer';
+import { createPost } from './post.reducer';
 
 const FormRest = () => {
    const dispatch = useAppDispatch();
@@ -29,7 +31,7 @@ const FormRest = () => {
          price: Yup.string()
             .required('Trường này không được để trống')
             .matches(priceRegex, 'Sai định dạng tiền tệ')
-            .min(3, 'Vui lòng điền giá tiền hơn 100 đồng'),
+            .min(3, 'Vui lòng điền giá tiền từ 100 đồng'),
          deposit: Yup.string()
             .matches(priceRegex, 'Sai định dạng tiền tệ')
             .min(3, 'Vui lòng điền giá tiền hơn 100 đồng'),
@@ -52,9 +54,16 @@ const FormRest = () => {
          Object.entries(userLogin).forEach((state) => {
             formData.append(state[0], state[1]);
          });
-         for (const data of formData.entries()) {
-            console.log(data);
-         }
+         dispatch(setLoading(true));
+
+         const response = await dispatch(createPost(formData));
+
+         dispatch(setLoading(false));
+         console.log(response);
+
+         // for (const data of formData.entries()) {
+         //    console.log(data);
+         // }
       },
    });
    const handelBlurInput = (field: keyof FormValuesPost) => {

@@ -17,6 +17,7 @@ export interface ILoginState {
    status: number | string;
    mess: string;
    data?: AccountUser;
+   isVerified?: boolean;
 }
 
 export interface IInitalState {
@@ -31,6 +32,7 @@ const initialState: IInitalState = {
       status: '',
       mess: '',
       data: undefined,
+      isVerified: true,
    },
 };
 
@@ -62,8 +64,6 @@ const LoginSlice = createSlice({
    extraReducers(builder) {
       builder
          .addMatcher(isFulfilled(loginAccount), (state, action) => {
-            console.log('caiconcac');
-
             state.infoState.status = action.payload.data.statusCode;
             state.infoState.loading = false;
             state.infoState.mess = action.payload.data.message;
@@ -75,10 +75,6 @@ const LoginSlice = createSlice({
             localStorage.setItem('userName', JSON.stringify(lastName || phone));
             localStorage.setItem('role', JSON.stringify(role));
             localStorage.setItem('userId', JSON.stringify(_id));
-
-            // const accessToken = action.payload.headers.authorization.split(' ')[1];
-            // // Lưu access_token vào localStorage hoặc làm bất kỳ việc gì khác cần thiết
-            // localStorage.setItem('access_token', accessToken);
          })
          .addMatcher(isPending(loginAccount), (state) => {
             state.infoState.loading = true;
@@ -86,9 +82,14 @@ const LoginSlice = createSlice({
             state.infoState.mess = '';
             state.infoState.error = false;
          })
-         .addMatcher(isRejected(loginAccount), (state) => {
+         .addMatcher(isRejected(loginAccount), (state, action) => {
             state.infoState.loading = false;
             state.infoState.error = true;
+
+            if (action?.error) {
+               const { response } = action.error as { response: any };
+               state.infoState.status = response.status;
+            }
          });
    },
    reducers: {
@@ -97,6 +98,7 @@ const LoginSlice = createSlice({
          state.infoState.status = '';
          state.infoState.mess = '';
          state.infoState.error = false;
+         state.infoState.isVerified = false;
       },
    },
 });

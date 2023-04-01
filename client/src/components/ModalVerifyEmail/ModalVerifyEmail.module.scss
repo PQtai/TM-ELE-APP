@@ -1,0 +1,21 @@
+.modalVerifyEmail {
+   background-color: #ffffff;
+   border-radius: 6px;
+   padding: 40px 20px;
+   display: flex;
+   flex-direction: column;
+   .modalTitle {
+      font-weight: 600;
+      font-size: 2rem;
+      border: 0.5px solid var(--text-color);
+      padding: 20px;
+   }
+   .modalBtn {
+      background-color: var(--primary);
+      padding: 10px 30px;
+      font-size: 2rem;
+      border-radius: 3px;
+      margin-top: 40px;
+      margin-left: auto;
+   }
+}
