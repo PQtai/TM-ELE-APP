@@ -19,6 +19,7 @@ import { setLoading } from '~/components/Loading/Loading.reducer';
 import { setInfoAlert } from '~/components/Alerts/Alerts.reducer';
 import ModalVerifyEmail from '~/components/ModalVerifyEmail/ModalVerifyEmail';
 import { setDisplayOverlay } from '~/components/Overlay/overlay.reducer';
+import SimpleBackdrop from '~/components/Loading/Loading';
 const Login = () => {
    const navigate = useNavigate();
 
@@ -26,6 +27,7 @@ const Login = () => {
    const isDisplayOverlay = useAppSelector((state) => state.OverlaySlice.isDisplay);
    const ChildrenItem = useAppSelector((state) => state.OverlaySlice.children);
    const statusLogin = useAppSelector((state) => state.login.infoState.status);
+   const loadingLogin = useAppSelector((state) => state.login.infoState.loading);
    console.log(statusLogin);
    const formik = useFormik({
       initialValues: {
@@ -135,6 +137,7 @@ const Login = () => {
                </Link>
             </div>
          </form>
+         {loadingLogin && <SimpleBackdrop />}
          {isDisplayOverlay && ChildrenItem && <Overlay children={ChildrenItem}></Overlay>}
       </div>
    );

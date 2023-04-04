@@ -6,6 +6,7 @@ import selectLabelSlice from '~/components/SelectLabel/SelectLabel.reducer';
 import OverlaySlice from '~/components/Overlay/overlay.reducer';
 import loadingSlice from '~/components/Loading/Loading.reducer';
 import alertSlice from '~/components/Alerts/Alerts.reducer';
+import postAuthorSlice from '~/pages/client/ManagePosts/managePosts.reducer';
 
 const rootReducer = {
    accountManager,
@@ -16,6 +17,7 @@ const rootReducer = {
    login,
    loadingSlice,
    alertSlice,
+   postAuthorSlice,
 };
 
 export default rootReducer;

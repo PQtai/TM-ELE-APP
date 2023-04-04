@@ -9,7 +9,8 @@ const postControllers = {
   index: async (req, res, next) => {
     try {
       const { page = 1, pageSize = 10 } = req.query;
-      const posts = await Post.find({})
+      const posts = await Post.find({ 'status.code': 1 })
+        .sort({ createdAt: -1 })
         .skip((page - 1) * pageSize)
         .limit(pageSize);
       res

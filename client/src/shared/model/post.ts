@@ -34,6 +34,7 @@ export interface IDataPost {
    otherInfo: number;
    status: {
       code: number;
+      mess?: string;
    };
    acreage: number;
    price: number;
@@ -48,4 +49,11 @@ export interface IResultResponsePost {
    statusCode: number;
    message: string;
    data: IDataPost;
+}
+
+export interface IResultResponsePostAuthor {
+   is_error: false;
+   statusCode: number;
+   message: string;
+   data: IDataPost[];
 }

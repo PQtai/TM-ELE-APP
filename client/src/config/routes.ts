@@ -9,6 +9,7 @@ const routes = {
    profile: '/profile',
    chat: '/chat',
    post: '/post',
+   managePosts: '/manage/posts?/:options',
 
    //    adminClient
    homeAdmin: '/admin',

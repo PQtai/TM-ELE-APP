@@ -21,6 +21,7 @@ import { setLoading } from '~/components/Loading/Loading.reducer';
 import { setInfoAlert } from '~/components/Alerts/Alerts.reducer';
 import { setDisplayOverlay } from '~/components/Overlay/overlay.reducer';
 import ModalVerifyEmail from '~/components/ModalVerifyEmail/ModalVerifyEmail';
+import SimpleBackdrop from '~/components/Loading/Loading';
 
 const Register = () => {
    const navigate = useNavigate();
@@ -28,6 +29,7 @@ const Register = () => {
    const isDisplayOverlay = useAppSelector((state) => state.OverlaySlice.isDisplay);
    const ChildrenItem = useAppSelector((state) => state.OverlaySlice.children);
    const statusRegister = useAppSelector((state) => state.register.infoState.status);
+   const loadingRegister = useAppSelector((state) => state.register.infoState.loading);
 
    const dispatch = useAppDispatch();
    const formik = useFormik({
@@ -166,6 +168,7 @@ const Register = () => {
                title="Đăng nhập"
             />
          </form>
+         {loadingRegister && <SimpleBackdrop />}
          {isDisplayOverlay && ChildrenItem && <Overlay children={ChildrenItem}></Overlay>}
       </div>
    );

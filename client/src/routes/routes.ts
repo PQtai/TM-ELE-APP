@@ -7,6 +7,7 @@ import Overview from '~/pages/admin/overview/overview';
 import PostManager from '~/pages/admin/postManager/postManager';
 import Chat from '~/pages/client/Chat/chat';
 import Home from '~/pages/client/Home';
+import ManagePosts from '~/pages/client/ManagePosts';
 import PostPage from '~/pages/client/Post';
 import Profile from '~/pages/client/Profile/profile';
 import Login from '~/pages/login/login';
@@ -23,9 +24,10 @@ const publicRoutes: IRoutes[] = [
 ];
 
 const privateRoutesUser: IRoutes[] = [
-   { path: config.routes.profile, component: Profile, layout: Auth },
+   { path: config.routes.profile, component: Profile },
    { path: config.routes.chat, component: Chat },
    { path: config.routes.post, component: PostPage, layout: NavOnly },
+   { path: config.routes.managePosts, component: ManagePosts },
 ];
 
 const privateRoutesAdmin: IRoutes[] = [
