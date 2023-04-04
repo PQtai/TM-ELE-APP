@@ -45,6 +45,10 @@ const postSchemas = {
   postDetail: Joi.object({
     id: Joi.string().min(1).required(),
   }),
+  postsAuthor: Joi.object().keys({
+    code: Joi.number().valid(0, 1, 2, 9).required(),
+    userId: Joi.string().required(),
+  }),
 };
 
 export default postSchemas;

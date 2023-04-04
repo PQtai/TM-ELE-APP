@@ -20,6 +20,38 @@ const postControllers = {
       res.status(500).json(errorFunction(true, 500, error.message));
     }
   },
+  getPostsAuthor: async (req, res, next) => {
+    try {
+      let { code = 1, userId } = req.query;
+      code = Number(code);
+      if (code !== 1) {
+        if (req.user.id === userId) {
+          const posts = await Post.find({ 'status.code': code, userId }).sort({
+            createdAt: -1,
+          });
+          return res
+            .status(200)
+            .json(
+              errorFunction(false, 200, 'Findddd post is succesfully', posts)
+            );
+        } else {
+          return res
+            .status(403)
+            .json(
+              errorFunction(true, 403, 'You are not authorized to do this')
+            );
+        }
+      }
+      const posts = await Post.find({ 'status.code': code, userId }).sort({
+        createdAt: -1,
+      });
+      return res
+        .status(200)
+        .json(errorFunction(false, 200, 'Find post isss succesfully', posts));
+    } catch (error) {
+      res.status(500).json(errorFunction(true, 500, error.message));
+    }
+  },
   // [Get]/post/:id
   show: async (req, res, next) => {
     try {
@@ -89,7 +121,7 @@ const postControllers = {
         if (!post) {
           return res
             .status(404)
-            .json(errorFunction(false, 404, 'Post id is not found'));
+            .json(errorFunction(true, 404, 'Post id is not found'));
         }
         const currCode = post.status.code;
         if ((code === 9 || code === 1) && (currCode === 9 || currCode === 1)) {

@@ -33,6 +33,12 @@ router.get(
   postControllers.index
 );
 router.get(
+  '/post-author',
+  authMiddleware.verifyToken,
+  validateMiddleware('query', postSchemas.postsAuthor),
+  postControllers.getPostsAuthor
+);
+router.get(
   '/:id',
   validateMiddleware('params', postSchemas.postDetail),
   postControllers.show
