@@ -17,7 +17,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAppSelector } from '~/config/store';
+import { useNavigate } from 'react-router-dom';
 const NavClient = () => {
+   const navigate = useNavigate();
    const dataLogin = useAppSelector((state) => state.login.infoState.data);
    let userName: string | undefined | null = localStorage.getItem('userName');
    if (typeof userName === 'string') {
@@ -35,6 +37,9 @@ const NavClient = () => {
                   leftIcon={<ChatOutlinedIcon />}
                />
                <ButtonCustom
+                  onClick={() => {
+                     navigate('/manage/posts');
+                  }}
                   transparent
                   className={styles.navOptions}
                   title="Quản lý tin"

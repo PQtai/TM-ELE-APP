@@ -1,0 +1,108 @@
+.managePostWrap {
+   background-color: var(--background-color-client);
+   .managePost {
+      max-width: var(--default-layout-width);
+      margin: auto;
+      padding: 0 30px;
+      .title {
+         padding-top: 40px;
+         padding-bottom: 10px;
+         padding-left: 10px;
+         border-bottom: 0.5px solid #ccc;
+         position: relative;
+         .btnBack {
+            position: absolute;
+            top: 10px;
+            left: 4px;
+            display: flex;
+            align-items: center;
+            > svg {
+               margin-right: 6px;
+            }
+         }
+      }
+      .infoUser {
+         display: flex;
+         border-bottom: 0.5px solid #ccc;
+         .avatar {
+            margin: 20px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center center;
+         }
+         .optionsWrap {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            > p {
+               width: 100%;
+               font-size: 1.8rem;
+               font-weight: 600;
+            }
+            justify-content: flex-end;
+
+            .button {
+               margin-top: 10px;
+               > button {
+                  padding: 10px;
+                  background-color: var(--primary);
+                  margin-right: 20px;
+                  border-radius: 4px;
+               }
+               display: flex;
+            }
+         }
+      }
+      .postNavigate {
+         display: flex;
+         border-bottom: 0.5px solid #ccc;
+         .navigateItem {
+            cursor: pointer;
+            margin-right: 10px;
+            padding: 14px;
+            position: relative;
+         }
+         .navigateItem ~ button {
+            padding: 5px;
+            margin-left: 137px;
+         }
+         .navigateItem.active {
+            &::after {
+               position: absolute;
+               content: '';
+               width: 100%;
+               height: 3px;
+               background-color: var(--primary);
+               bottom: 1px;
+               left: 0;
+            }
+         }
+      }
+      .listsPostAuthor {
+         .itemPost {
+            background-color: #ffffff;
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: flex;
+            .imgPost {
+               background-repeat: no-repeat;
+               background-size: cover;
+               background-position: center;
+               width: 120px;
+               height: 120px;
+               border-radius: 10px;
+            }
+            .itemPostRight {
+               display: flex;
+               flex-direction: column;
+               margin-left: 20px;
+               justify-content: space-around;
+            }
+         }
+      }
+   }
+}

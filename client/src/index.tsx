@@ -14,7 +14,7 @@ setupAxiosInterceptors();
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
    <Provider store={store}>
-      <SimpleBackdrop />
+      {/* <SimpleBackdrop /> */}
       <GlobalStyles>
          <App />
       </GlobalStyles>

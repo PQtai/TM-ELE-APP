@@ -23,6 +23,7 @@ const PostPage = () => {
    const images = useAppSelector((state) => state.postSlice.initialState.images);
    const typePost = useAppSelector((state) => state.postSlice.initialState.typePost);
    const address = useAppSelector((state) => state.postSlice.initialState.address);
+   const statusPost = useAppSelector((state) => state.postSlice.infoPost.status);
    const initsate = useAppSelector((state) => state.postSlice.initialState);
    console.log(initsate);
 
@@ -111,6 +112,12 @@ const PostPage = () => {
          setUrlImages(formatUrl);
       }
    }, [images]);
+
+   useEffect(() => {
+      if (typeof statusPost === 'number') {
+         setUrlImages([]);
+      }
+   }, [statusPost]);
 
    useEffect(() => {
       return () => {

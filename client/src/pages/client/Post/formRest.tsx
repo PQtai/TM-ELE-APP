@@ -7,13 +7,21 @@ import { useAppDispatch, useAppSelector } from '~/config/store';
 import { FormValuesPost } from '~/shared/model/post';
 import ItemTextField from '~/components/TextField';
 import { setLoading } from '~/components/Loading/Loading.reducer';
-import { createPost } from './post.reducer';
+import { createPost, resetInfoPost } from './post.reducer';
+import { useEffect } from 'react';
+import { setInfoAlert } from '~/components/Alerts/Alerts.reducer';
+import SimpleBackdrop from '~/components/Loading/Loading';
+import { useNavigate } from 'react-router-dom';
 
 const FormRest = () => {
    const dispatch = useAppDispatch();
    const images = useAppSelector((state) => state.postSlice.initialState.images);
    const initsate = useAppSelector((state) => state.postSlice.initialState);
-   console.log(images);
+
+   const statusCreatePost = useAppSelector((state) => state.postSlice.infoPost.status);
+   const loadingPost = useAppSelector((state) => state.postSlice.infoPost.loading);
+
+   const navigate = useNavigate();
 
    const formik = useFormik({
       initialValues: {
@@ -25,9 +33,7 @@ const FormRest = () => {
       },
       validationSchema: Yup.object({
          title: Yup.string().required('Trường này không được để trống').min(8, 'Tối thiểu 8 ký tự'),
-         acreage: Yup.number()
-            .required('Trường này không được để trống')
-            .min(5, 'Trọ lớn lớn hơn 5 m2'),
+         acreage: Yup.number().required('Trường này không được để trống').min(5, 'Trọ từ 5 m2'),
          price: Yup.string()
             .required('Trường này không được để trống')
             .matches(priceRegex, 'Sai định dạng tiền tệ')
@@ -56,30 +62,35 @@ const FormRest = () => {
             ...infoPostFormat,
          });
          formData.append('datas', datas);
-
-         // Object.entries(initsate.address).forEach((state) => {
-         //    formData.append(state[0], state[1]);
-         // });
-         // Object.entries(initsate).forEach((state) => {
-         //    if (state[0] !== 'address') {
-         //       formData.append(state[0], state[1]);
-         //    }
-         // });
-         // Object.entries(userLogin).forEach((state) => {
-         //    formData.append(state[0], state[1]);
-         // });
-         dispatch(setLoading(true));
-
-         const response = await dispatch(createPost(formData));
-
-         dispatch(setLoading(false));
-         console.log(response);
-
-         for (const data of formData.entries()) {
-            console.log(data);
-         }
+         await dispatch(createPost(formData));
+         navigate('/manage/posts/pending-review');
+         formik.resetForm();
+         dispatch(resetInfoPost());
       },
    });
+
+   useEffect(() => {
+      if (statusCreatePost === 201) {
+         dispatch(
+            setInfoAlert({
+               isOpen: true,
+               info: 'success',
+               mess: 'Đăng tin thành công',
+            }),
+         );
+         return;
+      }
+      // if (statusCreatePost === 401) {
+      //    dispatch(
+      //       setDisplayOverlay({
+      //          isDisplay: true,
+      //          children: <ModalVerifyEmail />,
+      //       }),
+      //    );
+      //    return;
+      // }
+   }, [statusCreatePost]);
+
    const handelBlurInput = (field: keyof FormValuesPost) => {
       return formik.touched[field] && formik.errors[field as keyof FormValuesPost] ? (
          <span className={styles.errMess}>{formik.errors[field as keyof FormValuesPost]}</span>
@@ -171,6 +182,7 @@ const FormRest = () => {
             info="success"
             message="login is successfully"
          /> */}
+         {loadingPost && <SimpleBackdrop />}
       </div>
    );
 };
