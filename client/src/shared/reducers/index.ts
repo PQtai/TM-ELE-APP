@@ -7,6 +7,7 @@ import OverlaySlice from '~/components/Overlay/overlay.reducer';
 import loadingSlice from '~/components/Loading/Loading.reducer';
 import alertSlice from '~/components/Alerts/Alerts.reducer';
 import postAuthorSlice from '~/pages/client/ManagePosts/managePosts.reducer';
+import postRoleAdminSlice from '~/pages/admin/postManager/postManager.reducer';
 
 const rootReducer = {
    accountManager,
@@ -18,6 +19,7 @@ const rootReducer = {
    loadingSlice,
    alertSlice,
    postAuthorSlice,
+   postRoleAdminSlice,
 };
 
 export default rootReducer;
