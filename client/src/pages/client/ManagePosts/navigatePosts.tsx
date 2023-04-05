@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ButtonCustom from '~/components/Button/ButtonCustom';
 import styles from './managePosts.module.scss';
+import { resetInfoPost } from './managePosts.reducer';
 
 const NavigatePosts = () => {
    const params = useParams();

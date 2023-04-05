@@ -79,13 +79,17 @@ const postAuthorSlice = createSlice({
    },
    reducers: {
       resetInfoPost(state) {
-         // state.infoPost = initialState.infoPost;
+         state.infoPost = {
+            data: [],
+            loading: false,
+            error: false,
+            status: '',
+            mess: '',
+         };
       },
    },
 });
 
-//  export const {
-//     findPosts
-//  } = postAuthorSlice.actions;
+export const { resetInfoPost } = postAuthorSlice.actions;
 
 export default postAuthorSlice.reducer;

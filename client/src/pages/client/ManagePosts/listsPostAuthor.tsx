@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '~/config/store';
 import ItemPost from './itemPost';
 import styles from './managePosts.module.scss';
-import { findPosts } from './managePosts.reducer';
+import { findPosts, resetInfoPost } from './managePosts.reducer';
 const ListsPostAuthor = () => {
    const { options } = useParams();
    const dispatch = useAppDispatch();
@@ -17,6 +17,7 @@ const ListsPostAuthor = () => {
    const listDatasPostAuthor = useAppSelector((state) => state.postAuthorSlice.infoPost.data);
 
    useEffect(() => {
+      dispatch(resetInfoPost());
       switch (options) {
          case 'posts':
             if (userId) {
@@ -29,14 +30,54 @@ const ListsPostAuthor = () => {
             }
             break;
          case 'deleted':
+            // if (userId) {
+            //    dispatch(
+            //       findPosts({
+            //          code: 1,
+            //          userId: userId,
+            //       }),
+            //    );
+            // }
             break;
          case 'refused':
+            // if (userId) {
+            //    dispatch(
+            //       findPosts({
+            //          code: 1,
+            //          userId: userId,
+            //       }),
+            //    );
+            // }
             break;
          case 'unpaid':
+            // if (userId) {
+            //    dispatch(
+            //       findPosts({
+            //          code: 1,
+            //          userId: userId,
+            //       }),
+            //    );
+            // }
             break;
          case 'hidden':
+            // if (userId) {
+            //    dispatch(
+            //       findPosts({
+            //          code: 1,
+            //          userId: userId,
+            //       }),
+            //    );
+            // }
             break;
          case 'pending-review':
+            if (userId) {
+               dispatch(
+                  findPosts({
+                     code: 2,
+                     userId: userId,
+                  }),
+               );
+            }
             break;
          default:
             break;
@@ -46,9 +87,10 @@ const ListsPostAuthor = () => {
       <Grid container spacing={2}>
          <Grid item md={9}>
             <div className={styles.listsPostAuthor}>
-               {[1, 2, 3].map((item, index) => {
-                  return <ItemPost key={index} />;
-               })}
+               {listDatasPostAuthor.length &&
+                  listDatasPostAuthor.map((data, index) => {
+                     return <ItemPost data={data} key={index} />;
+                  })}
             </div>
          </Grid>
          <Grid item md={3}>
