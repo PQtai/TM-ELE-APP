@@ -42,6 +42,8 @@ export interface IDataPost {
    description: string;
    userId: string;
    _id: string;
+   createdAt: string;
+   updatedAt: string;
 }
 
 export interface IResultResponsePost {
