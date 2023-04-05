@@ -1,0 +1,80 @@
+.postManager {
+   background-color: #ffffff;
+   .postTitle {
+      padding-left: 10px;
+      padding-top: 20px;
+   }
+   .postSearch {
+      padding: 20px 10px;
+      > label {
+         font-size: 1.6rem;
+         font-weight: 500;
+         margin-right: 20px;
+      }
+      > input {
+         font-size: 1.8rem;
+         padding: 4px;
+         border-bottom: 0.5px solid #ccc;
+      }
+   }
+   .tableInfoPosts {
+      margin-bottom: 100px;
+      .tableLeft {
+         .tableLeftItem {
+            padding: 10px;
+            margin: 6px 0;
+            font-weight: 500;
+            cursor: pointer;
+            &:hover {
+               background-color: var(--background-btn-default);
+            }
+         }
+         .tableLeftItem.active {
+            background-color: var(--primary);
+         }
+      }
+      .listsPost {
+         max-height: 500px;
+         overflow-y: scroll;
+         padding: 20px 0;
+         .itemPost {
+            background-color: #ffffff;
+            padding: 10px;
+            border-radius: 6px;
+            display: flex;
+            position: relative;
+            .itemPost + .itemPost {
+               margin-bottom: 20px;
+            }
+            .imgPost {
+               background-repeat: no-repeat;
+               background-size: cover;
+               background-position: center;
+               width: 120px;
+               height: 120px;
+               border-radius: 10px;
+               position: relative;
+            }
+            .itemPostRightWrap {
+               display: flex;
+               flex: 1;
+               justify-content: space-between;
+               padding-right: 40px;
+               .itemPostRight {
+                  display: flex;
+                  flex-direction: column;
+                  margin-left: 20px;
+                  margin-top: 10px;
+                  //   justify-content: space-around;
+               }
+               .itemBtnDetail {
+                  padding: 10px 20px;
+                  display: inline-block;
+                  background-color: var(--background-btn-admin);
+                  color: #ffffff;
+               }
+            }
+         }
+      }
+   }
+}
