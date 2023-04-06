@@ -65,7 +65,7 @@ const NavClient = () => {
                      leftIcon={<AccountCircleIcon />}
                      rightIcon={<ExpandMoreIcon />}
                   ></ButtonCustom>
-                  {/* <div className={styles.ListInfoCustom}>
+                  <div className={styles.ListInfoCustom}>
                      <div className={styles.infoHeader}>
                         <img className={styles.avatar} src={logo} alt="avatar-user" />
                         <div className={styles.infoName}>
@@ -139,7 +139,7 @@ const NavClient = () => {
                            title="Đăng xuất"
                         />
                      </div>
-                  </div> */}
+                  </div>
                </div>
             </div>
          </div>
