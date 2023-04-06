@@ -18,30 +18,47 @@
       }
       .navRight {
          display: flex;
-         .navOptions {
-            span {
-               font-size: 1.6rem;
-               font-weight: 400;
-               > svg {
-                  font-size: 24px;
-                  transform: translateY(2px);
-                  color: rgb(87, 85, 85);
+
+         .wrapInfoUser {
+            position: relative;
+            &::after {
+               content: '';
+               position: absolute;
+               width: 100%;
+               top: 100%;
+               right: 0;
+               height: 10px;
+               background-color: transparent;
+               z-index: 10;
+            }
+            &:hover {
+               .ListInfoCustom {
+                  display: block;
                }
             }
-         }
-         .infoUser {
-            span {
-               &:first-child {
+            .navOptions {
+               span {
+                  font-size: 1.6rem;
+                  font-weight: 400;
                   > svg {
-                     font-size: 30px;
-                     //   transform: translateY(0);
+                     font-size: 24px;
+                     transform: translateY(2px);
+                     color: rgb(87, 85, 85);
                   }
                }
             }
-         }
-         .wrapInfoUser {
-            position: relative;
+            .infoUser {
+               span {
+                  &:first-child {
+                     > svg {
+                        font-size: 30px;
+                        //   transform: translateY(0);
+                     }
+                  }
+               }
+            }
             .ListInfoCustom {
+               display: none;
                background-color: #fff;
                border: 0.5px solid #ccc;
                border-radius: 10px;
