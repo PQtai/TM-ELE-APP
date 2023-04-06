@@ -1,16 +1,23 @@
 import { Grid } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
+import SimpleBackdrop from '~/components/Loading/Loading';
+import Overlay from '~/components/Overlay';
+import { setDisplayOverlay } from '~/components/Overlay/overlay.reducer';
 import { useAppDispatch, useAppSelector } from '~/config/store';
 import ItemPost from './itemPost';
+import PostDetailAdmin from './postDetailAdmin';
 import styles from './postManager.module.scss';
 import { findPostsRoleAdmin } from './postManager.reducer';
 const PostManager: React.FC = () => {
    const elementRefs = useRef<Array<HTMLLIElement | null>>([]);
    const dispatch = useAppDispatch();
    const [optionFindPosts, setOptionFindPosts] = useState(-1);
-
+   const isDisplayOverlay = useAppSelector((state) => state.OverlaySlice.isDisplay);
+   const ChildrenItem = useAppSelector((state) => state.OverlaySlice.children);
    const datas = useAppSelector((state) => state.postRoleAdminSlice.infoPost.data);
-   console.log(datas);
+   const dataPostDetail = useAppSelector((state) => state.postRoleAdminSlice.postDetail.data);
+
+   const loading = useAppSelector((state) => state.postRoleAdminSlice.postDetail.loading);
 
    const handleActiveBtn = (e: any) => {
       elementRefs.current.forEach((element) => {
@@ -22,18 +29,22 @@ const PostManager: React.FC = () => {
       });
       setOptionFindPosts(e.target.value);
    };
-
+   useEffect(() => {
+      if (dataPostDetail) {
+         dispatch(
+            setDisplayOverlay({
+               isDisplay: true,
+               children: <PostDetailAdmin data={dataPostDetail} />,
+            }),
+         );
+      }
+   }, [dataPostDetail]);
    useEffect(() => {
       const fetchPost = async () => {
-         switch (optionFindPosts) {
-            case -1:
-               await dispatch(findPostsRoleAdmin({}));
-               break;
-            case 2:
-               await dispatch(findPostsRoleAdmin({ code: optionFindPosts }));
-               break;
-            default:
-               break;
+         if (optionFindPosts === -1) {
+            await dispatch(findPostsRoleAdmin({}));
+         } else {
+            await dispatch(findPostsRoleAdmin({ code: optionFindPosts }));
          }
       };
       fetchPost();
@@ -102,13 +113,16 @@ const PostManager: React.FC = () => {
                </Grid>
                <Grid item md={10}>
                   <ul className={styles.listsPost}>
-                     {[1, 2, 3, 4].map((data, index) => {
-                        return <ItemPost key={index} />;
-                     })}
+                     {datas.length &&
+                        datas.map((data, index) => {
+                           return <ItemPost data={data} key={index} />;
+                        })}
                   </ul>
                </Grid>
             </Grid>
          </div>
+         {isDisplayOverlay && ChildrenItem && <Overlay children={ChildrenItem}></Overlay>}
+         {loading && <SimpleBackdrop />}
       </div>
    );
 };

@@ -20,6 +20,29 @@ const postControllers = {
       res.status(500).json(errorFunction(true, 500, error.message));
     }
   },
+  getPostsRoleAdmin: async (req, res, next) => {
+    try {
+      const { page = 1, pageSize = 10, code } = req.query;
+      let query = {};
+      if (code) {
+        query = { 'status.code': code };
+      }
+      const posts = await Post.find(query)
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
+        .populate({
+          path: 'userId',
+          select: 'phone lastName',
+        });
+
+      res
+        .status(200)
+        .json(errorFunction(false, 200, 'Find post is succesfully', posts));
+    } catch (error) {
+      res.status(500).json(errorFunction(true, 500, error.message));
+    }
+  },
   getPostsAuthor: async (req, res, next) => {
     try {
       let { code = 1, userId } = req.query;
@@ -55,7 +78,9 @@ const postControllers = {
   // [Get]/post/:id
   show: async (req, res, next) => {
     try {
-      const post = await Post.findOne({ _id: req.params.id });
+      const post = await Post.findOne({ _id: req.params.id }).populate({
+        path: 'userId',
+      });
       res
         .status(201)
         .json(
@@ -104,11 +129,20 @@ const postControllers = {
   updatePostStatus: async (req, res, next) => {
     try {
       const { postId, code, mess } = req.body;
+      const infoUpdate = {
+        status: {
+          code,
+        },
+      };
+      if (mess) {
+        infoUpdate.status.mess = mess;
+      }
       const role = req.user.role;
       if (role === 'admin') {
         const post = await Post.findOneAndUpdate(
           { _id: postId },
-          { status: { code, mess } },
+          infoUpdate,
+          // { status: { code, mess } },
           { new: true }
         );
         res
