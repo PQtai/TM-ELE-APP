@@ -60,3 +60,4 @@ export interface IResultResponsePostAuthor {
    message: string;
    data: IDataPost[];
 }
+export interface IResultResponsePostList extends IResultResponsePostAuthor {}

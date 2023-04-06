@@ -70,7 +70,14 @@ const NavClient = () => {
                         <img className={styles.avatar} src={logo} alt="avatar-user" />
                         <div className={styles.infoName}>
                            {!dataLogin?.phone ? (
-                              <h4 className={styles.auth}>Đăng nhập / Đăng ký</h4>
+                              <h4
+                                 onClick={() => {
+                                    navigate('/login');
+                                 }}
+                                 className={styles.auth}
+                              >
+                                 Đăng nhập / Đăng ký
+                              </h4>
                            ) : (
                               <h3>
                                  {userName ? userName : dataLogin?.firstName || dataLogin?.phone}
