@@ -1,0 +1,13 @@
+.itemPostCustom {
+   padding: 10px;
+   background-color: #ffffff;
+   border-radius: 6px;
+   cursor: pointer;
+   .itemPostImg {
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      padding-top: 50%;
+      width: 100%;
+   }
+}

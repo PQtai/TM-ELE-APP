@@ -8,6 +8,7 @@ import loadingSlice from '~/components/Loading/Loading.reducer';
 import alertSlice from '~/components/Alerts/Alerts.reducer';
 import postAuthorSlice from '~/pages/client/ManagePosts/managePosts.reducer';
 import postRoleAdminSlice from '~/pages/admin/postManager/postManager.reducer';
+import postListSlice from '~/pages/client/Home/home.reducer';
 
 const rootReducer = {
    accountManager,
@@ -20,6 +21,7 @@ const rootReducer = {
    alertSlice,
    postAuthorSlice,
    postRoleAdminSlice,
+   postListSlice,
 };
 
 export default rootReducer;
