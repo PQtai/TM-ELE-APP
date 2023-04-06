@@ -62,7 +62,7 @@ export default function SelectLabels({
                      setInfoTypeAddress((prev: ISelectLabels[]) => {
                         const newArr = [...prev];
                         newArr[index].datasSelect = data.data.data.map((data: IAddressData) => {
-                           return { name: data.name, code: data.code };
+                           return { name: data.name_with_type, code: data.code };
                         });
                         return newArr;
                      });
@@ -82,7 +82,7 @@ export default function SelectLabels({
                         newArr[index].datasSelect =
                            data.exitcode === 1
                               ? data.data.data.map((data: IAddressData) => {
-                                   return { name: data.name, code: data.code };
+                                   return { name: data.name_with_type, code: data.code };
                                 })
                               : [];
                         return newArr;

@@ -18,7 +18,7 @@ router.delete('/delete', authMiddleware.authIsAdmin, postControllers.delete);
 router.patch(
   '/editStatus/:id',
   validateMiddleware('body', postSchemas.postEditStatus),
-  authMiddleware.authIsAdmin,
+  authMiddleware.authIsAdminOrIsAuthor,
   postControllers.updatePostStatus
 );
 router.patch(
@@ -31,6 +31,12 @@ router.get(
   '/list',
   validateMiddleware('query', postSchemas.postList),
   postControllers.index
+);
+router.get(
+  '/list/role-admin',
+  authMiddleware.authIsAdmin,
+  validateMiddleware('query', postSchemas.postList),
+  postControllers.getPostsRoleAdmin
 );
 router.get(
   '/post-author',

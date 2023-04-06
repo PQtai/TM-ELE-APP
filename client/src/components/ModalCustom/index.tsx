@@ -105,7 +105,7 @@ const ModalCustom = ({ datas, typeModal }: IModalProps) => {
                newArr[0].datasSelect =
                   response.data.exitcode === 1
                      ? response.data.data.data.map((data: IAddress) => {
-                          return { name: data.name, code: data.code };
+                          return { name: data.name_with_type, code: data.code };
                        })
                      : [];
                return newArr;

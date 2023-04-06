@@ -41,6 +41,7 @@ const postSchemas = {
   postList: Joi.object().keys({
     page: Joi.number().min(1),
     pageSize: Joi.number().max(20),
+    code: Joi.number().valid(0, 1, 2, 9),
   }),
   postDetail: Joi.object({
     id: Joi.string().min(1).required(),

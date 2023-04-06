@@ -1,3 +1,4 @@
+import { IAccountManager } from './accountManager';
 import { IStateAddress } from './address';
 
 export interface Category {
@@ -40,7 +41,7 @@ export interface IDataPost {
    price: number;
    deposit: number;
    description: string;
-   userId: string;
+   userId: IAccountManager;
    _id: string;
    createdAt: string;
    updatedAt: string;

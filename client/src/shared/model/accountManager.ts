@@ -9,6 +9,7 @@ export interface IAccountManager {
    isLocked?: boolean;
    evaluate?: Number;
    conversations?: string[];
+   _id?: string;
 }
 export interface IAccountManagerResponse {
    totalPage: number;
