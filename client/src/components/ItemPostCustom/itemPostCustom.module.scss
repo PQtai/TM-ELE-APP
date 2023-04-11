@@ -3,11 +3,80 @@
    background-color: #ffffff;
    border-radius: 6px;
    cursor: pointer;
+   height: 100%;
    .itemPostImg {
       background-repeat: no-repeat;
       background-position: center;
       background-size: cover;
       padding-top: 50%;
       width: 100%;
+   }
+   .wrapInfoPost {
+      .itemPostInfo {
+         .itemPostInfoTitle {
+            // font-size: 1.2rem;
+            color: #333;
+            line-height: 1.6rem;
+            font-weight: 700;
+            margin: 10px 0;
+            height: 1.8rem;
+            overflow: hidden;
+            display: block;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+         }
+         .itemPostInfoAcreage {
+            > span {
+               font-size: 1.2rem;
+            }
+         }
+         .itemPostInfoPrice {
+            color: rgb(231, 34, 34);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .itemBtnFavorite {
+               padding: 5px;
+               .notActive {
+                  font-size: 2rem;
+                  color: rgb(231, 34, 34);
+               }
+               > .active {
+                  font-size: 2rem;
+                  color: rgb(231, 34, 34);
+               }
+            }
+         }
+      }
+      .itemPostInfoOther {
+         display: flex;
+         align-items: center;
+         > svg {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            color: #adaaaa;
+         }
+         .itemPostInfoAvatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+         }
+         .infoAddress {
+            font-size: 1.2rem;
+            color: #333;
+            line-height: 1.6rem;
+            font-weight: 300;
+            margin: 10px;
+            height: 1.8rem;
+            overflow: hidden;
+            display: block;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+         }
+      }
    }
 }

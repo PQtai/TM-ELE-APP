@@ -12,7 +12,6 @@ import { emailRegex } from '~/utils/regexConfig';
 import { useAppDispatch, useAppSelector } from '~/config/store';
 import { useEffect } from 'react';
 import { loginAccount } from './login.reducer';
-import BasicAlerts from '~/components/Alerts/Alerts';
 import Logo from '~/components/Logo/Logo';
 import Overlay from '~/components/Overlay';
 import { setLoading } from '~/components/Loading/Loading.reducer';
@@ -27,6 +26,8 @@ const Login = () => {
    const isDisplayOverlay = useAppSelector((state) => state.OverlaySlice.isDisplay);
    const ChildrenItem = useAppSelector((state) => state.OverlaySlice.children);
    const statusLogin = useAppSelector((state) => state.login.infoState.status);
+   const messLogin = useAppSelector((state) => state.login.infoState.mess);
+   const errorLogin = useAppSelector((state) => state.login.infoState.error);
    const loadingLogin = useAppSelector((state) => state.login.infoState.loading);
    console.log(statusLogin);
    const formik = useFormik({
@@ -51,29 +52,46 @@ const Login = () => {
       },
    });
    useEffect(() => {
-      if (statusLogin === 200) {
+      if (typeof statusLogin === 'number') {
+         if (!errorLogin) {
+            dispatch(
+               setInfoAlert({
+                  isOpen: true,
+                  infoAlert: {
+                     type: 'Success',
+                     duration: 2000,
+                     message: 'Đăng nhập thành công thành công',
+                     title: 'Thành công',
+                  },
+               }),
+            );
+            navigate('/');
+            return;
+         } else if (
+            messLogin === 'Account not verified. Please check your email for verification link.'
+         ) {
+            dispatch(
+               setDisplayOverlay({
+                  isDisplay: true,
+                  children: <ModalVerifyEmail />,
+               }),
+            );
+            return;
+         }
+
          dispatch(
             setInfoAlert({
                isOpen: true,
-               info: 'success',
-               mess: 'Đăng nhập thành công',
+               infoAlert: {
+                  type: 'Error',
+                  duration: 2000,
+                  message: messLogin,
+                  title: 'Có lỗi',
+               },
             }),
          );
-         navigate('/');
-         return;
       }
-      if (statusLogin === 401) {
-         console.log('hihi');
-
-         dispatch(
-            setDisplayOverlay({
-               isDisplay: true,
-               children: <ModalVerifyEmail />,
-            }),
-         );
-         return;
-      }
-   }, [statusLogin]);
+   }, [statusLogin, errorLogin]);
    const handelBlurInput = (field: keyof FormValuesLogin) => {
       return formik.touched[field] && formik.errors[field as keyof FormErrorsLogin] ? (
          <span className={styles.errMess}>{formik.errors[field as keyof FormErrorsLogin]}</span>
@@ -138,7 +156,6 @@ const Login = () => {
             </div>
          </form>
          {loadingLogin && <SimpleBackdrop />}
-         {isDisplayOverlay && ChildrenItem && <Overlay children={ChildrenItem}></Overlay>}
       </div>
    );
 };

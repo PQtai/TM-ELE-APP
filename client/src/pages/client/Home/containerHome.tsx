@@ -17,7 +17,11 @@ const ContainerHome = () => {
       <div className={styles.containerHomeWrap}>
          <div className={styles.containerHome}>
             <div className={styles.header}>
-               <ButtonCustom className={styles.btnFindAll} title="Xem tất cả nhà trọ" />
+               <ButtonCustom
+                  to="/list-post-search"
+                  className={styles.btnFindAll}
+                  title="Xem tất cả nhà trọ"
+               />
                <div className={styles.searchWrap}>
                   <input
                      className={styles.searchInput}

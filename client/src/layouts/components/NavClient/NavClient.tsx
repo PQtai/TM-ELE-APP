@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ButtonCustom from '~/components/Button/ButtonCustom';
 import Logo from '~/components/Logo/Logo';
 import styles from './NavClient.module.scss';
@@ -16,15 +16,76 @@ import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined
 import SettingsIcon from '@mui/icons-material/Settings';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useAppSelector } from '~/config/store';
+import { useAppDispatch, useAppSelector } from '~/config/store';
 import { useNavigate } from 'react-router-dom';
+import { setInfoAlert } from '~/components/Alerts/Alerts.reducer';
+import { reset } from '~/pages/login/login.reducer';
+import { isObjEmpty } from '~/utils/checkObjEmpty';
+import axios from 'axios';
+import { SERVER_API_URL } from '~/config/constants';
+import SimpleBackdrop from '~/components/Loading/Loading';
 const NavClient = () => {
+   const apiUrl = SERVER_API_URL;
+   const [loadingLogout, setLoadingLogout] = useState<boolean>(false);
    const navigate = useNavigate();
    const dataLogin = useAppSelector((state) => state.login.infoState.data);
-   let userName: string | undefined | null = localStorage.getItem('userName');
+   let userName = localStorage.getItem('userName');
+   const dispatch = useAppDispatch();
    if (typeof userName === 'string') {
       userName = JSON.parse(userName);
    }
+   console.log(dataLogin);
+   const handleGetNameChildren = () => {
+      console.log(dataLogin);
+
+      if (!userName && typeof userName === 'object') {
+         return (
+            <h4
+               onClick={() => {
+                  navigate('/login');
+               }}
+               className={styles.auth}
+            >
+               Đăng nhập/ Đăng ký
+            </h4>
+         );
+      } else {
+         return <h3>{dataLogin?.lastName || userName}</h3>;
+      }
+   };
+
+   const handleLogout = async () => {
+      const url = `${apiUrl}auth/logout`;
+      setLoadingLogout(true);
+      let token: string | null = localStorage.getItem('token');
+      if (typeof token === 'string') {
+         token = JSON.parse(token);
+         token = `Bearer ${token}`;
+      }
+      if (token) {
+         const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+               token,
+            },
+         });
+         if (response) {
+            navigate('/login');
+            setLoadingLogout(false);
+            dispatch(
+               setInfoAlert({
+                  isOpen: true,
+                  infoAlert: {
+                     title: 'Thành công',
+                     duration: 2000,
+                     message: 'Đăng xuất thành công',
+                     type: 'Success',
+                  },
+               }),
+            );
+         }
+      }
+   };
    return (
       <div className={styles.navClientWrap}>
          <div className={styles.navClient}>
@@ -56,11 +117,9 @@ const NavClient = () => {
                      transparent
                      className={`${styles.navOptions} ${styles.infoUser}`}
                      title={
-                        !dataLogin?.phone
+                        !userName && typeof userName === 'object'
                            ? 'Tài khoản'
-                           : userName
-                           ? userName
-                           : dataLogin?.firstName || dataLogin?.phone
+                           : dataLogin?.lastName || userName
                      }
                      leftIcon={<AccountCircleIcon />}
                      rightIcon={<ExpandMoreIcon />}
@@ -69,20 +128,7 @@ const NavClient = () => {
                      <div className={styles.infoHeader}>
                         <img className={styles.avatar} src={logo} alt="avatar-user" />
                         <div className={styles.infoName}>
-                           {!dataLogin?.phone ? (
-                              <h4
-                                 onClick={() => {
-                                    navigate('/login');
-                                 }}
-                                 className={styles.auth}
-                              >
-                                 Đăng nhập / Đăng ký
-                              </h4>
-                           ) : (
-                              <h3>
-                                 {userName ? userName : dataLogin?.firstName || dataLogin?.phone}
-                              </h3>
-                           )}
+                           {handleGetNameChildren()}
                            {dataLogin?.phone && (
                               <div className={styles.comment}>
                                  <span className={styles.star}>4.5</span>
@@ -95,6 +141,9 @@ const NavClient = () => {
                      <div className={styles.itemOption}>
                         <h4 className={styles.itemOptionTitle}>Tiện ích</h4>
                         <ButtonCustom
+                           onClick={() => {
+                              navigate('/post-favourite');
+                           }}
                            leftIcon={<FavoriteBorderIcon />}
                            className={styles.btnOption}
                            transparent
@@ -139,17 +188,26 @@ const NavClient = () => {
                            transparent
                            title="Trợ giúp"
                         />
-                        <ButtonCustom
-                           leftIcon={<LogoutIcon />}
-                           className={styles.btnOption}
-                           transparent
-                           title="Đăng xuất"
-                        />
+
+                        {dataLogin || userName ? (
+                           <ButtonCustom
+                              onClick={async () => {
+                                 await handleLogout();
+                                 dispatch(reset());
+                                 localStorage.clear();
+                              }}
+                              leftIcon={<LogoutIcon />}
+                              className={styles.btnOption}
+                              transparent
+                              title="Đăng xuất"
+                           />
+                        ) : null}
                      </div>
                   </div>
                </div>
             </div>
          </div>
+         {loadingLogout && <SimpleBackdrop />}
       </div>
    );
 };

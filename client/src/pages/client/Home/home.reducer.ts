@@ -44,7 +44,7 @@ interface IParamsListPost {
 // actions
 
 export const getPostList = createAsyncThunk(
-   'find-posts-detail-slice',
+   'posts-lits-slice',
    async (params: IParamsListPost) => {
       const query = qs.stringify(params, { skipEmptyString: true });
       const requestUrl = `${apiUrl}post/list/${query}`;
@@ -88,18 +88,9 @@ const postListSlice = createSlice({
             mess: '',
          };
       },
-      resetPostDetail(state) {
-         state.infoPost = {
-            data: [],
-            loading: false,
-            error: false,
-            status: '',
-            mess: '',
-         };
-      },
    },
 });
 
-export const { resetInfoPost, resetPostDetail } = postListSlice.actions;
+export const { resetInfoPost } = postListSlice.actions;
 
 export default postListSlice.reducer;

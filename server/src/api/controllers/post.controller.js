@@ -8,8 +8,19 @@ const postControllers = {
   // [Get]/all
   index: async (req, res, next) => {
     try {
-      const { page = 1, pageSize = 10 } = req.query;
-      const posts = await Post.find({ 'status.code': 1 })
+      const {
+        page = 1,
+        pageSize = 10,
+        province,
+        district,
+        wards,
+        ...rest
+      } = req.query;
+      const query = { 'status.code': 1, ...rest };
+      if (province) query['address.province'] = province;
+      if (district) query['address.district'] = district;
+      if (wards) query['address.wards'] = wards;
+      const posts = await Post.find(query)
         .sort({ createdAt: -1 })
         .skip((page - 1) * pageSize)
         .limit(pageSize);

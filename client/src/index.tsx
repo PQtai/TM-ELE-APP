@@ -7,6 +7,7 @@ import GlobalStyles from './components/GlobalStyles';
 import SimpleBackdrop from './components/Loading/Loading';
 import config from './config';
 import setupAxiosInterceptors from './config/axios-interceptor';
+import Overlay from './components/Overlay';
 
 const store = config.getStore();
 
@@ -19,6 +20,7 @@ root.render(
          <App />
       </GlobalStyles>
       <BasicAlerts />
+      <Overlay />
    </Provider>,
 );
 

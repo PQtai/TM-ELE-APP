@@ -121,7 +121,6 @@ const PostManager: React.FC = () => {
                </Grid>
             </Grid>
          </div>
-         {isDisplayOverlay && ChildrenItem && <Overlay children={ChildrenItem}></Overlay>}
          {loading && <SimpleBackdrop />}
       </div>
    );

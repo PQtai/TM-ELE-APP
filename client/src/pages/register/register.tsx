@@ -169,7 +169,6 @@ const Register = () => {
             />
          </form>
          {loadingRegister && <SimpleBackdrop />}
-         {isDisplayOverlay && ChildrenItem && <Overlay children={ChildrenItem}></Overlay>}
       </div>
    );
 };

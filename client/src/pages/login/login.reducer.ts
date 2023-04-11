@@ -88,13 +88,15 @@ const LoginSlice = createSlice({
 
             if (action?.error) {
                const { response } = action.error as { response: any };
-               state.infoState.status = response.status;
+               state.infoState.status = response.data.statusCode;
+               state.infoState.mess = response.data.message;
             }
          });
    },
    reducers: {
       reset(state) {
          state.infoState.loading = false;
+         state.infoState.data = undefined;
          state.infoState.status = '';
          state.infoState.mess = '';
          state.infoState.error = false;

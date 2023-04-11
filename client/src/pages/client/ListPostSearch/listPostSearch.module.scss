@@ -1,0 +1,294 @@
+.postSearchWrap {
+   background-color: var(--background-color-client);
+   .ListPostSearch {
+      max-width: var(--default-layout-width);
+      padding: 0 30px;
+      margin: auto;
+      .search {
+         margin-top: 10px;
+         display: flex;
+         align-items: center;
+         .searchWrap {
+            width: 85%;
+            margin-right: 10px;
+            border-radius: 3px;
+            display: flex;
+            background-color: #fff;
+            > input {
+               flex: 1;
+               font-size: 1.8rem;
+               padding: 10px 20px;
+            }
+            .btnSearch {
+               font-weight: 700;
+               width: 80px;
+               background-color: var(--primary);
+               border-radius: 6px;
+               margin: 3px;
+               > svg {
+                  font-size: 2rem;
+               }
+            }
+         }
+         .btnPost {
+            font-weight: 700;
+            font-size: 1.8rem;
+            padding: 10px 0;
+            border-radius: 2px;
+            background-color: var(--primary);
+            flex: 1;
+         }
+      }
+      .filterWrap {
+         margin-top: 10px;
+         display: flex;
+         align-items: center;
+         .btnFilter {
+            background-color: #fff;
+            border: 0.5px solid #ccc;
+            svg {
+               font-size: 2rem;
+            }
+            font-size: 1.4rem;
+            font-weight: 500;
+         }
+      }
+      .postSearchTitle {
+         padding: 20px 0;
+      }
+      .containerLeft {
+         background-color: #fff;
+         .head {
+            display: flex;
+            border-bottom: 0.5px solid #ccc;
+            .headOption {
+               font-size: 1.6rem;
+               color: var(--title-color);
+               font-weight: 500;
+               padding: 10px 20px;
+               cursor: pointer;
+               position: relative;
+               .headOptionList {
+                  position: absolute;
+                  width: 100%;
+                  top: 100%;
+                  left: 0;
+                  display: flex;
+                  flex-direction: column;
+                  background-color: #fff;
+                  box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
+                     rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+                     rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+                  z-index: 1;
+                  > button {
+                     text-align: left;
+                     padding: 16px;
+                     &:hover {
+                        background-color: var(--background-btn-default);
+                     }
+                  }
+               }
+            }
+            .headOption.active {
+               color: var(--text-color);
+               font-weight: 600;
+               &::after {
+                  position: absolute;
+                  content: '';
+                  width: 100%;
+                  height: 2px;
+                  background-color: var(--primary);
+                  top: 90%;
+                  left: 0;
+               }
+            }
+         }
+         .body {
+            margin-top: 10px;
+            .itemPostSearch {
+               border: 0.5px solid #ccc;
+               transition: transform 0.1s linear;
+               &:hover {
+                  background-color: var(--background-btn-default);
+                  transform: translateY(-10px);
+               }
+            }
+         }
+      }
+   }
+}
+.modalAddress {
+   background-color: #fff;
+   min-height: 40vh;
+   max-height: 61vh;
+   width: 30vw;
+   display: flex;
+   flex-direction: column;
+   animation: slideInTop ease 0.5s;
+   position: relative;
+   .addressTitle {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 2rem;
+   }
+   .addressList {
+      //   max-height: 70%;
+      flex: 1;
+      overflow-y: scroll;
+      .addressListTitle {
+         display: flex;
+         justify-content: flex-start;
+         padding: 10px 20px;
+         align-items: center;
+         > svg {
+            margin-right: 10px;
+         }
+      }
+      .addressItem {
+         display: flex;
+         justify-content: space-between;
+         padding: 10px 20px;
+         border-bottom: 0.5px solid #ccc;
+         cursor: pointer;
+         &:hover {
+            background-color: var(--background-btn-default);
+         }
+      }
+   }
+   .btnBack {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 2px 4px;
+      > svg {
+         font-size: 1.8rem;
+      }
+   }
+}
+.modalTypePost {
+   background-color: #fff;
+   transform: translateY(-200px);
+   min-width: 30vw;
+   width: 40vw;
+   animation: slideInTopSort ease 0.5s;
+   position: relative;
+   .modalTypeTitle {
+      text-align: center;
+      background-color: var(--background-btn-default);
+      padding: 10px 20px;
+      font-size: 1.6rem;
+   }
+   .modalTypeList {
+      padding: 10px;
+      .modalTypeItem {
+         cursor: pointer;
+         padding: 12px 10px;
+         border: 0.5px solid #ccc;
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         > svg {
+            font-size: 2rem;
+            color: #ccc;
+         }
+         &:first-child {
+            border-bottom: transparent;
+         }
+         &:nth-child(2) {
+            border-bottom: transparent;
+         }
+      }
+      .modalTypeItem.active {
+         > svg {
+            color: var(--primary);
+         }
+      }
+   }
+   .btnClose {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 2px 4px;
+      > svg {
+         font-size: 2rem;
+      }
+   }
+}
+
+.modalCategory {
+   background-color: #fff;
+   transform: translateY(-200px);
+   min-width: 30vw;
+   width: 40vw;
+   animation: slideInTopSort ease 0.5s;
+   position: relative;
+   .categoryTitle {
+      text-align: center;
+      background-color: var(--background-btn-default);
+      padding: 10px 20px;
+      font-size: 1.6rem;
+   }
+   .categoryList {
+      padding: 10px;
+      .categoryItem {
+         cursor: pointer;
+         padding: 12px 10px;
+         border: 0.5px solid #ccc;
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         > svg {
+            font-size: 2rem;
+            color: #ccc;
+         }
+         &:first-child {
+            border-bottom: transparent;
+         }
+         &:nth-child(2) {
+            border-bottom: transparent;
+         }
+         &:nth-child(3) {
+            border-bottom: transparent;
+         }
+      }
+      .categoryItem.active {
+         > svg {
+            color: var(--primary);
+         }
+      }
+   }
+   .btnClose {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 2px 4px;
+      > svg {
+         font-size: 2rem;
+      }
+   }
+}
+@keyframes slideInTop {
+   from {
+      opacity: 0;
+      transform: translateY(calc(-100% + 32px));
+   }
+   to {
+      opacity: 1;
+      transform: translateY(calc(0));
+   }
+}
+@keyframes slideInTopSort {
+   from {
+      opacity: 0;
+      transform: translateY(calc(-400px + 32px));
+   }
+   to {
+      opacity: 1;
+      transform: translateY(calc(-200px));
+   }
+}
+@keyframes fadeout {
+   to {
+      opacity: 0;
+   }
+}
