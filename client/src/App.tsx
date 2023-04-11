@@ -2,19 +2,31 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { privateRoutesAdmin, publicRoutes, privateRoutesUser } from '~/routes';
 import AdminLayout from '~/layouts/Admin/LayoutAdmin';
 import './App.css';
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import DefaultLayout from '~/layouts/Client/DefaultLayout/DefaultLayout';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import Error404 from './pages/error-404/error-404';
 import { IRoutes } from './shared/model/global';
 import { useAppSelector } from './config/store';
-
+import getRole from './utils/getRole';
 const App: React.FC = () => {
    const dataLogin = useAppSelector((state) => state.login.infoState.data);
-   let role: string | null = localStorage.getItem('role');
-   if (typeof role === 'string') {
-      role = JSON.parse(role);
-   }
+   // const [role, setRole] = useState<string>();
+   // let role = '';
+   // if (dataLogin && Object.keys(dataLogin).length === 0) {
+   //    let infoLocal = localStorage.getItem('role');
+   //    if (typeof infoLocal === 'string') {
+   //       role = JSON.parse(infoLocal);
+   //    }
+   // }
+   let role = getRole();
+   useEffect(() => {
+      if (!dataLogin) {
+         role = getRole();
+      }
+   }, [dataLogin]);
+   console.log(role);
+
    return (
       <Router>
          <div className="App">

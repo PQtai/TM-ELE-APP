@@ -28,7 +28,7 @@ const ItemPost = ({ data }: IDataPropsItem) => {
          </div>
          <div className={styles.itemPostRight}>
             <h4>{data.title}</h4>
-            <p>{data.price}</p>
+            <p>{data.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}đ</p>
             <p>
                {/* <span>16:33</span> <span>16/2/2023</span> */}
                <span>{createAtLocalString}</span>

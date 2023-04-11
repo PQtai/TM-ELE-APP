@@ -2,14 +2,22 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface IStateAlerts {
    isOpen: boolean;
-   info: 'error' | 'warning' | 'info' | 'success';
-   mess: string;
+   infoAlert: {
+      title: string;
+      message: string;
+      type: 'Error' | 'Warning' | 'Info' | 'Success';
+      duration: number;
+   };
 }
 
 const initialState: IStateAlerts = {
    isOpen: false,
-   info: 'success',
-   mess: '',
+   infoAlert: {
+      title: '',
+      message: '',
+      type: 'Info',
+      duration: 0,
+   },
 };
 
 const alertSlice = createSlice({
@@ -18,8 +26,7 @@ const alertSlice = createSlice({
    reducers: {
       setInfoAlert(state, action: PayloadAction<IStateAlerts>) {
          state.isOpen = action.payload.isOpen;
-         state.info = action.payload.info;
-         state.mess = action.payload.mess;
+         state.infoAlert = action.payload.infoAlert;
       },
    },
 });

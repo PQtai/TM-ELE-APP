@@ -1,7 +1,7 @@
 import express from 'express';
 import userControllers from '../controllers/auth.controller.js';
 import authMiddleware from '../middlewares/auth.middleware.js';
-import userValidation from '../helpers/userValidation.js';
+import userValidation, { updateFavourites } from '../helpers/userValidation.js';
 import validateMiddleware from '../middlewares/validate.middleware.js';
 import passport from 'passport';
 import '../middlewares/passport.js';
@@ -43,13 +43,13 @@ router.post('/refresh', userControllers.requestRefreshToken);
 // Route get user/id
 router.get(
   '/get-user/:id',
-  authMiddleware.verifyToken,
+  // authMiddleware.verifyToken,
   userControllers.getUserById
 );
 
 // Route user all
 router.get('/get-all', authMiddleware.authIsAdmin, userControllers.getAllUsers);
-router.get('/get-allllll', userControllers.getAllUsers) 
+router.get('/get-allllll', userControllers.getAllUsers);
 
 // Route lock user
 router.patch('/:id/lock', authMiddleware.authIsAdmin, userControllers.lockUser);
@@ -60,6 +60,13 @@ router.patch(
   formatFileUpload('avatar', 'single'),
   authMiddleware.authIsAdminOrIsAuthor,
   userControllers.editUser
+);
+// edit Favourite
+router.patch(
+  '/update-favourite',
+  validateMiddleware('body', updateFavourites),
+  authMiddleware.verifyToken,
+  userControllers.updateFavourite
 );
 
 // Route change password
