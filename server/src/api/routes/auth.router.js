@@ -5,6 +5,7 @@ import userValidation from '../helpers/userValidation.js';
 import validateMiddleware from '../middlewares/validate.middleware.js';
 import passport from 'passport';
 import '../middlewares/passport.js';
+import { formatFileUpload } from '../middlewares/post.middlewares.js';
 const router = express.Router();
 
 // Route add user
@@ -56,6 +57,7 @@ router.patch('/:id/lock', authMiddleware.authIsAdmin, userControllers.lockUser);
 // Route edit user
 router.patch(
   '/edit/:id',
+  formatFileUpload('avatar', 'single'),
   authMiddleware.authIsAdminOrIsAuthor,
   userControllers.editUser
 );
