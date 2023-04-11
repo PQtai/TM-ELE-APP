@@ -7,6 +7,8 @@ import bycrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
 import mailer from '../utils/mailer.js';
 import generateToken from '../utils/generateToken.js';
+import uploads from '../utils/cloudinary.js';
+import fs from 'fs';
 
 let refreshTokens = [];
 
@@ -372,7 +374,7 @@ const userControllers = {
   },
 
   // EDIT USER
-  editUser: (req, res, next) => {
+  editUser1: (req, res, next) => {
     try {
       const userId = req.params.id;
       const isBodyEmpty = Object.keys(req.body).length;
@@ -397,6 +399,72 @@ const userControllers = {
             );
         }
       });
+    } catch (error) {
+      return res.status(500).json(errorFunction(true, 500, 'Bad Request'));
+    }
+  },
+  editUser: async (req, res, next) => {
+    try {
+      const userId = req.params.id;
+      // const isBodyEmpty = Object.keys(req.body).length;
+      // console.log('407', isBodyEmpty)
+      // if (isBodyEmpty === 0) {
+      //   return res.status(403).send(errorFunction(false, 403, "Body request can not empty!"));
+      // }
+
+      if (req.file) {
+        // Lấy đường dẫn tạm thời của ảnh đã tải lên
+        const tempFilePath = req.file.path;
+
+        //upload  ảnh lên Cloudinary
+        const result = await uploads(tempFilePath, 'avatars');
+
+        // Xóa ảnh tạm thời sau khi đã upload lên Cloudinary
+        fs.unlinkSync(tempFilePath);
+
+        // Lấy url của ảnh đã được upload lên Cloudinary
+        const imageUrl = result.url;
+
+        // Cập nhật thông tin vào cơ sở dữ liệu, bao gồm đường dẫn
+        const updatedUserData = {
+          ...req.body,
+          avatar: imageUrl,
+        };
+        User.findByIdAndUpdate(userId, updatedUserData, { new: true }).then(
+          (data) => {
+            if (data) {
+              res.status(200).json(errorFunction(false, 200, 'Successfully'));
+            } else {
+              res
+                .status(204)
+                .json(
+                  errorFunction(
+                    false,
+                    204,
+                    'This User Id have not in the database.'
+                  )
+                );
+            }
+          }
+        );
+      } else {
+        // Nếu không có tệp ảnh được tải lên, chỉ cập nhật thông tin người dùng vào cơ sở dữ liệu
+        User.findByIdAndUpdate(userId, req.body, { new: true }).then((data) => {
+          if (data) {
+            res.status(200).json(errorFunction(false, 200, 'Successfully'));
+          } else {
+            res
+              .status(204)
+              .json(
+                errorFunction(
+                  false,
+                  204,
+                  'This User Id have not in the database.'
+                )
+              );
+          }
+        });
+      }
     } catch (error) {
       return res.status(500).json(errorFunction(true, 500, 'Bad Request'));
     }
