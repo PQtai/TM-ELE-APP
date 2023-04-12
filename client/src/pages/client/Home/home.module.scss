@@ -22,7 +22,7 @@
    }
    .containerHomeWrap {
       background-color: var(--background-color-client);
-      height: 600px;
+      min-height: 700px;
       .containerHome {
          max-width: var(--default-layout-width);
          margin: auto;
