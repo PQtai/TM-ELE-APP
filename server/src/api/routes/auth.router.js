@@ -1,88 +1,47 @@
 import express from 'express';
-import userControllers from '../controllers/auth.controller.js';
+import authControllers from '../controllers/auth.controller.js';
 import authMiddleware from '../middlewares/auth.middleware.js';
 import userValidation from '../helpers/userValidation.js';
 import validateMiddleware from '../middlewares/validate.middleware.js';
-import passport from 'passport';
 import '../middlewares/passport.js';
 import { formatFileUpload } from '../middlewares/post.middlewares.js';
 const router = express.Router();
 
-// Route add user
+// Route register user
 router.post(
   '/register',
   authMiddleware.checkRole,
   validateMiddleware('body', userValidation),
-  userControllers.registerAccount
+  authControllers.registerAccount
 );
 
 // Verify email
-router.get('/verify-email/:token', userControllers.verifyEmail);
+router.get('/verify-email/:token', authControllers.verifyEmail);
 
 // Resend verification email
-router.post('/resend-email', userControllers.resendVerificationEmail);
+router.post('/resend-email', authControllers.resendVerificationEmail);
 
 // Route register for Admin
 router.post(
   '/admin-register',
   authMiddleware.authIsAdmin,
   validateMiddleware('body', userValidation),
-  userControllers.registerAccount
+  authControllers.registerAccount
 );
 
 // Route Login
 router.post(
   '/login',
   validateMiddleware('body', userValidation),
-  userControllers.login
+  authControllers.login
 );
 
 // Route Refresh
-router.post('/refresh', userControllers.requestRefreshToken);
-
-// Route get user/id
-router.get(
-  '/get-user/:id',
-  authMiddleware.verifyToken,
-  userControllers.getUserById
-);
-
-// Route user all
-router.get('/get-all', authMiddleware.authIsAdmin, userControllers.getAllUsers);
-router.get('/get-allllll', userControllers.getAllUsers) 
-
-// Route lock user
-router.patch('/:id/lock', authMiddleware.authIsAdmin, userControllers.lockUser);
-
-// Route edit user
-router.patch(
-  '/edit/:id',
-  formatFileUpload('avatar', 'single'),
-  authMiddleware.authIsAdminOrIsAuthor,
-  userControllers.editUser
-);
-
-// Route change password
-router.post(
-  '/change-password',
-  authMiddleware.authIsAdminOrIsAuthor,
-  userControllers.changePassword
-);
-
-// Route forgot password
-router.post(
-  '/forgot-password',
-  authMiddleware.authIsAdminOrIsAuthor,
-  userControllers.forgotPassword
-);
+router.post('/refresh', authControllers.requestRefreshToken);
 
 // Route logout
-router.post('/logout', authMiddleware.verifyToken, userControllers.logout);
+router.post('/logout', authMiddleware.verifyToken, authControllers.logout);
 
-router.get(
-  '/secret',
-  passport.authenticate('jwt', { session: false }),
-  userControllers.getAllUsers
-);
+
 
 export default router;
