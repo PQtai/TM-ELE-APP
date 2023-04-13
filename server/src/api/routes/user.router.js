@@ -14,11 +14,22 @@ router.get(
   userControllers.getUserById
 );
 
+router.get(
+  "/get-current-user/:id", 
+  authMiddleware.authIsAdminOrIsAuthor,
+  userControllers.getCurrentUser)
+
 // Route user all
-router.get("/get-all", authMiddleware.authIsAdmin, userControllers.getAllUsers);
+router.get(
+  "/get-all", 
+  authMiddleware.authIsAdmin, 
+  userControllers.getAllUsers);
 
 // Route lock user
-router.patch("/:id/lock", authMiddleware.authIsAdmin, userControllers.lockUser);
+router.patch(
+  "/:id/lock", 
+  authMiddleware.authIsAdmin, 
+  userControllers.lockUser);
 
 // Route edit user
 router.patch(

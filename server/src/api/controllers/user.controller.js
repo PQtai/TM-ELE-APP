@@ -14,23 +14,42 @@ const userControllers = {
   // GET USER BY ID
   getUserById: async (req, res) => {
     try {
-      const userResult = await User.findById(req.params.id).populate(
-        "posts",
-        "_id title images status price"
-      );
+      const userResult = await User.findById(req.params.id);
       if (userResult) {
-        const { password, ...others } = userResult._doc;
-        res.status(200).json({
-          statusCode: 200,
-          ...others,
-        });
+        const {
+          password,
+          phone,
+          email,
+          role,
+          favourite,
+          conversations,
+          isVerified,
+          ...others
+        } = userResult._doc;
+        res
+          .status(200)
+          .json(
+            errorFunction(false, 200, "Get user successfully", { ...others })
+          );
       } else {
-        res.status(204).json({
-          statusCode: 204,
-          message: "This user Id have not in the database",
-          user: {},
-        });
+        res.status(204).send();
       }
+    } catch (error) {
+      res.status(500).json(errorFunction(true, 500, "Bad Request"));
+    }
+  },
+
+  getCurrentUser: async (req, res) => {
+    try {
+      User.findById(req.params.id)
+        .select("-password -role")
+        .then((user) => {
+          res
+            .status(200)
+            .json(
+              errorFunction(false, 200, "Get current user successfully", user)
+            );
+        })
     } catch (error) {
       res.status(500).json(errorFunction(true, 500, "Bad Request"));
     }
@@ -91,20 +110,19 @@ const userControllers = {
   },
 
   // EDIT USER
- 
 
   editUser: async (req, res, next) => {
     try {
       const userId = req.params.id;
       req.body = JSON.parse(req.body.datas);
       if (req.file) {
-        console.log(132, req.file)
+        console.log(132, req.file);
         // Lấy đường dẫn tạm thời của ảnh đã tải lên
         const tempFilePath = req.file.path;
 
         //upload ảnh lên Cloudinary
         const result = await uploads(tempFilePath, "avatars");
-        console.log(result)
+        console.log(result);
 
         // Xóa ảnh tạm thời sau khi đã upload lên Cloudinary
         fs.unlinkSync(tempFilePath);
@@ -131,7 +149,9 @@ const userControllers = {
             if (data) {
               res
                 .status(200)
-                .json(errorFunction(false, 200, "Add avatar successfully", data));
+                .json(
+                  errorFunction(false, 200, "Add avatar successfully", data)
+                );
             } else {
               res
                 .status(204)
@@ -170,7 +190,7 @@ const userControllers = {
         });
       }
     } catch (error) {
-      console.log(197, error)
+      console.log(197, error);
       return res.status(500).json(errorFunction(true, 500, "Bad Request"));
     }
   },
