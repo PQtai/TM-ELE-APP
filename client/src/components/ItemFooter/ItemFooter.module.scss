@@ -1,0 +1,30 @@
+.itemFooter{
+    padding: 12px;
+    max-width: 250px;
+    min-width: 160px;
+}
+.titleFooter{
+    margin-bottom: 12px;
+}
+.contentFooter {
+    font-size: 1.4rem;
+    margin: 6px 16px 6px 0;
+    line-height: 1.25;
+    padding: 0px;
+    cursor: pointer;
+}
+.QrCode{
+    width: 127px;
+    height: 127px;
+}
+.download {
+    min-width: 250px;
+    display: flex;
+    align-items: center;
+}
+.social{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: calc(128px - 16px);
+}

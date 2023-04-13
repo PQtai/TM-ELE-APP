@@ -19,6 +19,8 @@ const FormRest = () => {
    const initsate = useAppSelector((state) => state.postSlice.initialState);
 
    const statusCreatePost = useAppSelector((state) => state.postSlice.infoPost.status);
+   const errorPost = useAppSelector((state) => state.postSlice.infoPost.error);
+   const messPost = useAppSelector((state) => state.postSlice.infoPost.mess);
    const loadingPost = useAppSelector((state) => state.postSlice.infoPost.loading);
 
    const navigate = useNavigate();
@@ -70,26 +72,32 @@ const FormRest = () => {
    });
 
    useEffect(() => {
-      if (statusCreatePost === 201) {
+      if (!errorPost) {
          dispatch(
             setInfoAlert({
                isOpen: true,
-               info: 'success',
-               mess: 'Đăng tin thành công',
+               infoAlert: {
+                  type: 'Success',
+                  duration: 2000,
+                  message: messPost,
+                  title: 'Thành công',
+               },
             }),
          );
-         return;
+      } else {
+         dispatch(
+            setInfoAlert({
+               isOpen: true,
+               infoAlert: {
+                  type: 'Error',
+                  duration: 2000,
+                  message: messPost,
+                  title: 'Có lỗi',
+               },
+            }),
+         );
       }
-      // if (statusCreatePost === 401) {
-      //    dispatch(
-      //       setDisplayOverlay({
-      //          isDisplay: true,
-      //          children: <ModalVerifyEmail />,
-      //       }),
-      //    );
-      //    return;
-      // }
-   }, [statusCreatePost]);
+   }, [errorPost]);
 
    const handelBlurInput = (field: keyof FormValuesPost) => {
       return formik.touched[field] && formik.errors[field as keyof FormValuesPost] ? (

@@ -14,7 +14,7 @@ export interface IStateAddress {
    province: string;
    district: string;
    wards: string;
-   addressDetails: string;
+   addressDetails?: string;
 }
 
 export interface IAddressDataResponse {

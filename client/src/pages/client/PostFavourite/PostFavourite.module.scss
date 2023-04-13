@@ -1,0 +1,108 @@
+.postFavouriteWrap {
+   background-color: var(--background-color-client);
+   .postFavourite {
+      max-width: var(--default-layout-width);
+      margin: auto;
+      padding: 0 30px;
+      min-height: 500px;
+      .postFavouriteTitle {
+         margin: 10px;
+      }
+      .itemPostCustom {
+         padding: 10px;
+         background-color: #ffffff;
+         border-radius: 6px;
+         cursor: pointer;
+         height: 100%;
+         display: flex;
+         margin: 10px 0;
+         &:hover {
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
+               rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+         }
+         .itemPostImg {
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            padding-top: 10%;
+            width: 14%;
+            margin-right: 10px;
+         }
+         .wrapInfoPost {
+            flex: 1;
+            .itemPostInfo {
+               .itemPostInfoTitle {
+                  // font-size: 1.2rem;
+                  color: #333;
+                  line-height: 1.6rem;
+                  font-weight: 600;
+                  margin: 10px 0;
+                  height: 1.8rem;
+                  overflow: hidden;
+                  display: block;
+                  display: -webkit-box;
+                  -webkit-box-orient: vertical;
+                  -webkit-line-clamp: 1;
+               }
+               .itemPostInfoAcreage {
+                  > span {
+                     font-size: 1.2rem;
+                  }
+               }
+               .itemPostInfoPrice {
+                  color: rgb(231, 34, 34);
+                  font-weight: 600;
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  flex: 1;
+                  .chat {
+                     padding: 10px 20px;
+                     border-radius: 18px;
+                     border: 0.5px solid rgb(70, 166, 70);
+                  }
+                  .itemBtnFavorite {
+                     padding: 5px;
+                     .notActive {
+                        font-size: 2rem;
+                        color: rgb(231, 34, 34);
+                     }
+                     > .active {
+                        font-size: 2rem;
+                        color: rgb(231, 34, 34);
+                     }
+                  }
+               }
+            }
+            .itemPostInfoOther {
+               display: flex;
+               align-items: center;
+               > svg {
+                  width: 26px;
+                  height: 26px;
+                  border-radius: 50%;
+                  color: #adaaaa;
+               }
+               .itemPostInfoAvatar {
+                  width: 40px;
+                  height: 40px;
+                  border-radius: 50%;
+               }
+               .infoAddress {
+                  font-size: 1.2rem;
+                  color: #333;
+                  line-height: 1.6rem;
+                  font-weight: 300;
+                  margin: 10px;
+                  height: 1.8rem;
+                  overflow: hidden;
+                  display: block;
+                  display: -webkit-box;
+                  -webkit-box-orient: vertical;
+                  -webkit-line-clamp: 1;
+               }
+            }
+         }
+      }
+   }
+}

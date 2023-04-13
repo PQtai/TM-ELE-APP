@@ -223,7 +223,6 @@ const PostPage = () => {
                </Grid>
             </Grid>
          </div>
-         {isDisplayOverlay && ChildrenItem && <Overlay children={ChildrenItem}></Overlay>}
          {/* <Map /> */}
       </div>
    );

@@ -10,6 +10,7 @@ export interface AccountUser {
    isLocked: boolean;
    evaluate?: Number;
    conversations?: string[];
+   createdAt: string;
 }
 export interface FormValuesLogin {
    emailOrPhone: string;

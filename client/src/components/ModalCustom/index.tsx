@@ -15,7 +15,7 @@ interface IModalProps {
       bodyTitle: string;
    };
 }
-interface IAddress {
+export interface IAddress {
    _id: string;
    name: string;
    slug: string;
@@ -23,9 +23,10 @@ interface IAddress {
    name_with_type: string;
    code: string;
    isDeleted: false;
+   parent_code?: string;
 }
 
-interface IDatasFetchAddress {
+export interface IDatasFetchAddress {
    data: {
       data: IAddress[];
    };

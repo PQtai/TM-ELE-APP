@@ -10,10 +10,13 @@ import Home from '~/pages/client/Home';
 import ManagePosts from '~/pages/client/ManagePosts';
 import PostPage from '~/pages/client/Post';
 import Profile from '~/pages/client/Profile/profile';
+import UserInfo from '~/pages/client/UserInfo/userInfo';
+import ListPostSearch from '~/pages/client/ListPostSearch/listPostSearch';
 import Login from '~/pages/login/login';
 import Register from '~/pages/register/register';
 import VerifiEmailSuccess from '~/pages/verifiEmailSuccess/verifiEmailSuccess';
 import { IRoutes } from '~/shared/model/global';
+import PostFavourite from '~/pages/client/PostFavourite';
 
 // Public routes
 const publicRoutes: IRoutes[] = [
@@ -21,6 +24,8 @@ const publicRoutes: IRoutes[] = [
    { path: config.routes.login, component: Login, layout: Auth },
    { path: config.routes.register, component: Register, layout: Auth },
    { path: config.routes.verifyEmailSuccess, component: VerifiEmailSuccess, layout: NavOnly },
+   { path: config.routes.userInfo, component: UserInfo },
+   { path: config.routes.listPostSearch, component: ListPostSearch },
 ];
 
 const privateRoutesUser: IRoutes[] = [
@@ -28,6 +33,7 @@ const privateRoutesUser: IRoutes[] = [
    { path: config.routes.chat, component: Chat },
    { path: config.routes.post, component: PostPage, layout: NavOnly },
    { path: config.routes.managePosts, component: ManagePosts },
+   { path: config.routes.postFavourite, component: PostFavourite },
 ];
 
 const privateRoutesAdmin: IRoutes[] = [
