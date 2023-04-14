@@ -7,7 +7,7 @@ import categoryRouter from './category.router.js';
 
 const routes = (app) => {
   app.use('/auth', authRouter);
-  app.use('/user', userRouter);
+  app.use('/auth', userRouter);
   app.use('/post', postRouter);
   app.use('/conversation', conversationRouter);
   app.use('/message', messageRouter);
