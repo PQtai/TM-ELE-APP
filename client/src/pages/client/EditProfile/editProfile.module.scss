@@ -1,0 +1,183 @@
+.editProfileWrap {
+   background-color: var(--background-color-client);
+   min-height: 600px;
+   .editProfile {
+      padding: 0 30px;
+      max-width: var(--default-layout-width);
+      margin: auto;
+      .editProfileTitle {
+         margin: 10px 0;
+      }
+
+      .wrapAvatar {
+         background-color: #fff;
+         width: 100%;
+         height: 30%;
+         margin-bottom: 20px;
+         position: relative;
+         display: flex;
+         border-radius: 10px;
+         .inputAvatar {
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            opacity: 0;
+            z-index: 1;
+         }
+         .iconUpload {
+            position: absolute;
+            width: 100%;
+            display: flex;
+            bottom: 20px;
+            justify-content: flex-end;
+            padding: 0 20px;
+            > svg {
+               // margin: auto;
+               font-size: 3rem;
+            }
+         }
+         .imgAvatar {
+            position: relative;
+            margin: auto;
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center center;
+            width: 90%;
+            height: 90%;
+
+            &::after {
+               content: '';
+               position: absolute;
+               top: 0;
+               left: 0;
+               right: 0;
+               bottom: 0;
+               background-color: rgba(102, 102, 102, 0.5);
+            }
+            // top: 0;
+            // right: 0;
+            // left: 0;
+            // bottom: 0;
+            // opacity: 0;
+         }
+      }
+      .editListLeft {
+         background-color: #fff;
+         .editlistItem {
+            padding: 6px;
+            margin: 10px;
+            cursor: pointer;
+            &:first-child {
+               font-weight: 600;
+               &:hover {
+                  background-color: transparent;
+               }
+            }
+            &:hover {
+               background-color: var(--background-btn-default);
+            }
+         }
+      }
+      .editListRight {
+         padding: 0 10px;
+         .editTitleSecurity {
+            > p {
+               padding: 10px;
+            }
+         }
+      }
+   }
+}
+.btnSave {
+   padding: 10px 20px;
+   background-color: var(--primary);
+   margin-bottom: 40px;
+   font-size: 1.8rem;
+   border-radius: 4px;
+}
+.formGroup {
+   background-color: #fff;
+   .groupField {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      width: 100%;
+      margin-bottom: 24px;
+      .inputDescription {
+         max-width: 100%;
+         min-width: 100%;
+         min-height: 100px;
+         max-height: 200px;
+         padding: 20px;
+         font-size: 1.8rem;
+         outline: none;
+         border: 0.5px solid #e2e2e2;
+         border-radius: 4px;
+         &::placeholder {
+            color: var(--background-color-sidebar);
+         }
+         color: #1e1d1d;
+      }
+      input {
+         font-size: 1.6rem;
+         font-weight: 400;
+         flex: 1;
+         color: #1e1d1d;
+         border: 0.5px solid #e2e2e2;
+         border-radius: 4px;
+         padding: 30px 18px 10px 20px;
+         &::placeholder {
+            opacity: 0;
+         }
+         &:not(:placeholder-shown) ~ label {
+            top: 4px;
+            font-size: 13px;
+         }
+
+         &:focus ~ label {
+            font-weight: 600;
+            color: var(--primary);
+            top: 4px;
+            font-size: 13px;
+         }
+      }
+      .unit {
+         position: absolute;
+         right: 20px;
+         color: var(--text-color);
+      }
+      label {
+         position: absolute;
+         top: 20px;
+         left: 20px;
+         color: #666;
+         font-size: 16px;
+         transition: font-size 0.2s;
+         transition-property: all;
+         > span {
+            color: red;
+         }
+      }
+      .errMess {
+         font-size: 1.4rem;
+         position: absolute;
+         top: 100%;
+         left: 20px;
+         color: orangered;
+      }
+   }
+}
+
+.modalChangePassword {
+   background-color: #fff;
+   min-width: 40vw;
+   padding: 20px;
+   > h4 {
+      text-align: center;
+      margin-bottom: 10px;
+   }
+}

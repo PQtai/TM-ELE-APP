@@ -1,12 +1,12 @@
-import { User, Post } from "../models/index.js";
-import errorFunction from "../utils/errorFunction.js";
-import jwt from "jsonwebtoken";
-import { encryptionPassword } from "../utils/encryption.js";
-import { response } from "express";
-import bycrypt from "bcryptjs";
-import nodemailer from "nodemailer";
-import mailer from "../utils/mailer.js";
-import generateToken from "../utils/generateToken.js";
+import { User, Post } from '../models/index.js';
+import errorFunction from '../utils/errorFunction.js';
+import jwt from 'jsonwebtoken';
+import { encryptionPassword } from '../utils/encryption.js';
+import { response } from 'express';
+import bycrypt from 'bcryptjs';
+import nodemailer from 'nodemailer';
+import mailer from '../utils/mailer.js';
+import generateToken from '../utils/generateToken.js';
 
 let refreshTokens = [];
 const sendVerificationEmail = async (email, verificationToken) => {

@@ -42,6 +42,4 @@ router.post('/refresh', authControllers.requestRefreshToken);
 // Route logout
 router.post('/logout', authMiddleware.verifyToken, authControllers.logout);
 
-
-
 export default router;

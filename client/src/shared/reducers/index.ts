@@ -11,6 +11,7 @@ import postRoleAdminSlice from '~/pages/admin/postManager/postManager.reducer';
 import postListSlice from '~/pages/client/Home/home.reducer';
 import userDetailSlice from '~/pages/client/UserInfo/userInfo.reducer';
 import postListSearchSlice from '~/pages/client/ListPostSearch/listPostSearch.reducer';
+import updateUserSlice from '~/pages/client/EditProfile/editProfile.reducer';
 
 const rootReducer = {
    accountManager,
@@ -26,6 +27,7 @@ const rootReducer = {
    postListSlice,
    userDetailSlice,
    postListSearchSlice,
+   updateUserSlice,
 };
 
 export default rootReducer;
