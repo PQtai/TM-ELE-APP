@@ -39,7 +39,7 @@ const FormRest = () => {
          price: Yup.string()
             .required('Trường này không được để trống')
             .matches(priceRegex, 'Sai định dạng tiền tệ')
-            .min(3, 'Vui lòng điền giá tiền từ 100 đồng'),
+            .min(3, 'Vui lòng điền giá tiền từ 100 ngàn đồng'),
          deposit: Yup.string()
             .matches(priceRegex, 'Sai định dạng tiền tệ')
             .min(3, 'Vui lòng điền giá tiền hơn 100 đồng'),

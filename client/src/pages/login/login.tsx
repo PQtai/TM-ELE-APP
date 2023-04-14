@@ -143,7 +143,14 @@ const Login = () => {
                   />
                   <label htmlFor="remember">Ghi nhớ tài khoản</label>
                </div>
-               <p className={styles.forgotPasswrod}>Quên mật khẩu?</p>
+               <p
+                  onClick={() => {
+                     navigate('/forgot-password');
+                  }}
+                  className={styles.forgotPasswrod}
+               >
+                  Quên mật khẩu?
+               </p>
             </div>
             <Button className={styles.btnLogin} type="submit">
                Login

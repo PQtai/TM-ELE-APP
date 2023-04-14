@@ -177,6 +177,9 @@ const NavClient = () => {
                      <div className={styles.itemOption}>
                         <h4 className={styles.itemOptionTitle}>Khác</h4>
                         <ButtonCustom
+                           onClick={() => {
+                              navigate('/edit/profile');
+                           }}
                            leftIcon={<SettingsIcon />}
                            className={styles.btnOption}
                            transparent

@@ -17,6 +17,8 @@ import Register from '~/pages/register/register';
 import VerifiEmailSuccess from '~/pages/verifiEmailSuccess/verifiEmailSuccess';
 import { IRoutes } from '~/shared/model/global';
 import PostFavourite from '~/pages/client/PostFavourite';
+import EditProfile from '~/pages/client/EditProfile';
+import ForgotPassword from '~/pages/client/ForgotPassword';
 
 // Public routes
 const publicRoutes: IRoutes[] = [
@@ -26,6 +28,7 @@ const publicRoutes: IRoutes[] = [
    { path: config.routes.verifyEmailSuccess, component: VerifiEmailSuccess, layout: NavOnly },
    { path: config.routes.userInfo, component: UserInfo },
    { path: config.routes.listPostSearch, component: ListPostSearch },
+   { path: config.routes.fogotPasswords, component: ForgotPassword },
 ];
 
 const privateRoutesUser: IRoutes[] = [
@@ -34,6 +37,7 @@ const privateRoutesUser: IRoutes[] = [
    { path: config.routes.post, component: PostPage, layout: NavOnly },
    { path: config.routes.managePosts, component: ManagePosts },
    { path: config.routes.postFavourite, component: PostFavourite },
+   { path: config.routes.editProfile, component: EditProfile },
 ];
 
 const privateRoutesAdmin: IRoutes[] = [
