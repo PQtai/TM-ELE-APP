@@ -43,15 +43,22 @@ const userControllers = {
     try {
       User.findById(req.params.id)
         .select("-password -role")
-        .populate("favourite", "_id title images status price")
+        .populate({
+          path: "favourite",
+          populate: {
+            path: "userId",
+            select: "phone lastName avatar firstName",
+          },
+        })
         .then((user) => {
           res
             .status(200)
             .json(
               errorFunction(false, 200, "Get current user successfully", user)
             );
-        })
+        });
     } catch (error) {
+      console.log(error);
       res.status(500).json(errorFunction(true, 500, "Bad Request"));
     }
   },
@@ -115,7 +122,7 @@ const userControllers = {
   editUser: async (req, res, next) => {
     try {
       const userId = req.params.id;
-      req.body = JSON.parse(req.body.datas);
+      // req.body = JSON.parse(req.body.datas);
       if (req.file) {
         console.log(132, req.file);
         // Lấy đường dẫn tạm thời của ảnh đã tải lên
@@ -131,14 +138,6 @@ const userControllers = {
         // Lấy url của ảnh đã được upload lên Cloudinary
         const imageUrl = result.url;
 
-        // Check nếu URL của ảnh mới tải lên giống với URL của ảnh cũ đã lưu trong DB
-        const userData = await User.findById(userId);
-        if (userData.avatar === imageUrl) {
-          return res
-            .status(400)
-            .json(errorFunction(false, 400, "Image already exists!"));
-        }
-
         // Cập nhật thông tin vào DB
         const updatedUserData = {
           ...req.body,
@@ -151,7 +150,7 @@ const userControllers = {
               res
                 .status(200)
                 .json(
-                  errorFunction(false, 200, "Add avatar successfully", data)
+                  errorFunction(false, 200, "Cập nhật thông tin cá nhân thành công", data)
                 );
             } else {
               res
@@ -176,7 +175,7 @@ const userControllers = {
         }
         User.findByIdAndUpdate(userId, req.body, { new: true }).then((data) => {
           if (data) {
-            res.status(200).json(errorFunction(false, 200, "Successfully"));
+            res.status(200).json(errorFunction(false, 200, "Cập nhật thông tin cá nhân thành công"));
           } else {
             res
               .status(204)
@@ -213,7 +212,7 @@ const userControllers = {
                   errorFunction(
                     false,
                     201,
-                    'Tin đã được đưa vào danh sách theo giõi!!!',
+                    "Tin đã được đưa vào danh sách theo dõi!!!",
                     newUser
                   )
                 );
@@ -230,7 +229,7 @@ const userControllers = {
                   errorFunction(
                     false,
                     201,
-                    'Đã huỷ theo giõi tin này!!!',
+                    "Đã huỷ theo giõi tin này!!!",
                     newUser
                   )
                 );
@@ -240,7 +239,7 @@ const userControllers = {
         });
       }
     } catch (error) {
-      return res.status(500).json(errorFunction(true, 500, 'Bad Request'));
+      return res.status(500).json(errorFunction(true, 500, "Bad Request"));
     }
   },
 
