@@ -1,7 +1,7 @@
 import express from "express";
 import userControllers from "../controllers/user.controller.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
-import userValidation from "../helpers/userValidation.js";
+import { updateFavourites } from "../helpers/userValidation.js";
 import validateMiddleware from "../middlewares/validate.middleware.js";
 import "../middlewares/passport.js";
 import { formatFileUpload } from "../middlewares/post.middlewares.js";
@@ -38,6 +38,14 @@ router.patch(
     authMiddleware.authIsAdminOrIsAuthor,
     userControllers.editUser
   );
+
+// Edit Favourite
+router.patch(
+  '/update-favourite',
+  validateMiddleware('body', updateFavourites),
+  authMiddleware.verifyToken,
+  userControllers.updateFavourite
+);
 
 
 // Route change password

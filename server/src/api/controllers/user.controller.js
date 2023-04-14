@@ -43,6 +43,7 @@ const userControllers = {
     try {
       User.findById(req.params.id)
         .select("-password -role")
+        .populate("favourite", "_id title images status price")
         .then((user) => {
           res
             .status(200)
@@ -192,6 +193,54 @@ const userControllers = {
     } catch (error) {
       console.log(197, error);
       return res.status(500).json(errorFunction(true, 500, "Bad Request"));
+    }
+  },
+
+  updateFavourite: async (req, res, next) => {
+    try {
+      const { userId, postId } = req.body;
+      if (userId && postId) {
+        const user = Promise.resolve(User.findById(userId));
+        const post = Promise.resolve(Post.findById(postId));
+        Promise.all([user, post]).then((datas) => {
+          if (datas[0] && datas[1] && !datas[0].favourite.includes(postId)) {
+            datas[0].favourite.push(postId);
+            const saveUser = async () => {
+              const newUser = await datas[0].save();
+              return res
+                .status(201)
+                .json(
+                  errorFunction(
+                    false,
+                    201,
+                    'Tin đã được đưa vào danh sách theo giõi!!!',
+                    newUser
+                  )
+                );
+            };
+            saveUser();
+          } else if (datas[0].favourite.includes(postId)) {
+            const index = datas[0].favourite.indexOf(postId);
+            datas[0].favourite.splice(index, 1);
+            const saveUser = async () => {
+              const newUser = await datas[0].save();
+              return res
+                .status(201)
+                .json(
+                  errorFunction(
+                    false,
+                    201,
+                    'Đã huỷ theo giõi tin này!!!',
+                    newUser
+                  )
+                );
+            };
+            saveUser();
+          }
+        });
+      }
+    } catch (error) {
+      return res.status(500).json(errorFunction(true, 500, 'Bad Request'));
     }
   },
 

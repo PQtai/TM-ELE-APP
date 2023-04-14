@@ -1,7 +1,7 @@
 import express from 'express';
 import authControllers from '../controllers/auth.controller.js';
 import authMiddleware from '../middlewares/auth.middleware.js';
-import userValidation, { updateFavourites } from '../helpers/userValidation.js';
+import userValidation from '../helpers/userValidation.js';
 import validateMiddleware from '../middlewares/validate.middleware.js';
 import '../middlewares/passport.js';
 import { formatFileUpload } from '../middlewares/post.middlewares.js';
