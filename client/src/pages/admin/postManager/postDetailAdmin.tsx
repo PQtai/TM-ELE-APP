@@ -21,7 +21,7 @@ const infoStatus = [
 
 const PostDetailAdmin = ({ data }: IPropDataDetail) => {
    const [indexDisplayImg, setIndexDisplayImg] = useState(0);
-   const [postStatus, setPostStatus] = useState(2);
+   const [postStatus, setPostStatus] = useState(data?.status.code);
    const [messRejected, setMessRejected] = useState('');
    const dispatch = useAppDispatch();
    const handleSetDisplayImg = (index: number) => {
@@ -31,7 +31,7 @@ const PostDetailAdmin = ({ data }: IPropDataDetail) => {
       setPostStatus(Number(e.target.value));
    };
    const handleSubmitAction = async () => {
-      if (data) {
+      if (data && postStatus) {
          const dataUpdate: IParamsPostEditStatus = {
             postId: data._id,
             code: postStatus,
@@ -39,8 +39,12 @@ const PostDetailAdmin = ({ data }: IPropDataDetail) => {
          if (messRejected) {
             dataUpdate.mess = messRejected;
          }
+         if (dataUpdate.code === 0 && !messRejected) return;
          await dispatch(updateStatusPost(dataUpdate));
       }
+   };
+   const handleSetInfoRejected = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setMessRejected(e.target.value);
    };
    return (
       <div
@@ -109,7 +113,11 @@ const PostDetailAdmin = ({ data }: IPropDataDetail) => {
             <Grid className={styles.detailRight} item md={4}>
                <div className={styles.userWrap}>
                   <div className={styles.userHead}>
-                     {data?.userId.avatar ? <div>img</div> : <FaceIcon />}
+                     {data?.userId.avatar ? (
+                        <img src={data?.userId.avatar} alt="avatar" className={styles.avatar} />
+                     ) : (
+                        <FaceIcon />
+                     )}
 
                      {/* <h4>{data?.userId.lastName}</h4> */}
                      <h4>Trần Thị Hiếu</h4>
@@ -122,9 +130,9 @@ const PostDetailAdmin = ({ data }: IPropDataDetail) => {
                   <div className={styles.status}>
                      Trạng thái đơn hàng:
                      <select
-                        // value={statusMess}
+                        value={postStatus}
                         onChange={(e) => handleSelectChange(e)}
-                        className="select-status"
+                        className={styles.selectStatus}
                      >
                         {infoStatus.map((item, index) => {
                            return (
@@ -134,8 +142,30 @@ const PostDetailAdmin = ({ data }: IPropDataDetail) => {
                            );
                         })}
                      </select>
+                     {postStatus === 0 ? (
+                        <textarea
+                           onChange={(e) => {
+                              handleSetInfoRejected(e);
+                           }}
+                           placeholder="Nhập lý do từ chối"
+                        ></textarea>
+                     ) : (
+                        <></>
+                     )}
+                     {postStatus === 0 && !messRejected ? (
+                        <p>Vui lòng nhập lý do từ chối</p>
+                     ) : (
+                        <></>
+                     )}
                   </div>
-                  <ButtonCustom onClick={handleSubmitAction} title="Cập nhật" primary />
+                  <ButtonCustom
+                     disabled={
+                        postStatus === 2 || (postStatus === 0 && !messRejected) ? true : false
+                     }
+                     onClick={handleSubmitAction}
+                     title="Cập nhật"
+                     primary
+                  />
                </div>
             </Grid>
          </Grid>
