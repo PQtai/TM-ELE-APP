@@ -1,4 +1,4 @@
-import { Conversation, Message, Post, User } from '../models/index.js';
+import { Conversation, Chat, Post, User } from '../models/index.js';
 import errorFunction from '../utils/errorFunction.js';
 
 const conversationControllers = {

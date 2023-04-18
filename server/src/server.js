@@ -16,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 const PORT = process.env.PORT || 3000;
 app.use(allowCrossDomain);
 app.use(morgan('combined'));

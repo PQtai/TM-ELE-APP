@@ -1,13 +1,22 @@
 import Joi from 'joi';
 
-const messageSchemas = {
-  messageCreate: Joi.object().keys({
-    senderId: Joi.string().required(),
-    message: Joi.string().min(1).required(),
-  }),
-  paramsMessage: Joi.object().keys({
-    conversationId: Joi.string().required(),
-  }),
-};
+const chatId = Joi.string().required().label('Chat ID');
 
-export default messageSchemas;
+const senderId = Joi.string().required().label('Sender ID');
+
+const text = Joi.string().label('Text');
+
+const postId = Joi.array().items(Joi.string().label('Post ID'));
+
+const images = Joi.array().items(
+  Joi.object({
+    url: Joi.string().label('Image URL'),
+    contentType: Joi.string().label('Content type'),
+  })
+);
+
+const messageValidation = Joi.object({
+  chatId, senderId, text, postId, images
+});
+
+export default messageValidation;
