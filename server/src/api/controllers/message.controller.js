@@ -1,47 +1,89 @@
-import { Message, Conversation } from '../models/index.js';
-import errorFunction from '../utils/errorFunction.js';
+import { Message } from "../models/index.js";
+import errorFunction from "../utils/errorFunction.js";
+import uploads from "../utils/cloudinary.js";
+import fs from "fs";
 
-const messageControllers = {
-  create: async (req, res, next) => {
+const messageController = {
+  addMessage: async (req, res, next) => {
     try {
-      const { conversationId } = req.params;
-      const conversation = await Conversation.findById({ _id: conversationId });
-      if (!conversation) {
-        return res
-          .status(404)
-          .json(errorFunction(false, 404, 'Conversation is not found'));
-      }
-      const { senderId, message } = req.body;
-      if (
-        conversation.senderId === senderId ||
-        conversation.receiverId === senderId
-      ) {
-        const newMessage = await Message.create({
-          conversationId: conversation._id,
-          senderId,
-          message,
-        });
-        newMessage.save().then((data) => {
+      if (req.files && req.files.length > 0) {
+        try {
+          const listImg = [];
+          for (const file of req.files) {
+            const { path, mimetype } = file;
+            const newPath = await uploads(path, "Messages");
+            const imageUrl = newPath.url;
+            fs.unlinkSync(path);
+            listImg.push({
+              url: imageUrl,
+              contentType: mimetype,
+            });
+          }
+
+          const newMessage = await Message.create({
+            ...req.body,
+            images: listImg,
+          });
           return res
             .status(201)
             .json(
-              errorFunction(false, 201, 'Create message is succesfully', data)
+              errorFunction(
+                true,
+                201,
+                "Create message successfully",
+                newMessage
+              )
             );
-        });
+        } catch (error) {
+          return res.status(500).json(errorFunction(false, 500, error.message));
+        }
       } else {
+        const { chatId, senderId, message } = req.body;
+
+        if (!chatId || !senderId || !message) {
+          return res
+            .status(400)
+            .json(errorFunction(false, 400, "Missing required fields"));
+        }
+
+        const newMessage = await Message.create({
+          chatId,
+          senderId,
+          message,
+        });
+
         return res
-          .status(403)
+          .status(201)
           .json(
-            errorFunction(
-              false,
-              403,
-              'You do not have permission to join this conversation'
-            )
+            errorFunction(true, 201, "Create message successfully", newMessage)
           );
       }
     } catch (error) {
-      res.status(500).json(error.message);
+      return res.status(500).json(errorFunction(false, 500, error.message));
+    }
+  },
+
+  // Lấy thông tin các tin nhắn trong một cuộc trò chuyện
+  getMessage: async (req, res) => {
+    try {
+      const { chatId } = req.params;
+      if (!chatId) {
+        return res.status(400).json(errorFunction(false, 400, 'Invalid chatId'));
+      }
+      const senderId = req.user.id;
+      const messages = await Message.find({ chatId, senderId });
+      if (!messages) {
+        return res
+            .status(404)
+            .json(errorFunction(false, 404, 'Message not found'))
+      }      
+
+      return res
+        .status(200)
+        .json(errorFunction(true, 200, "Get messages successfully", messages));
+    } catch (error) {
+      return res.status(500).json(errorFunction(false, 500, error.message));
     }
   },
 };
-export default messageControllers;
+export default messageController;

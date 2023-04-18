@@ -37,8 +37,8 @@ const authControllers = {
         $or: [{ email }, { phone }],
       }).lean(true);
       if (existingPhone) {
-        res.status(403);
-        return res.json(errorFunction(true, 403, 'User Already Exist'));
+        res.status(409);
+        return res.json(errorFunction(true, 409, 'User Already Exist'));
       } else {
         const hashedPassword = await encryptionPassword(password);
         const user = await User.create({

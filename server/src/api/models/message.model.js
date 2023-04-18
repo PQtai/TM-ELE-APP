@@ -2,9 +2,9 @@ import mongoose from 'mongoose';
 
 const MessageSchema = new mongoose.Schema(
   {
-    conversationId: {
+    chatId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'conversation',
+      ref: 'chat',
       require: true,
     },
     senderId: {
@@ -12,12 +12,24 @@ const MessageSchema = new mongoose.Schema(
       ref: 'user',
       require: true,
     },
-    message: {
+    text: {
       type: String,
     },
+    postId: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'post'
+      }
+    ],
+    images: [
+      {
+        url: { type: String },
+        contentType: { type: String },
+      },
+    ],
   },
   { timestamps: true }
 );
 
 const Message = mongoose.model('message', MessageSchema);
-export { Message, MessageSchema };
+export { Message, MessageSchema};
