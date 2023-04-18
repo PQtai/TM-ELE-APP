@@ -106,7 +106,7 @@ li {
    opacity: 0.6;
    preventdefault: true !important;
    pointer-events: none;
-   cursor: not-allowed !important;
+   cursor: no-drop !important;
    -webkit-touch-callout: none; /* iOS Safari */
    -webkit-user-select: none; /* Safari */
    -khtml-user-select: none; /* Konqueror HTML */

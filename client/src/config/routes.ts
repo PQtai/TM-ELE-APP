@@ -7,13 +7,14 @@ const routes = {
    verifyEmailSuccess: '/auth/verify-email/:token',
    userInfo: '/user/:userId',
    listPostSearch: '/list-post-search',
-
+   fogotPasswords: '/forgot-password',
    // private routes
    profile: '/profile',
    chat: '/chat',
    post: '/post',
    managePosts: '/manage/posts?/:options',
    postFavourite: '/post-favourite',
+   editProfile: '/edit/profile',
 
    //    adminClient
    homeAdmin: '/admin',

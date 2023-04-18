@@ -34,13 +34,18 @@ const ItemPostCustom = ({ data, stylesCustom, classes, handleRemoveFavourite }: 
          const userId = getUserId();
          if (userId) {
             const fetchUser = async () => {
-               const url = `${apiUrl}auth/get-user/${userId}`;
+               const url = `${apiUrl}auth/get-current-user/${userId}`;
                const response = await axios.get(url);
 
                if (response.data) {
-                  const infoIdFavourite = response.data.favourite.map((data: { _id: string }) => {
-                     return data._id;
-                  });
+                  // console.log(response.data);
+                  // console.log(response.data.favourite);
+
+                  const infoIdFavourite = response.data.data.favourite.map(
+                     (data: { _id: string }) => {
+                        return data._id;
+                     },
+                  );
                   setStateDataFavourite(infoIdFavourite);
                }
             };
@@ -164,7 +169,7 @@ const ItemPostCustom = ({ data, stylesCustom, classes, handleRemoveFavourite }: 
                         stylesCustom ? stylesCustom.itemPostInfoAvatar : styles.itemPostInfoAvatar
                      }`}
                      src={data.userId.avatar}
-                     alt="avartar"
+                     alt="avatar"
                   />
                ) : (
                   <AccountCircleIcon />

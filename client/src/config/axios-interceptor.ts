@@ -13,6 +13,7 @@ const setupAxiosInterceptors = () => {
       if (typeof token === 'string') {
          token = JSON.parse(token);
          config.headers.token = `Bearer ${token}`;
+         // config.headers['Content-Type'] = 'multipart/form-data';
       }
       return config;
    };

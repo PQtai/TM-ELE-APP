@@ -12,7 +12,7 @@ const PostFavourite = () => {
    useEffect(() => {
       if (userId) {
          const fetchUser = async () => {
-            const url = `${apiUrl}auth/get-user/${userId}`;
+            const url = `${apiUrl}auth/get-current-user/${userId}`;
             let token: string | null = localStorage.getItem('token');
             if (typeof token === 'string') {
                token = JSON.parse(token);
@@ -20,14 +20,16 @@ const PostFavourite = () => {
             }
             if (token) {
                const { data } = await axios.get<{
-                  favourite: IDataPost[];
+                  data: {
+                     favourite: IDataPost[];
+                  };
                }>(url, {
                   headers: { Authorization: token },
                });
-               console.log(data.favourite);
+               console.log(data);
 
                if (data) {
-                  setInfoFavourite(data.favourite);
+                  setInfoFavourite(data.data.favourite);
                }
             }
          };
@@ -37,7 +39,7 @@ const PostFavourite = () => {
    const handleRemoveFavourite = useCallback(() => {
       if (userId) {
          const fetchUser = async () => {
-            const url = `${apiUrl}auth/get-user/${userId}`;
+            const url = `${apiUrl}auth/get-current-user/${userId}`;
             let token: string | null = localStorage.getItem('token');
             if (typeof token === 'string') {
                token = JSON.parse(token);
@@ -45,15 +47,17 @@ const PostFavourite = () => {
             }
             if (token) {
                const { data } = await axios.get<{
-                  favourite: IDataPost[];
+                  data: {
+                     favourite: IDataPost[];
+                  };
                }>(url, {
                   headers: { Authorization: token },
                });
-               console.log(data.favourite);
+               console.log(data.data.favourite);
                console.log(data);
 
                if (data) {
-                  setInfoFavourite(data.favourite);
+                  setInfoFavourite(data.data.favourite);
                }
             }
          };

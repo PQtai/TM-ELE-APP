@@ -6,21 +6,30 @@ interface IItemTextField {
    lable: string;
    formik: {
       initialValues: {
-         title: string;
-         acreage: string;
-         price: string;
-         deposit: string;
-         description: string;
+         title?: string;
+         acreage?: string;
+         price?: string;
+         deposit?: string;
+         description?: string;
+         firstName?: string;
+         lastName?: string;
+         phone?: string;
+         email?: string;
+         password?: string;
+         newPassword?: string;
+         confirmPassword?: string;
+         type?: string;
       };
       getFieldProps: (nameOrOptions: any) => FieldInputProps<any>;
    };
    title: string;
+   type?: string;
    stylesCustom?: {
       [key: string]: string;
    };
 }
 
-export default function ItemTextField({ lable, title, formik }: IItemTextField) {
+export default function ItemTextField({ lable, title = '', type, formik }: IItemTextField) {
    return (
       <>
          <input
@@ -34,7 +43,7 @@ export default function ItemTextField({ lable, title, formik }: IItemTextField) 
             }}
             placeholder={lable}
             id={title}
-            type={title}
+            type={type || title}
             {...formik.getFieldProps(title)}
          />
          <label htmlFor={title}>
