@@ -18,12 +18,12 @@ router.post(
 router.get(
     '/users-chat',
     authMiddleware.verifyToken, 
-    chatControllers.userChats
+    chatControllers.getConversations
 );
 
 // Find chat between sender and receiver
 router.get(
-    '/find-chat/:firstId/:secondId', 
+    '/find-chat/:secondId', 
     authMiddleware.verifyToken,
     chatControllers.findChat
 );

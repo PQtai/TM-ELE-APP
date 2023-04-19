@@ -4,23 +4,20 @@ const ChatSchema = new mongoose.Schema(
   {
     members: [
       {
-        senderId: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-            ref: "user",
-          },
-          receiverId: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-            ref: "user",
-          },
-      }
-    ]
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+        required: true,
+      },
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+        required: true,
+      },
+    ],
   },
   { timestamps: true }
 );
 
-  
-
 const Chat = mongoose.model("chat", ChatSchema);
-export { Chat, ChatSchema };
+
+export {Chat, ChatSchema};

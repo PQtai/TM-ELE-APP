@@ -28,7 +28,7 @@ const messageController = {
             .status(201)
             .json(
               errorFunction(
-                true,
+                false,
                 201,
                 "Create message successfully",
                 newMessage
@@ -38,9 +38,10 @@ const messageController = {
           return res.status(500).json(errorFunction(false, 500, error.message));
         }
       } else {
-        const { chatId, senderId, message } = req.body;
+        const { chatId, senderId, text } = req.body;
 
-        if (!chatId || !senderId || !message) {
+        if (!chatId || !senderId || !text) {
+          console.log(`chat ${chatId} ::: sender ${senderId} ::: text ${text}`);
           return res
             .status(400)
             .json(errorFunction(false, 400, "Missing required fields"));
@@ -49,13 +50,13 @@ const messageController = {
         const newMessage = await Message.create({
           chatId,
           senderId,
-          message,
+          text,
         });
 
         return res
           .status(201)
           .json(
-            errorFunction(true, 201, "Create message successfully", newMessage)
+            errorFunction(false, 201, "Create message successfully", newMessage)
           );
       }
     } catch (error) {
