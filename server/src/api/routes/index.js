@@ -11,9 +11,10 @@ const routes = (app) => {
   app.use('/auth', userRouter);
   app.use('/post', postRouter);
   app.use('/conversation', conversationRouter);
-  app.use('/message', messageRouter);
   app.use('/category', categoryRouter);
   app.use('/chat', chatRouter)
+  app.use('/message', messageRouter);
+
 };
 
 export default routes;
