@@ -4,11 +4,13 @@ import uploads from "../utils/cloudinary.js";
 import fs from "fs";
 
 const messageController = {
+  // Gửi tin nhắn
   addMessage: async (req, res, next) => {
     try {
       if (req.files && req.files.length > 0) {
         try {
           const listImg = [];
+
           for (const file of req.files) {
             const { path, mimetype } = file;
             const newPath = await uploads(path, "Messages");
@@ -24,6 +26,7 @@ const messageController = {
             ...req.body,
             images: listImg,
           });
+
           return res
             .status(201)
             .json(
@@ -41,7 +44,6 @@ const messageController = {
         const { chatId, senderId, text } = req.body;
 
         if (!chatId || !senderId || !text) {
-          console.log(`chat ${chatId} ::: sender ${senderId} ::: text ${text}`);
           return res
             .status(400)
             .json(errorFunction(false, 400, "Missing required fields"));
@@ -60,7 +62,7 @@ const messageController = {
           );
       }
     } catch (error) {
-      return res.status(500).json(errorFunction(false, 500, error.message));
+      return res.status(500).json(errorFunction(true, 500, error.message));
     }
   },
 
@@ -69,21 +71,20 @@ const messageController = {
     try {
       const { chatId } = req.params;
       if (!chatId) {
-        return res.status(400).json(errorFunction(false, 400, 'Invalid chatId'));
+        return res.status(400).json(errorFunction(true, 400, "Invalid chatId"));
       }
-      const senderId = req.user.id;
-      const messages = await Message.find({ chatId, senderId });
+      const currentUser = req.user.id;
+      const messages = await Message.find({ chatId, currentUser });
       if (!messages) {
         return res
-            .status(404)
-            .json(errorFunction(false, 404, 'Message not found'))
-      }      
-
+          .status(404)
+          .json(errorFunction(true, 204, "Message not found"));
+      }
       return res
         .status(200)
-        .json(errorFunction(true, 200, "Get messages successfully", messages));
+        .json(errorFunction(false, 200, "Get messages successfully", messages));
     } catch (error) {
-      return res.status(500).json(errorFunction(false, 500, error.message));
+      return res.status(500).json(errorFunction(true, 500, error.message));
     }
   },
 };
