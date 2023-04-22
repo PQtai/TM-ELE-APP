@@ -15,16 +15,16 @@ const router = express.Router();
 // );
 
 router.post(
-  '/create',
+  "/create",
   authMiddleware.verifyToken,
   formatFileUpload("images", "multiple"),
   messageControllers.addMessage
 );
 
 router.get(
-    '/find/:chatId',
-    authMiddleware.verifyToken,
-    messageControllers.getMessage
-)
+  "/find/:chatId",
+  authMiddleware.verifyToken,
+  messageControllers.getMessage
+);
 
 export default router;
