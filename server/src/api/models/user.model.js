@@ -10,9 +10,9 @@ const UserSchema = new Schema(
       type: String,
       required: false,
     },
-    password: { 
-      type: String, 
-      required: true 
+    password: {
+      type: String,
+      required: true,
     },
     phone: {
       type: String,
@@ -26,12 +26,13 @@ const UserSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ['user', 'admin'],
+      enum: ["user", "admin"],
       default: "user",
     },
     avatar: {
       type: String,
-      required: false,
+      default:
+        "https://res.cloudinary.com/dzn7taii7/image/upload/v1682177170/avartar-default/images_wx8wbt.png",
     },
     favourite: [
       {
@@ -58,14 +59,14 @@ const UserSchema = new Schema(
     },
     conversations: [
       {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "conversation",
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "conversation",
       },
     ],
     isVerified: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   { timestamps: true }
 );
