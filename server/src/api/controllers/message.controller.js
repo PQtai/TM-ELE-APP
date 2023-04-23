@@ -85,15 +85,34 @@ const messageController = {
         return res.status(400).json(errorFunction(true, 400, "Invalid chatId"));
       }
       const currentUser = req.user.id;
-      const messages = await Message.find({ chatId, currentUser });
+      const pageNumber = parseInt(req.query.pageNumber) || 1;
+      const pageSize = parseInt(req.query.pageSize) || 20;
+      const skip = (pageNumber - 1) * pageSize;
+
+      const messages = await Message.find({ chatId, currentUser })
+        .sort({ createdAt: -1 })
+        .limit(pageSize)
+        .skip(skip);
+
       if (!messages) {
         return res
           .status(404)
           .json(errorFunction(true, 204, "Message not found"));
       }
-      return res
-        .status(200)
-        .json(errorFunction(false, 200, "Get messages successfully", messages));
+
+      const countMessages = await Message.countDocuments({
+        chatId,
+        currentUser,
+      });
+      const totalPages = Math.ceil(countMessages / pageSize);
+      return res.status(200).json(
+        errorFunction(false, 200, "Get messages successfully", {
+          pageNumber,
+          totalPages,
+          countMessages,
+          messages,
+        })
+      );
     } catch (error) {
       return res.status(500).json(errorFunction(true, 500, error.message));
     }
