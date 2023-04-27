@@ -10,7 +10,7 @@ import { setInfoAlert } from '../Alerts/Alerts.reducer';
 import axios from 'axios';
 import { AccountUser } from '~/shared/model/register';
 import { useAppDispatch, useAppSelector } from '~/config/store';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 interface IDataPropsPost {
    data: IDataPost;
    stylesCustom?: {
@@ -29,6 +29,7 @@ export interface IResultResponse {
 const ItemPostCustom = ({ data, stylesCustom, classes, handleRemoveFavourite }: IDataPropsPost) => {
    const dataLogin = useAppSelector((state) => state.login.infoState.data);
    const [stateDataFavourite, setStateDataFavourite] = useState<string[]>([]);
+   const navigate = useNavigate();
    useEffect(() => {
       if (!dataLogin) {
          const userId = getUserId();
@@ -97,6 +98,9 @@ const ItemPostCustom = ({ data, stylesCustom, classes, handleRemoveFavourite }: 
 
    return (
       <div
+         onClick={() => {
+            navigate(`/post-detail/${data._id}`);
+         }}
          className={`${stylesCustom ? stylesCustom.itemPostCustom : styles.itemPostCustom} ${
             classes ? classes : ''
          }`}
@@ -132,7 +136,8 @@ const ItemPostCustom = ({ data, stylesCustom, classes, handleRemoveFavourite }: 
                   <p>
                      {stylesCustom ? <button className={stylesCustom.chat}>Chat</button> : <></>}
                      <button
-                        onClick={async () => {
+                        onClick={async (e) => {
+                           e.stopPropagation();
                            await handleSaveFavourite(data._id);
                            if (handleRemoveFavourite) {
                               handleRemoveFavourite();
