@@ -73,8 +73,8 @@ const EditProfile = () => {
                   setInitialValues((prev) => {
                      return {
                         ...prev,
-                        lastName: data.data.lastName,
-                        firstName: data.data.firstName,
+                        lastName: data.data.lastName || '',
+                        firstName: data.data.firstName || '',
                         phone: data.data.phone,
                         email: data.data.email,
                      };

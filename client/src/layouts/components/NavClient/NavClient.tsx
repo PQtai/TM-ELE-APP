@@ -92,6 +92,9 @@ const NavClient = () => {
             <Logo className={styles.logo} />
             <div className={styles.navRight}>
                <ButtonCustom
+                  onClick={() => {
+                     navigate('/chat');
+                  }}
                   transparent
                   className={styles.navOptions}
                   title="Chat"

@@ -119,8 +119,8 @@ const PostDetailAdmin = ({ data }: IPropDataDetail) => {
                         <FaceIcon />
                      )}
 
-                     {/* <h4>{data?.userId.lastName}</h4> */}
-                     <h4>Trần Thị Hiếu</h4>
+                     <h4>{data?.userId.lastName || data?.userId.phone}</h4>
+                     {/* <h4>Trần Thị Hiếu</h4> */}
                      <button className={styles.detailUser}>Xem trang cá nhân</button>
                   </div>
                   <div className={styles.contact}>

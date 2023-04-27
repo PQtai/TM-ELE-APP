@@ -8,6 +8,7 @@ const routes = {
    userInfo: '/user/:userId',
    listPostSearch: '/list-post-search',
    fogotPasswords: '/forgot-password',
+   postDetail: '/post-detail/:postId',
    // private routes
    profile: '/profile',
    chat: '/chat',
