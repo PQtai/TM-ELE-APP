@@ -16,14 +16,16 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.REACT_APP_CLIENT_URL,
+    origin: `http://localhost:3001`,
   },
 });
-
 let activeUsers = [];
+console.log(`${process.env.LOCAL_URL}`);
 
 io.on('connection', (socket) => {
   // add new User
+  console.log(`User is connect:::${socket.id}`);
+  socket.on('clientsend', (data) => console.log(data));
   socket.on('new-user-add', (newUserId) => {
     // if user is not added previously
     if (!activeUsers.some((user) => user.userId === newUserId)) {

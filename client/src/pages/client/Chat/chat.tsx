@@ -1,34 +1,102 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './chat.module.scss';
 import ItemConversation from './itemConversation';
 import { Grid } from '@mui/material';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import { useAppDispatch, useAppSelector } from '~/config/store';
-import { getListChat } from './chat.reducer';
-import { IMemberCreateChat } from '~/shared/model/chat';
+import { IDataCreateMess, getListChat } from './chat.reducer';
+import { IDataChat, IMemberCreateChat } from '~/shared/model/chat';
 import { isObjEmpty } from '~/utils/checkObjEmpty';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus, faEllipsisVertical, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import getUserId from '~/utils/getUserId';
+import { IListDataMess, IResultResponseDataMess } from '~/shared/model/message';
+import { SERVER_API_URL } from '~/config/constants';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { Socket, io } from 'socket.io-client';
 const Chat = () => {
+    // const role = useAppSelector((state) => state.login.infoState.role);
+
+    // Connect to Socket.io
+    // useEffect(() => {
+    //     // socketRef.current = io('http://localhost:3000');
+    // }, []);
+
     const listDataChat = useAppSelector((state) => state.listChatSlice.listChat.data);
     const listDataMess = useAppSelector((state) => state.listChatSlice.datasMess.data);
     const dispatch = useAppDispatch();
+    const [newMessage, setNewMessage] = useState('');
+    const [newListDataMess, setNewListDataMess] = useState<IListDataMess[] | undefined>();
+    const [newListDataChat, setNewListDataChat] = useState<IDataChat[] | undefined>();
     const [currChat, setCurrChat] = useState<IMemberCreateChat>({} as IMemberCreateChat);
     useEffect(() => {
         dispatch(getListChat());
     }, [dispatch]);
-    console.log(listDataChat);
-    console.log(currChat);
-    console.log(listDataMess);
+    const { chatId } = useParams();
+    useEffect(() => {
+        setNewListDataMess(listDataMess);
+    }, [listDataMess, dispatch]);
+    useEffect(() => {
+        setNewListDataChat(listDataChat);
+    }, [listDataChat, dispatch]);
+    // Send Message to socket server
+    // useEffect(() => {
+    //     if (newMessage !== '') {
+    //         socket.emit('send-message', newMessage);
+    //     }
+    // }, [newMessage, socket]);
+
+    // Get the message from socket server
+    // useEffect(() => {
+    //     socket.on('recieve-message', (data) => {
+    //         console.log(data);
+    //         //   setReceivedMessage(data);
+    //     });
+
+    //     // console.log("Message Arrived: ", receivedMessage)
+    //     // if (receivedMessage !== null && receivedMessage.chatId === chat._id) {
+    //     //   setMessages([...messages, receivedMessage]);
+    //     // }
+    // }, [socket]);
+    const handleAddLastMess = (chatId = '1', text: string) => {
+        console.log(text);
+        if (newListDataChat) {
+            const newData: IDataChat[] = [...newListDataChat].map((data) => {
+                if (data.chatId === chatId) {
+                    const updatedData = {
+                        ...data,
+                        lastMessage: {
+                            ...data.lastMessage,
+                            text: text,
+                        },
+                    };
+                    return updatedData;
+                }
+                return data;
+            });
+            setNewListDataChat(newData);
+        }
+    };
+    const handleCrateMess = async (dataCreateMess: IDataCreateMess) => {
+        const requestUrl = `${SERVER_API_URL}message/create`;
+        const response = await axios.post<IResultResponseDataMess>(requestUrl, dataCreateMess);
+
+        setNewListDataMess((prev) => {
+            if (prev) {
+                return [response.data.data, ...prev];
+            }
+        });
+        setNewMessage('');
+    };
     const currUser = getUserId();
     return (
         <div className={styles.chatWrapp}>
             <div className={styles.chat}>
                 <Grid container spacing={1}>
                     <Grid className={styles.chatLeft} item md={5}>
-                        {listDataChat ? (
-                            listDataChat.map((dataChat, index) => {
+                        {newListDataChat ? (
+                            newListDataChat.map((dataChat, index) => {
                                 return (
                                     <ItemConversation
                                         setCurrChat={setCurrChat}
@@ -73,8 +141,8 @@ const Chat = () => {
                                     />
                                 </div>
                                 <div className={styles.chatBox}>
-                                    {listDataMess &&
-                                        listDataMess.map((dataMessage, index) => {
+                                    {newListDataMess &&
+                                        [...newListDataMess].reverse().map((dataMessage, index) => {
                                             return (
                                                 <div
                                                     className={`${
@@ -106,14 +174,36 @@ const Chat = () => {
                                 </div>
                                 <div className={styles.chatInput}>
                                     <button>
-                                        <FontAwesomeIcon icon={faCirclePlus} />{' '}
+                                        <FontAwesomeIcon icon={faCirclePlus} />
                                     </button>
                                     <input
+                                        onChange={(e) => {
+                                            setNewMessage(e.target.value);
+                                        }}
                                         className={styles.inputChatMess}
                                         type="text"
                                         placeholder="Nhập tin nhắn"
+                                        value={newMessage}
                                     />
-                                    <button type="submit" className={styles.btnSend}>
+                                    <button
+                                        onClick={() => {
+                                            if (newMessage) {
+                                                handleCrateMess({
+                                                    chatId,
+                                                    receiverId: currChat._id,
+                                                    text: newMessage,
+                                                });
+                                                handleAddLastMess(chatId, newMessage);
+                                                // socket.emit('send-message', {
+                                                //     chatId,
+                                                //     text: newMessage,
+                                                //     receiverId: currChat._id,
+                                                // });
+                                            }
+                                        }}
+                                        type="submit"
+                                        className={styles.btnSend}
+                                    >
                                         <FontAwesomeIcon icon={faPaperPlane} />
                                     </button>
                                 </div>
