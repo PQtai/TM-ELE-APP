@@ -97,7 +97,6 @@
                 background-color: #fff;
                 position: absolute;
                 width: 100%;
-                bottom: -10px;
                 display: flex;
                 align-items: center;
                 padding: 10px 0;
@@ -118,8 +117,7 @@
                 overflow-y: scroll;
                 overflow-x: hidden;
                 margin-top: 70px;
-                padding-bottom: 70px;
-                max-height: 600px;
+                max-height: 450px;
                 .messIsCurrUser,
                 .messIsSenderUser {
                     display: flex;

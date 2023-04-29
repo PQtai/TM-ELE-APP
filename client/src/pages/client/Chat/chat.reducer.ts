@@ -9,7 +9,11 @@ import axios from 'axios';
 import { SERVER_API_URL } from '~/config/constants';
 import { serializeAxiosError } from '~/shared/reducers/reducer.utils';
 import { IDataChat, IResultResponseListChat } from '~/shared/model/chat';
-import { IListDataMess, IResultResponseListDataMess } from '~/shared/model/message';
+import {
+    IListDataMess,
+    IResultResponseDataMess,
+    IResultResponseListDataMess,
+} from '~/shared/model/message';
 
 const apiUrl = SERVER_API_URL;
 // slice
@@ -23,6 +27,9 @@ interface IInitState {
         mess: string;
     };
     datasMess: {
+        countMessages: number;
+        pageNumber: number;
+        totalPages: number | undefined;
         data: IListDataMess[] | undefined;
         loading: boolean;
         error: boolean;
@@ -40,6 +47,9 @@ const initialState: IInitState = {
         mess: '',
     },
     datasMess: {
+        countMessages: 20,
+        pageNumber: 1,
+        totalPages: undefined,
         data: undefined,
         loading: false,
         error: false,
@@ -61,6 +71,12 @@ const initialState: IInitState = {
 // }
 export interface IParamsGetListMess {
     chatId: string;
+}
+export interface IDataCreateMess {
+    chatId?: string;
+    text?: string;
+    postId?: string;
+    receiverId: string;
 }
 // actions
 
@@ -106,7 +122,7 @@ const listChatSlice = createSlice({
                 }
             })
             .addMatcher(isFulfilled(getListMessChat), (state, action) => {
-                state.datasMess.data = action.payload.data.data;
+                state.datasMess.data = action.payload.data.data.messages;
                 state.datasMess.error = false;
                 state.datasMess.loading = false;
                 state.datasMess.status = action.payload.data.message;
@@ -137,6 +153,9 @@ const listChatSlice = createSlice({
         },
         resetInfoListMess(state) {
             state.datasMess = {
+                countMessages: 20,
+                pageNumber: 1,
+                totalPages: undefined,
                 data: undefined,
                 loading: false,
                 error: false,
