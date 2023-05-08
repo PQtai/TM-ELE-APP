@@ -1,52 +1,54 @@
-import express from 'express';
-import postControllers from '../controllers/post.controller.js';
-import postSchemas from '../helpers/postValidation.js';
-import authMiddleware from '../middlewares/auth.middleware.js';
-import { formatFileUpload } from '../middlewares/post.middlewares.js';
-import validateMiddleware from '../middlewares/validate.middleware.js';
-import validateFormData from '../utils/validateFormData.js';
+import express from "express";
+import postControllers from "../controllers/post.controller.js";
+import postSchemas from "../helpers/postValidation.js";
+import authMiddleware from "../middlewares/auth.middleware.js";
+import { formatFileUpload } from "../middlewares/post.middlewares.js";
+import validateMiddleware from "../middlewares/validate.middleware.js";
+import validateFormData from "../utils/validateFormData.js";
+import postViewsMiddleware from "../middlewares/postView.middleware.js";
 const router = express.Router();
 router.post(
-  '/create',
+  "/create",
   authMiddleware.verifyToken,
-  formatFileUpload('images', 'multiple'),
-  validateFormData('body', postSchemas.postCreate),
+  formatFileUpload("images", "multiple"),
+  validateFormData("body", postSchemas.postCreate),
   postControllers.upload
 );
-router.delete('/delete', authMiddleware.authIsAdmin, postControllers.delete);
+router.delete("/delete", authMiddleware.authIsAdmin, postControllers.delete);
 
 router.patch(
-  '/editStatus/:id',
-  validateMiddleware('body', postSchemas.postEditStatus),
+  "/editStatus/:id",
+  validateMiddleware("body", postSchemas.postEditStatus),
   authMiddleware.authIsAdminOrIsAuthor,
   postControllers.updatePostStatus
 );
 router.patch(
-  '/edit/:id',
+  "/edit/:id",
   authMiddleware.authIsAdmin,
   postControllers.updatePost
 );
 
 router.get(
-  '/list',
-  validateMiddleware('query', postSchemas.postList),
+  "/list",
+  validateMiddleware("query", postSchemas.postList),
   postControllers.index
 );
 router.get(
-  '/list/role-admin',
+  "/list/role-admin",
   authMiddleware.authIsAdmin,
-  validateMiddleware('query', postSchemas.postList),
+  validateMiddleware("query", postSchemas.postList),
   postControllers.getPostsRoleAdmin
 );
 router.get(
-  '/post-author',
+  "/post-author",
   authMiddleware.verifyToken,
-  validateMiddleware('query', postSchemas.postsAuthor),
+  validateMiddleware("query", postSchemas.postsAuthor),
   postControllers.getPostsAuthor
 );
 router.get(
-  '/:id',
-  validateMiddleware('params', postSchemas.postDetail),
+  "/:id",
+  validateMiddleware("params", postSchemas.postDetail),
+  postViewsMiddleware,
   postControllers.show
 );
 // router.get('/', postControllers.index);
