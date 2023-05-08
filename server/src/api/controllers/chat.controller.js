@@ -77,20 +77,13 @@ const chatControllers = {
       const chat = await Chat.findOne({
         members: { $all: [firstId, secondId] },
       });
-      // const populatedChats = await Chat.populate(chat, {
-      //   path: "members",
-      //   select: "_id firstName lastName avatar",
-      // });
       if (chat) {
         const chatId = chat._id;
-        const messages = await Message.find({ chatId })
-          .populate("senderId", "_id firstName lastName avatar")
-          .populate("postId", "_id title price, images");
-        return res
-          .status(200)
-          .json(
-            errorFunction(false, 200, "Get messages successfully", messages)
-          );
+        return res.status(200).json(
+          errorFunction(false, 200, "Get messages successfully", {
+            chatId,
+          })
+        );
       }
       return res.status(404).json(errorFunction(true, 404, "Chat not found"));
     } catch (error) {
