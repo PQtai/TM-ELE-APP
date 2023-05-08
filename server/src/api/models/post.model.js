@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 const PostSchema = new Schema(
   {
@@ -33,12 +33,13 @@ const PostSchema = new Schema(
     typePost: { type: Number, required: true },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'user',
+      ref: "user",
     },
+    views: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
-const Post = mongoose.model('post', PostSchema);
+const Post = mongoose.model("post", PostSchema);
 export { Post, PostSchema };
 
 // 0 từ chôi
