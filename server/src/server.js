@@ -51,6 +51,8 @@ io.on('connection', (socket) => {
     console.log('Sending from socket to :', receiverId);
     console.log('Data: ', data);
     if (user) {
+      console.log(`user.socketId::::${user.socketId}`);
+      console.log(`data::::${data}`);
       io.to(user.socketId).emit('receive-message', data);
     }
   });

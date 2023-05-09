@@ -14,9 +14,27 @@ const postControllers = {
         province,
         district,
         wards,
+        priceFrom,
+        priceTo,
+        acreageFrom,
+        acreageTo,
+        title,
         ...rest
       } = req.query;
-      const query = { 'status.code': 1, ...rest };
+      const query = {
+        'status.code': 1,
+        // price: { $gte: priceFrom, $lte: priceTo },
+        // acreage: { $gte: acreageFrom, $lte: acreageTo },
+        ...rest,
+      };
+      if (title) {
+        const searchQuery = new RegExp(`${title}`, 'i');
+        query.title = { $regex: searchQuery };
+      }
+      if (priceFrom && priceTo)
+        query.price = { $gte: priceFrom, $lte: priceTo };
+      if (acreageFrom && acreageTo)
+        query.acreage = { $gte: acreageFrom, $lte: acreageTo };
       if (province) query['address.province'] = province;
       if (district) query['address.district'] = district;
       if (wards) query['address.wards'] = wards;
@@ -29,6 +47,20 @@ const postControllers = {
         .json(errorFunction(false, 200, 'Find post is succesfully', posts));
     } catch (error) {
       res.status(500).json(errorFunction(true, 500, error.message));
+    }
+  },
+  // [Get]/post/search?q=xxx
+  search: async (req, res, next) => {
+    try {
+      const searchQuery = new RegExp(`${req.query.q}`, 'i');
+      const posts = await Post.find({
+        title: { $regex: searchQuery },
+      });
+      res
+        .status(200)
+        .json(errorFunction(false, 200, 'Search post is succesfully', posts));
+    } catch (error) {
+      res.status(500).json(error.message);
     }
   },
   getPostsRoleAdmin: async (req, res, next) => {

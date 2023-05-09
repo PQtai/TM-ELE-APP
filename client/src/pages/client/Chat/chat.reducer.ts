@@ -14,6 +14,7 @@ import {
     IResultResponseDataMess,
     IResultResponseListDataMess,
 } from '~/shared/model/message';
+import { IDataPost } from '~/shared/model/post';
 
 const apiUrl = SERVER_API_URL;
 // slice
@@ -36,6 +37,7 @@ interface IInitState {
         status: string | number;
         mess: string;
     };
+    fakePostChat?: IDataPost;
 }
 
 const initialState: IInitState = {
@@ -56,6 +58,7 @@ const initialState: IInitState = {
         status: '',
         mess: '',
     },
+    fakePostChat: undefined,
 };
 
 // body request
@@ -72,12 +75,7 @@ const initialState: IInitState = {
 export interface IParamsGetListMess {
     chatId: string;
 }
-export interface IDataCreateMess {
-    chatId?: string;
-    text?: string;
-    postId?: string;
-    receiverId: string;
-}
+
 // actions
 
 export const getListChat = createAsyncThunk(
@@ -142,6 +140,9 @@ const listChatSlice = createSlice({
             });
     },
     reducers: {
+        setFakePostChat(state, action) {
+            state.fakePostChat = action.payload;
+        },
         resetInfoListChat(state) {
             state.listChat = {
                 data: undefined,
@@ -166,6 +167,6 @@ const listChatSlice = createSlice({
     },
 });
 
-export const { resetInfoListChat, resetInfoListMess } = listChatSlice.actions;
+export const { resetInfoListChat, resetInfoListMess, setFakePostChat } = listChatSlice.actions;
 
 export default listChatSlice.reducer;

@@ -1,20 +1,14 @@
 import React from 'react';
 import styles from './chat.module.scss';
-import { IDataChat, IMemberCreateChat } from '~/shared/model/chat';
-import { useAppDispatch } from '~/config/store';
-import { getListMessChat } from './chat.reducer';
+import { IDataChat } from '~/shared/model/chat';
 import { useNavigate } from 'react-router-dom';
 export interface IPropDataChat {
     dataChat: IDataChat;
-    setCurrChat: React.Dispatch<React.SetStateAction<IMemberCreateChat>>;
 }
-const ItemConversation = ({ dataChat, setCurrChat }: IPropDataChat) => {
-    const dispatch = useAppDispatch();
+const ItemConversation = ({ dataChat }: IPropDataChat) => {
     const navigate = useNavigate();
     const handleFindListMess = (chatId: string) => {
-        setCurrChat({ ...dataChat.members[0] });
         if (chatId) {
-            dispatch(getListMessChat({ chatId }));
             navigate(`/chat/${chatId}`);
         }
     };

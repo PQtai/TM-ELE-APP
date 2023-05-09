@@ -64,7 +64,16 @@
         }
         .chatRight {
             position: relative;
-            max-height: 600px;
+            height: 100%;
+            .emptyRoomImg {
+                min-height: 600px;
+                display: flex;
+                > img {
+                    margin: auto;
+                    height: auto;
+                    width: 50%;
+                }
+            }
             .chatHead {
                 background-color: #fff;
                 position: absolute;
@@ -117,6 +126,7 @@
                 overflow-y: scroll;
                 overflow-x: hidden;
                 margin-top: 70px;
+                min-height: 450px;
                 max-height: 450px;
                 .messIsCurrUser,
                 .messIsSenderUser {

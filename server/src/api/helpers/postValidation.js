@@ -42,7 +42,6 @@ const postSchemas = {
     page: Joi.number().min(1),
     pageSize: Joi.number().max(20),
     code: Joi.number().valid(0, 1, 2, 9),
-
     typeCategory: Joi.string(),
     typePost: Joi.number(),
     title: Joi.string(),
@@ -53,6 +52,10 @@ const postSchemas = {
     acreage: Joi.number(),
     price: Joi.number(),
     deposit: Joi.number(),
+    priceFrom: Joi.number(),
+    priceTo: Joi.number(),
+    acreageFrom: Joi.number(),
+    acreageTo: Joi.number(),
   }),
   postDetail: Joi.object({
     id: Joi.string().min(1).required(),

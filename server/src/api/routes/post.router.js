@@ -32,6 +32,7 @@ router.get(
   validateMiddleware('query', postSchemas.postList),
   postControllers.index
 );
+router.get('/search', postControllers.search);
 router.get(
   '/list/role-admin',
   authMiddleware.authIsAdmin,
