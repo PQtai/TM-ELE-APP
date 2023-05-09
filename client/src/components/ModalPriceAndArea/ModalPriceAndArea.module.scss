@@ -1,0 +1,35 @@
+.modalWrapper {
+    background-color: #fff;
+    transform: translateY(-200px);
+    min-width: 30vw;
+    width: 40vw;
+    animation: slideInTopSort ease 0.5s;
+    position: relative;
+    .modalTypeTitle {
+        text-align: center;
+        padding: 10px;
+        background-color: var(--background-btn-default);
+    }
+    .modalTypeList {
+        padding: 20px;
+    }
+    .btnSubmit {
+        text-align: center;
+        width: 100%;
+        background-color: #ffc96f;
+        padding: 10px 0;
+        color: #fff;
+        font-size: 2rem;
+    }
+    .btnClose {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        margin: 10px 0 0 10px;
+        > svg {
+            font-size: 2rem;
+        }
+        top: 0;
+        left: 0;
+    }
+}

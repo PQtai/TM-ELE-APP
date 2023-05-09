@@ -29,7 +29,7 @@ const Footer = () => {
    return (
       <div className={styles.footerWrap}>
          <div className={styles.footerContainer}>
-            <Grid rowSpacing={1} container columnSpacing={{ xs: 1, sm: 2, md: 4 }}>
+            <Grid rowSpacing={1} container columnSpacing={{ xs: 1, sm: 2, md: 1 }}>
                <Grid item xs={12} sm={6} md={3}>
                   <ItemFooter QR={QRImage} imgs={imgDownloadFooter}>
                      TẢI ỨNG DỤNG TMELE

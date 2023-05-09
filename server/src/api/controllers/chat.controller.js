@@ -1,5 +1,5 @@
-import { Chat, Message } from "../models/index.js";
-import errorFunction from "../utils/errorFunction.js";
+import { Chat, Message } from '../models/index.js';
+import errorFunction from '../utils/errorFunction.js';
 
 const chatControllers = {
   // Tạo 1 đoạn chat giữa 2 người dùng
@@ -13,7 +13,7 @@ const chatControllers = {
       const result = await newChat.save();
       res
         .status(200)
-        .json(errorFunction(false, 200, "Created Chat successfully", result));
+        .json(errorFunction(false, 200, 'Created Chat successfully', result));
     } catch (error) {
       res.status(500).json(errorFunction(false, 500, error.message));
     }
@@ -26,8 +26,8 @@ const chatControllers = {
       console.log(`currentUser ::: ${currentUser}`);
       const chats = await Chat.find({ members: currentUser }) // Lấy ra những hội thoại mà user hiện tại đã từng tham gia
         .populate({
-          path: "members",
-          select: "_id firstName lastName avatar",
+          path: 'members',
+          select: '_id firstName lastName avatar',
           match: { _id: { $ne: currentUser } }, // Chỉ lấy ra người người dùng khác user hiện tại
         })
         .sort({ updatedAt: -1 }) // Sắp xếp theo thời gian tạo giảm dần
@@ -40,8 +40,8 @@ const chatControllers = {
         // Lấy tin nhắn cuối cùng
         const lastMessage = await Message.findOne({ chatId: chat._id })
           .populate({
-            path: "senderId",
-            select: "firstName lastName avatar",
+            path: 'senderId',
+            select: 'firstName lastName avatar',
           })
           .sort({ createdAt: -1 })
           .exec();
@@ -60,12 +60,12 @@ const chatControllers = {
         }
       }
 
-      return res.status(200).json(errorFunction(false, 200, "OK", result));
+      return res.status(200).json(errorFunction(false, 200, 'OK', result));
     } catch (error) {
       console.log(error.message);
       return res
         .status(500)
-        .json(errorFunction(true, 500, "Something went wrong"));
+        .json(errorFunction(true, 500, 'Something went wrong'));
     }
   },
 
@@ -80,12 +80,12 @@ const chatControllers = {
       if (chat) {
         const chatId = chat._id;
         return res.status(200).json(
-          errorFunction(false, 200, "Get messages successfully", {
+          errorFunction(false, 200, 'Get messages successfully', {
             chatId,
           })
         );
       }
-      return res.status(404).json(errorFunction(true, 404, "Chat not found"));
+      return res.status(404).json(errorFunction(true, 404, 'Chat not found'));
     } catch (error) {
       res.status(500).json(errorFunction(true, 500, error.message));
     }

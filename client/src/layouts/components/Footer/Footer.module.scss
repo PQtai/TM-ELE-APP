@@ -1,16 +1,17 @@
-.footerWrap{
-    width: 100%;
-    margin-bottom: 16px;
-}
-.footerContainer {
-    display: flex;
-    margin: 0 81px;
-    padding: 0 30px;
-    justify-content: space-between;
-}
-.imageFooter{
-    display: flex;
-    height: 32px;
-    margin: 8px 8px 8px 0;
-    cursor: pointer;
+.footerWrap {
+   width: 100%;
+   margin-bottom: 16px;
+   .footerContainer {
+      max-width: var(--default-layout-width);
+      padding: 0 30px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      .imageFooter {
+         display: flex;
+         height: 32px;
+         margin: 8px 8px 8px 0;
+         cursor: pointer;
+      }
+   }
 }

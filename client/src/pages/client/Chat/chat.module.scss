@@ -1,0 +1,165 @@
+.chatWrapp {
+    .chat {
+        max-width: var(--default-layout-width);
+        padding: 0 30px;
+        margin: auto;
+        overflow: hidden;
+        min-height: 600px;
+        .chatLeft {
+            max-height: calc(100vh - var(--navbar-height-client));
+            overflow-y: scroll;
+            position: relative;
+            padding-top: 100px;
+            .optionFilter {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                padding: 20px;
+                background-color: #fff;
+                box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+                    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+                .btnOption {
+                    border-radius: 24px;
+                    padding: 10px 12px;
+                    border: 0.5px solid #ccc;
+                    background-color: var(--background-btn-default);
+                }
+            }
+            .itemConversation {
+                padding-bottom: 10px;
+                display: flex;
+                border-bottom: 0.5px solid #ccc;
+                .imgConversation {
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    margin: 20px;
+                }
+                .infoConversation {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    .conversationName {
+                    }
+                    .conversationTitle {
+                    }
+                    .conversationLastMess {
+                    }
+                    .conversationEvaluate {
+                        margin-top: 10px;
+                        padding: 10px;
+                        border-radius: 20px;
+                        width: 50%;
+                        border: 0.5px solid #ff6d25;
+                        color: #ff6d25;
+                    }
+                }
+            }
+        }
+        .chatRight {
+            position: relative;
+            height: 100%;
+            .emptyRoomImg {
+                min-height: 600px;
+                display: flex;
+                > img {
+                    margin: auto;
+                    height: auto;
+                    width: 50%;
+                }
+            }
+            .chatHead {
+                background-color: #fff;
+                position: absolute;
+                top: 10px;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 10px 0;
+                border-bottom: 0.5px solid #ccc;
+                .chatHeadWrap {
+                    display: flex;
+                    align-items: center;
+                }
+                .chatHeadAvatar {
+                    margin-right: 20px;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                }
+                .chatHeadIcon {
+                    margin-right: 20px;
+                    cursor: pointer;
+                }
+            }
+            .chatInput {
+                background-color: #fff;
+                position: absolute;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                padding: 10px 0;
+                border-bottom: 0.5px solid #ccc;
+                .inputChatMess {
+                    flex: 1;
+                    font-size: 2rem;
+                    padding: 20px 0;
+                }
+                > button {
+                    width: 10%;
+                    > svg {
+                        font-size: 2rem;
+                    }
+                }
+            }
+            .chatBox {
+                overflow-y: scroll;
+                overflow-x: hidden;
+                margin-top: 70px;
+                min-height: 450px;
+                max-height: 450px;
+                .messIsCurrUser,
+                .messIsSenderUser {
+                    display: flex;
+                    flex-direction: column;
+                }
+                .messIsCurrUser {
+                    align-items: end;
+                    p {
+                        background-color: var(--primary);
+                    }
+                }
+                .messIsSenderUser {
+                    align-items: start;
+                    justify-content: flex-start;
+                }
+                p {
+                    display: inline;
+                    background-color: #f4f4f4;
+                    font-size: 2rem;
+                    padding: 10px 20px;
+                    margin: 20px 0;
+                    border-radius: 10px;
+                }
+                .messImg {
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    width: 50%;
+                    padding-top: 50%;
+                    margin-bottom: 20px;
+                }
+            }
+        }
+    }
+}
