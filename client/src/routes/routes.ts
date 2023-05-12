@@ -19,6 +19,7 @@ import { IRoutes } from '~/shared/model/global';
 import PostFavourite from '~/pages/client/PostFavourite';
 import EditProfile from '~/pages/client/EditProfile';
 import ForgotPassword from '~/pages/client/ForgotPassword';
+import PostDetail from '~/pages/client/PostDetail';
 
 // Public routes
 const publicRoutes: IRoutes[] = [
@@ -29,6 +30,7 @@ const publicRoutes: IRoutes[] = [
    { path: config.routes.userInfo, component: UserInfo },
    { path: config.routes.listPostSearch, component: ListPostSearch },
    { path: config.routes.fogotPasswords, component: ForgotPassword },
+   { path: config.routes.postDetail, component: PostDetail },
 ];
 
 const privateRoutesUser: IRoutes[] = [

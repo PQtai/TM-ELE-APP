@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 import { Chat, Message } from "../models/index.js";
 import errorFunction from "../utils/errorFunction.js";
 import { checkConditionReview } from "../helpers/checkContionReview.js";
+=======
+import { Chat, Message } from '../models/index.js';
+import errorFunction from '../utils/errorFunction.js';
+>>>>>>> master
 
 const chatControllers = {
   // Tạo 1 đoạn chat giữa 2 người dùng
@@ -14,7 +19,7 @@ const chatControllers = {
       const result = await newChat.save();
       res
         .status(200)
-        .json(errorFunction(false, 200, "Created Chat successfully", result));
+        .json(errorFunction(false, 200, 'Created Chat successfully', result));
     } catch (error) {
       res.status(500).json(errorFunction(false, 500, error.message));
     }
@@ -24,8 +29,13 @@ const chatControllers = {
   getConversations: async (req, res) => {
     try {
       const currentUser = req.user.id;
+<<<<<<< HEAD
       // Lấy ra những hội thoại mà user hiện tại đã từng tham gia
       const chats = await Chat.find({ members: currentUser })
+=======
+      console.log(`currentUser ::: ${currentUser}`);
+      const chats = await Chat.find({ members: currentUser }) // Lấy ra những hội thoại mà user hiện tại đã từng tham gia
+>>>>>>> master
         .populate({
           path: "members",
           select: "_id firstName lastName avatar",
@@ -72,21 +82,36 @@ const chatControllers = {
               read: lastMessage.read,
               createdAt: lastMessage.createdAt,
             },
+<<<<<<< HEAD
             isRatingCondition: chat.isRatingCondition,
+=======
+>>>>>>> master
           });
         }
       }
 
+<<<<<<< HEAD
       return res.status(200).json(errorFunction(false, 200, "OK", result));
+=======
+      return res.status(200).json(errorFunction(false, 200, 'OK', result));
+>>>>>>> master
     } catch (error) {
       console.log(error.message);
       return res
         .status(500)
+<<<<<<< HEAD
         .json(errorFunction(true, 500, "Something went wrong"));
     }
   },
 
   // Tìm đoạn chat giữa 2 người dùng (người gửi và người nhận) cụ thể
+=======
+        .json(errorFunction(true, 500, 'Something went wrong'));
+    }
+  },
+
+  // Tìm đoạn chat giữa 2 người dùng (người gửi và người nhận) cụ thể và lấy ra lịch sử nhắn tin
+>>>>>>> master
   findChat: async (req, res) => {
     const firstId = req.user.id;
     const secondId = req.params.secondId;
@@ -94,16 +119,15 @@ const chatControllers = {
       const chat = await Chat.findOne({
         members: { $all: [firstId, secondId] },
       });
-      const populatedChats = await Chat.populate(chat, {
-        path: "members",
-        select: "_id firstName lastName avatar",
-      });
       if (chat) {
-        return res
-          .status(200)
-          .json(errorFunction(false, 200, "Found a chat", populatedChats));
+        const chatId = chat._id;
+        return res.status(200).json(
+          errorFunction(false, 200, 'Get messages successfully', {
+            chatId,
+          })
+        );
       }
-      return res.status(404).json(errorFunction(true, 404, "Chat not found"));
+      return res.status(404).json(errorFunction(true, 404, 'Chat not found'));
     } catch (error) {
       res.status(500).json(errorFunction(true, 500, error.message));
     }

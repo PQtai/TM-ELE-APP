@@ -31,7 +31,8 @@ const UserSchema = new Schema(
     },
     avatar: {
       type: String,
-      required: false,
+      default:
+        "https://res.cloudinary.com/dzn7taii7/image/upload/v1682177170/avartar-default/images_wx8wbt.png",
     },
     favourite: [
       {
@@ -60,7 +61,11 @@ const UserSchema = new Schema(
     conversations: [
       {
         type: mongoose.Schema.Types.ObjectId,
+<<<<<<< HEAD
         ref: "chat",
+=======
+        ref: "conversation",
+>>>>>>> master
       },
     ],
     isVerified: {
