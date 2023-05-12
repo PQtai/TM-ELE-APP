@@ -61,11 +61,7 @@ const UserSchema = new Schema(
     conversations: [
       {
         type: mongoose.Schema.Types.ObjectId,
-<<<<<<< HEAD
         ref: "chat",
-=======
-        ref: "conversation",
->>>>>>> master
       },
     ],
     isVerified: {

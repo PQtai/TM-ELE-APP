@@ -5,11 +5,8 @@ import authRouter from "./auth.router.js";
 import userRouter from "./user.router.js";
 import categoryRouter from "./category.router.js";
 import chatRouter from "./chat.router.js";
-<<<<<<< HEAD
 import reviewRouter from "./review.router.js";
-=======
 import statisticRouter from "./statistic.router.js";
->>>>>>> master
 
 const routes = (app) => {
   app.use("/auth", authRouter);
@@ -19,11 +16,8 @@ const routes = (app) => {
   app.use("/category", categoryRouter);
   app.use("/chat", chatRouter);
   app.use("/message", messageRouter);
-<<<<<<< HEAD
   app.use("/review", reviewRouter);
-=======
   app.use("/stats", statisticRouter);
->>>>>>> master
 };
 
 export default routes;

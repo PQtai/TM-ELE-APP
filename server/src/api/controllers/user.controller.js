@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { User, Post, Review } from "../models/index.js";
-=======
-import { User, Post } from "../models/index.js";
->>>>>>> master
 import errorFunction from "../utils/errorFunction.js";
 import jwt from "jsonwebtoken";
 import { encryptionPassword } from "../utils/encryption.js";
@@ -74,11 +70,8 @@ const userControllers = {
         pageSize = 12,
         pageNumber = 1,
         role = "",
-<<<<<<< HEAD
         phone = "",
         email = "",
-=======
->>>>>>> master
         userByColumn,
         userByDirection = "desc",
       } = req.query;
@@ -88,7 +81,6 @@ const userControllers = {
           {
             role: {
               $regex: role,
-<<<<<<< HEAD
             },
           },
           {
@@ -101,9 +93,6 @@ const userControllers = {
             email: {
               $regex: email,
               $options: "i",
-=======
-              $options: "$i",
->>>>>>> master
             },
           },
         ],
