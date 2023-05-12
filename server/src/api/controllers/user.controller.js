@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+import { User, Post, Review } from "../models/index.js";
+=======
 import { User, Post } from "../models/index.js";
+>>>>>>> master
 import errorFunction from "../utils/errorFunction.js";
 import jwt from "jsonwebtoken";
 import { encryptionPassword } from "../utils/encryption.js";
@@ -70,15 +74,36 @@ const userControllers = {
         pageSize = 12,
         pageNumber = 1,
         role = "",
+<<<<<<< HEAD
+        phone = "",
+        email = "",
+=======
+>>>>>>> master
         userByColumn,
         userByDirection = "desc",
       } = req.query;
+
       const filter = {
         $and: [
           {
             role: {
               $regex: role,
+<<<<<<< HEAD
+            },
+          },
+          {
+            phone: {
+              $regex: phone,
+              $options: "i",
+            },
+          },
+          {
+            email: {
+              $regex: email,
+              $options: "i",
+=======
               $options: "$i",
+>>>>>>> master
             },
           },
         ],
@@ -88,6 +113,38 @@ const userControllers = {
         .sort(`${userByDirection === "asc" ? "" : "-"}${userByColumn}`)
         .limit(pageSize * 1)
         .skip((pageNumber - 1) * pageSize);
+
+      const countReviews = await Review.aggregate([
+        {
+          $group: {
+            _id: "$reviewedUser",
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+
+      const countPosts = await Post.aggregate([
+        {
+          $group: {
+            _id: "$userId",
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+
+      const usersWithCount = filterUsers.map((user) => {
+        const reviewCount = countReviews.find(
+          (item) => item._id && item._id.toString() === user._id.toString()
+        );
+        const postCount = countPosts.find(
+          (item) => item._id && item._id.toString() === user._id.toString()
+        );
+        return {
+          ...user.toObject(),
+          reviewCount: reviewCount ? reviewCount.count : 0,
+          postCount: postCount ? postCount.count : 0,
+        };
+      });
 
       const allUsers = await User.find(filter);
       let totalPage = 0;
@@ -102,8 +159,10 @@ const userControllers = {
           totalUsers: allUsers.length,
           users:
             userByDirection && userByColumn
-              ? filterUsers
-              : filterUsers.reverse(),
+              ? usersWithCount
+              : usersWithCount.reverse(),
+          //  ? filterUsers
+          //  : filterUsers.reverse(),
         });
       } else {
         res.status(200).json({
@@ -112,8 +171,8 @@ const userControllers = {
         });
       }
     } catch (error) {
-      res.status(500);
-      return res.json(errorFunction(true, 500, error.massage));
+      console.log(error);
+      return res.status(500).json(errorFunction(true, 500, error.massage));
     }
   },
 

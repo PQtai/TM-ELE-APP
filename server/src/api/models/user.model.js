@@ -44,8 +44,9 @@ const UserSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    evaluate: {
+    averageRating: {
       type: Number,
+      minimum: 1,
       maximum: 5,
       default: 0,
     },
@@ -60,7 +61,11 @@ const UserSchema = new Schema(
     conversations: [
       {
         type: mongoose.Schema.Types.ObjectId,
+<<<<<<< HEAD
+        ref: "chat",
+=======
         ref: "conversation",
+>>>>>>> master
       },
     ],
     isVerified: {

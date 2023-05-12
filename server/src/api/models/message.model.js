@@ -33,5 +33,14 @@ const MessageSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+/*
+chatId: id phòng chat
+senderId: id người gửi
+text: nội dung tin nhắn
+postId: id bài đăng mà người gửi muốn trao đổi với người bán
+images: chứa hình ảnh đã gửi
+read: tình trạng đã xem tin nhắn hay chưa (đừng thêm)
+ */
+
 const Message = mongoose.model("message", MessageSchema);
 export { Message, MessageSchema };

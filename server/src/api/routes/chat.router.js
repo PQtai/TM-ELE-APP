@@ -14,7 +14,7 @@ router.post(
   chatControllers.createChat
 );
 
-// Get user chat
+// Get users chat
 router.get(
   "/users-chat",
   authMiddleware.verifyToken,

@@ -14,10 +14,19 @@ const ChatSchema = new mongoose.Schema(
         required: true,
       },
     ],
+    isRatingCondition: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
 
+/*
+  members: chứa 2 id của user trong phòng chat
+  isRatingCondition: có đủ điều kiện để được đánh giá hay không
+*/
+
 const Chat = mongoose.model("chat", ChatSchema);
 
-export {Chat, ChatSchema};
+export { Chat, ChatSchema };
