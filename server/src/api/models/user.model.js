@@ -10,9 +10,9 @@ const UserSchema = new Schema(
       type: String,
       required: false,
     },
-    password: { 
-      type: String, 
-      required: true 
+    password: {
+      type: String,
+      required: true,
     },
     phone: {
       type: String,
@@ -26,7 +26,7 @@ const UserSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ['user', 'admin'],
+      enum: ["user", "admin"],
       default: "user",
     },
     avatar: {
@@ -43,8 +43,9 @@ const UserSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    evaluate: {
+    averageRating: {
       type: Number,
+      minimum: 1,
       maximum: 5,
       default: 0,
     },
@@ -58,14 +59,14 @@ const UserSchema = new Schema(
     },
     conversations: [
       {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "conversation",
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "chat",
       },
     ],
     isVerified: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   { timestamps: true }
 );

@@ -1,5 +1,6 @@
 import { Chat, Message } from "../models/index.js";
 import errorFunction from "../utils/errorFunction.js";
+import { checkConditionReview } from "../helpers/checkContionReview.js";
 
 const chatControllers = {
   // Tạo 1 đoạn chat giữa 2 người dùng
@@ -8,10 +9,7 @@ const chatControllers = {
       const senderId = req.user.id;
       const receiverId = req.body.receiverId;
       const newChat = new Chat({
-        members: [
-          senderId,
-          receiverId,
-        ],
+        members: [senderId, receiverId],
       });
       const result = await newChat.save();
       res
@@ -26,11 +24,11 @@ const chatControllers = {
   getConversations: async (req, res) => {
     try {
       const currentUser = req.user.id;
-      console.log(`currentUser ::: ${currentUser}`)
-      const chats = await Chat.find({ members: currentUser }) // Lấy ra những hội thoại mà user hiện tại đã từng tham gia
+      // Lấy ra những hội thoại mà user hiện tại đã từng tham gia
+      const chats = await Chat.find({ members: currentUser })
         .populate({
-          path: 'members',
-          select: '_id firstName lastName avatar',
+          path: "members",
+          select: "_id firstName lastName avatar",
           match: { _id: { $ne: currentUser } }, // Chỉ lấy ra người người dùng khác user hiện tại
         })
         .sort({ updatedAt: -1 }) // Sắp xếp theo thời gian tạo giảm dần
@@ -43,13 +41,28 @@ const chatControllers = {
         // Lấy tin nhắn cuối cùng
         const lastMessage = await Message.findOne({ chatId: chat._id })
           .populate({
-            path: 'senderId',
-            select: 'firstName lastName avatar',
+            path: "senderId",
+            select: "firstName lastName avatar",
           })
           .sort({ createdAt: -1 })
           .exec();
-        // Nếu có thì push dữ liệu vào mảng result
+
         if (lastMessage) {
+          // Kiểm tra xem có đủ điều kiện cho phép được đánh giá
+          const otherUserId = chat.members.find(
+            (member) => member._id.toString() !== currentUser
+          );
+          const isConditionReview = await checkConditionReview(
+            chat._id,
+            currentUser,
+            otherUserId._id
+          );
+          // Update field isRatingCondition nếu thỏa mãn đk
+          if (isConditionReview) {
+            await Chat.findByIdAndUpdate(chat._id, { isRatingCondition: true });
+            chat.isRatingCondition = true;
+          }
+          // Push data vào mảng result
           result.push({
             chatId: chat._id,
             members: chat.members,
@@ -57,21 +70,21 @@ const chatControllers = {
               sender: lastMessage.senderId,
               text: lastMessage.text,
               read: lastMessage.read,
-              createdAt: lastMessage.createdAt
-            }
+              createdAt: lastMessage.createdAt,
+            },
+            isRatingCondition: chat.isRatingCondition,
           });
         }
       }
-  
+
       return res.status(200).json(errorFunction(false, 200, "OK", result));
     } catch (error) {
-      console.log(error.message)
-      return res.status(500).json(errorFunction(true, 500, "Something went wrong"));
+      console.log(error.message);
+      return res
+        .status(500)
+        .json(errorFunction(true, 500, "Something went wrong"));
     }
   },
-  
-
-  
 
   // Tìm đoạn chat giữa 2 người dùng (người gửi và người nhận) cụ thể
   findChat: async (req, res) => {

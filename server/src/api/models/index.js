@@ -4,4 +4,6 @@ export * from "./category.model.js";
 export * from "./conversation.model.js";
 export * from "./chat.model.js";
 export * from "./message.model.js";
+export * from "./review.model.js";
+export * from "./reviewReply.model.js";
 export { default as User } from "./user.model.js";

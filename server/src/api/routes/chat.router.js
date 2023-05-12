@@ -8,24 +8,24 @@ const router = express.Router();
 
 // Add Chat
 router.post(
-    '/create',
-    authMiddleware.verifyToken,
-    validateMiddleware('body', chatValidation),
-    chatControllers.createChat
+  "/create",
+  authMiddleware.verifyToken,
+  validateMiddleware("body", chatValidation),
+  chatControllers.createChat
 );
 
-// Get user chat
+// Get users chat
 router.get(
-    '/users-chat',
-    authMiddleware.verifyToken, 
-    chatControllers.getConversations
+  "/users-chat",
+  authMiddleware.verifyToken,
+  chatControllers.getConversations
 );
 
 // Find chat between sender and receiver
 router.get(
-    '/find-chat/:secondId', 
-    authMiddleware.verifyToken,
-    chatControllers.findChat
+  "/find-chat/:secondId",
+  authMiddleware.verifyToken,
+  chatControllers.findChat
 );
 
 export default router;

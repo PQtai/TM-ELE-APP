@@ -1,21 +1,22 @@
-import { User, Post } from '../models/index.js';
-import errorFunction from '../utils/errorFunction.js';
-import jwt from 'jsonwebtoken';
-import { encryptionPassword } from '../utils/encryption.js';
-import { response } from 'express';
-import bycrypt from 'bcryptjs';
-import nodemailer from 'nodemailer';
-import mailer from '../utils/mailer.js';
-import generateToken from '../utils/generateToken.js';
+import { User, Post } from "../models/index.js";
+import errorFunction from "../utils/errorFunction.js";
+import jwt from "jsonwebtoken";
+import { encryptionPassword } from "../utils/encryption.js";
+import { response } from "express";
+import bycrypt from "bcryptjs";
+import nodemailer from "nodemailer";
+import mailer from "../utils/mailer.js";
+import generateToken from "../utils/generateToken.js";
 
 let refreshTokens = [];
 const sendVerificationEmail = async (email, verificationToken) => {
   try {
-    const verificationLink = `${process.env.LOCAL_URL}auth/verify-email/${verificationToken}`;
+    const verificationLink = `${process.env.LOCAL_URL}/auth/verify-email/${verificationToken}`;
+    console.log(`verificationLink: ${verificationLink}`);
     await mailer.sendMail(
       email,
-      'XÁC THỰC EMAIL',
-      'Email gửi với mục đích yêu cầu người dùng xác thực email nhập vào lúc đăng ký',
+      "XÁC THỰC EMAIL",
+      "Email gửi với mục đích yêu cầu người dùng xác thực email nhập vào lúc đăng ký",
       `<p>Cảm ơn bạn đã đăng ký tài khoản!</p>
             <p>Để hoàn tất quá trình đăng ký, vui lòng nhấn vào liên kết sau để xác thực địa chỉ email của bạn:</p>
             <a href="${verificationLink}">Xác thực tài khoản</a>
@@ -38,7 +39,7 @@ const authControllers = {
       }).lean(true);
       if (existingPhone) {
         res.status(409);
-        return res.json(errorFunction(true, 409, 'User Already Exist'));
+        return res.json(errorFunction(true, 409, "User Already Exist"));
       } else {
         const hashedPassword = await encryptionPassword(password);
         const user = await User.create({
@@ -61,7 +62,7 @@ const authControllers = {
             errorFunction(
               false,
               201,
-              'An Email sent to your account please check your email and verify'
+              "An Email sent to your account please check your email and verify"
             )
           );
         // if (req.user?.role === "admin") {
@@ -81,7 +82,7 @@ const authControllers = {
       res.status(500);
       return res
         .status(500)
-        .json(errorFunction(true, 500, 'Internal server error'));
+        .json(errorFunction(true, 500, "Internal server error"));
     }
   },
 
@@ -95,7 +96,7 @@ const authControllers = {
       // Find user
       const user = await User.findById(decoded.id);
       if (!user) {
-        return res.status(401).json('User not found');
+        return res.status(401).json("User not found");
       }
 
       // Update user
@@ -104,12 +105,12 @@ const authControllers = {
 
       res
         .status(200)
-        .json(errorFunction(false, 200, 'Email verified successfully'));
+        .json(errorFunction(false, 200, "Email verified successfully"));
     } catch (error) {
       console.error(error);
       return res
         .status(500)
-        .json(errorFunction(true, 500, 'Internal server error'));
+        .json(errorFunction(true, 500, "Internal server error"));
     }
   },
 
@@ -129,14 +130,14 @@ const authControllers = {
             user.password,
             async function (err, result) {
               if (err) {
-                res.status(400).json(errorFunction(true, 400, 'Bad request'));
+                res.status(400).json(errorFunction(true, 400, "Bad request"));
               }
               if (result) {
                 // check account lock status
                 if (user.isLocked === true) {
                   return res
                     .status(405)
-                    .json(errorFunction(false, 405, 'Account has been locked'));
+                    .json(errorFunction(false, 405, "Account has been locked"));
                 }
 
                 // Check if user is verified
@@ -155,7 +156,7 @@ const authControllers = {
                       errorFunction(
                         true,
                         401,
-                        'Account not verified. Please check your email for verification link.'
+                        "Account not verified. Please check your email for verification link."
                       )
                     );
                 }
@@ -166,19 +167,19 @@ const authControllers = {
                 refreshTokens.push(refreshToken);
 
                 // Set cookies
-                res.cookie('refreshToken', refreshToken, {
+                res.cookie("refreshToken", refreshToken, {
                   httpOnly: true,
                   secure: true, // When deploy will reset to true
-                  path: '/',
-                  sameSite: 'strict',
+                  path: "/",
+                  sameSite: "strict",
                 });
-                res.set('Authorization', `Bearer ${accessToken}`);
+                res.set("Authorization", `Bearer ${accessToken}`);
 
                 // Returns access token and user information
                 const { password, ...rest } = user._doc;
 
                 res.status(200).json(
-                  errorFunction(false, 200, 'Login Success', {
+                  errorFunction(false, 200, "Login Success", {
                     user: { ...rest },
                     accessToken,
                   })
@@ -187,19 +188,19 @@ const authControllers = {
                 res
                   .status(401)
                   .json(
-                    errorFunction(true, 401, 'Password does not matched!!!')
+                    errorFunction(true, 401, "Password does not matched!!!")
                   );
               }
             }
           );
         } else {
-          res.status(400).json(errorFunction(true, 400, 'User not found'));
+          res.status(400).json(errorFunction(true, 400, "User not found"));
         }
       });
     } catch (err) {
       return res
         .status(500)
-        .json(errorFunction(true, 500, 'Internal server error'));
+        .json(errorFunction(true, 500, "Internal server error"));
     }
   },
 
@@ -208,10 +209,10 @@ const authControllers = {
       const { email } = req.body;
 
       // check the email is not empty
-      if (!email || email.trim() === '') {
+      if (!email || email.trim() === "") {
         return res
           .status(400)
-          .json(errorFunction(true, 400, 'Please enter a valid email'));
+          .json(errorFunction(true, 400, "Please enter a valid email"));
       }
 
       // Check if email is valid format
@@ -219,13 +220,13 @@ const authControllers = {
       if (!emailRegex.test(email)) {
         return res
           .status(400)
-          .json(errorFunction(true, 400, 'Invalid email format'));
+          .json(errorFunction(true, 400, "Invalid email format"));
       }
 
       // Check if account exists
       const user = await User.findOne({ email });
       if (!user) {
-        return res.status(404).json(errorFunction(true, 404, 'User not found'));
+        return res.status(404).json(errorFunction(true, 404, "User not found"));
       }
 
       // Check verified user
@@ -236,7 +237,7 @@ const authControllers = {
             errorFunction(
               true,
               409,
-              'The email you entered has already been verified. Please check again.'
+              "The email you entered has already been verified. Please check again."
             )
           );
       }
@@ -250,11 +251,11 @@ const authControllers = {
       res
         .status(200)
         .json(
-          errorFunction(false, 200, 'New verification email sent successfully!')
+          errorFunction(false, 200, "New verification email sent successfully!")
         );
     } catch (error) {
       console.error(error);
-      res.status(500).json(errorFunction(true, 500, 'Internal server error'));
+      res.status(500).json(errorFunction(true, 500, "Internal server error"));
     }
   },
 
@@ -263,7 +264,7 @@ const authControllers = {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) return res.status(401).json("You're not authenticated");
     if (!refreshTokens.includes(refreshToken)) {
-      return res.status(403).json('Refresh token is not valid');
+      return res.status(403).json("Refresh token is not valid");
     }
     jwt.verify(refreshToken, process.env.JWT_ACCESSTOKEN_KEY, (err, user) => {
       if (err) {
@@ -274,11 +275,11 @@ const authControllers = {
       const newAccessToken = generateToken.accessToken(user);
       const newRefreshToken = generateToken.refreshToken(user);
       refreshTokens.push(newRefreshToken);
-      res.cookie('refreshToken', newRefreshToken, {
+      res.cookie("refreshToken", newRefreshToken, {
         httpOnly: true,
         secure: true,
-        path: '/',
-        sameSite: 'strict',
+        path: "/",
+        sameSite: "strict",
       });
       return res.status(200).json({ accessToken: newAccessToken });
     });
@@ -286,13 +287,13 @@ const authControllers = {
 
   // LOGOUT
   logout: async (req, res) => {
-    res.clearCookie('refreshToken');
+    res.clearCookie("refreshToken");
     refreshTokens = refreshTokens.filter(
       (token) => token !== req.cookies.refreshToken
     );
     return res
       .status(200)
-      .json(errorFunction(false, 200, 'Logout successful!!!'));
+      .json(errorFunction(false, 200, "Logout successful!!!"));
   },
 };
 
