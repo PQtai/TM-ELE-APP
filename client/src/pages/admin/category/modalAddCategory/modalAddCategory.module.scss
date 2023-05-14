@@ -1,0 +1,24 @@
+.modalAddCategory {
+    background-color: #fff;
+    min-width: 30vw;
+    padding: 10px;
+    border-radius: 4px;
+    .categoryTitle {
+        font-size: 2.2rem;
+        padding: 10px 0;
+    }
+    .categoryInput {
+        width: 100%;
+        font-size: 2rem;
+        padding: 6px 10px;
+        margin: 20px 0;
+        border: 0.5px solid #ccc;
+        &:focus {
+            border: 0.5px solid blue;
+        }
+    }
+    .categoryOptions {
+        display: flex;
+        justify-content: flex-end;
+    }
+}
