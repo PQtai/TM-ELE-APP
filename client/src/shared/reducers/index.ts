@@ -13,23 +13,25 @@ import userDetailSlice from '~/pages/client/UserInfo/userInfo.reducer';
 import postListSearchSlice from '~/pages/client/ListPostSearch/listPostSearch.reducer';
 import updateUserSlice from '~/pages/client/EditProfile/editProfile.reducer';
 import listChatSlice from '~/pages/client/Chat/chat.reducer';
+import listCategorySlice from '~/pages/admin/category/category.reducer';
 
 const rootReducer = {
-   accountManager,
-   postSlice,
-   selectLabelSlice,
-   OverlaySlice,
-   register,
-   login,
-   loadingSlice,
-   alertSlice,
-   postAuthorSlice,
-   postRoleAdminSlice,
-   postListSlice,
-   userDetailSlice,
-   postListSearchSlice,
-   updateUserSlice,
-   listChatSlice,
+    accountManager,
+    postSlice,
+    selectLabelSlice,
+    OverlaySlice,
+    register,
+    login,
+    loadingSlice,
+    alertSlice,
+    postAuthorSlice,
+    postRoleAdminSlice,
+    postListSlice,
+    userDetailSlice,
+    postListSearchSlice,
+    updateUserSlice,
+    listChatSlice,
+    listCategorySlice,
 };
 
 export default rootReducer;

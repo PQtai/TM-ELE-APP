@@ -1,0 +1,44 @@
+.category {
+    background-color: #fff;
+    min-height: calc(100vh - 120px);
+    position: relative;
+    .titleTable {
+    }
+    .headTable {
+        display: flex;
+        > li {
+            text-align: center;
+            border: 0.5px solid #ccc;
+            width: 30%;
+            padding: 6px;
+        }
+    }
+    .contentTable {
+        > ul {
+            display: flex;
+            > li {
+                text-align: center;
+                border: 0.5px solid #ccc;
+                width: 30%;
+                padding: 6px;
+                .categoryInputRename {
+                    width: 90%;
+                    padding: 6px;
+                    border: 0.5px solid #ccc;
+                    &:focus {
+                        border: 0.5px solid blue;
+                    }
+                }
+            }
+        }
+    }
+    .btnAdd {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        background-color: var(--primary);
+    }
+}
