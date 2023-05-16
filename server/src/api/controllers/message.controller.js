@@ -16,9 +16,8 @@ const messageController = {
         chat = await Chat.create({ members: [senderId, receiverId] });
       }
       // Nếu có thì thêm bình thường
+      const listImg = [];
       if (req.files && req.files.length > 0) {
-        const listImg = [];
-
         for (const file of req.files) {
           const { path, mimetype } = file;
           const newPath = await uploads(path, "Messages");
@@ -29,21 +28,24 @@ const messageController = {
             contentType: mimetype,
           });
         }
-
-        const newMessage = await Message.create({
-          chatId: chat._id, // Sử dụng chatId mới hoặc chatId đã có trước đó
-          senderId,
-          text,
-          postId,
-          images: listImg,
-        });
-
-        return res
-          .status(201)
-          .json(
-            errorFunction(false, 201, "Create message successfully", newMessage)
-          );
       }
+      const messageBody = {
+        chatId: chat._id, // Sử dụng chatId mới hoặc chatId đã có trước đó
+        senderId,
+        text,
+        postId,
+      };
+      if (listImg.length > 0) {
+        messageBody.images = listImg;
+      }
+
+      const newMessage = await Message.create(messageBody);
+
+      return res
+        .status(201)
+        .json(
+          errorFunction(false, 201, "Create message successfully", newMessage)
+        );
     } catch (error) {
       return res.status(500).json(errorFunction(true, 500, error.message));
     }
