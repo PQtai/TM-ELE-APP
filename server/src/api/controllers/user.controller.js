@@ -92,7 +92,9 @@ const userControllers = {
 
       const skipCount = parseInt((pageNumber - 1) * pageSize);
 
-      const filterUsers = await User.find().skip(skipCount).limit(pageSize);
+      const filterUsers = await User.find(filter)
+        .skip(skipCount)
+        .limit(pageSize);
 
       const userIds = filterUsers.map((user) => user._id);
 
