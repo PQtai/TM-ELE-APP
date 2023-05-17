@@ -64,6 +64,7 @@ const userControllers = {
   },
 
   // GET ALL USERS
+
   getAllUsers: async (req, res) => {
     try {
       const {
@@ -72,96 +73,94 @@ const userControllers = {
         role = "",
         phone = "",
         email = "",
-        userByColumn,
-        userByDirection = "desc",
       } = req.query;
 
-      const filter = {
-        $and: [
-          {
-            role: {
-              $regex: role,
-            },
-          },
-          {
-            phone: {
-              $regex: phone,
-              $options: "i",
-            },
-          },
-          {
-            email: {
-              $regex: email,
-              $options: "i",
-            },
-          },
-        ],
-      };
-      const filterUsers = await User.find(filter)
-        .populate("favourite", "_id title images status price")
-        .sort(`${userByDirection === "asc" ? "" : "-"}${userByColumn}`)
-        .limit(pageSize * 1)
-        .skip((pageNumber - 1) * pageSize);
+      const filter = {};
+      if (role !== "") {
+        filter.role = { $regex: role };
+      }
+      if (phone !== "") {
+        filter.phone = { $regex: phone, $options: "i" };
+      }
+      if (email !== "") {
+        filter.email = { $regex: email, $options: "i" };
+      }
 
-      const countReviews = await Review.aggregate([
+      const countUsers = await User.countDocuments(filter);
+
+      const totalPages = Math.ceil(countUsers / pageSize);
+
+      const skipCount = parseInt((pageNumber - 1) * pageSize);
+
+      const filterUsers = await User.find().skip(skipCount).limit(pageSize);
+
+      const userIds = filterUsers.map((user) => user._id);
+
+      const reviewCounts = await Review.aggregate([
+        { $match: { reviewedUser: { $in: userIds } } },
         {
           $group: {
             _id: "$reviewedUser",
             count: { $sum: 1 },
           },
         },
+        {
+          $project: {
+            _id: 1,
+            count: 1,
+          },
+        },
       ]);
 
-      const countPosts = await Post.aggregate([
+      const postCounts = await Post.aggregate([
+        { $match: { userId: { $in: userIds } } },
         {
           $group: {
             _id: "$userId",
             count: { $sum: 1 },
           },
         },
+        {
+          $project: {
+            _id: 1,
+            count: 1,
+          },
+        },
       ]);
 
+      const userReviews = {};
+      const userPosts = {};
+
+      for (const count of reviewCounts) {
+        userReviews[count._id.toString()] = count.count;
+      }
+
+      for (const count of postCounts) {
+        userPosts[count._id.toString()] = count.count;
+      }
+
       const usersWithCount = filterUsers.map((user) => {
-        const reviewCount = countReviews.find(
-          (item) => item._id && item._id.toString() === user._id.toString()
-        );
-        const postCount = countPosts.find(
-          (item) => item._id && item._id.toString() === user._id.toString()
-        );
+        const userId = user._id.toString();
+        const reviewCount = userReviews[userId] || 0;
+        const postCount = userPosts[userId] || 0;
+
         return {
           ...user.toObject(),
-          reviewCount: reviewCount ? reviewCount.count : 0,
-          postCount: postCount ? postCount.count : 0,
+          reviewCount,
+          postCount,
         };
       });
 
-      const allUsers = await User.find(filter);
-      let totalPage = 0;
-      if (allUsers.length % pageSize === 0) {
-        totalPage = allUsers.length / pageSize;
-      } else {
-        totalPage = parseInt(allUsers.length / pageSize) + 1;
-      }
-      if (allUsers.length > 0) {
-        res.status(200).json({
-          totalPage: totalPage,
-          totalUsers: allUsers.length,
-          users:
-            userByDirection && userByColumn
-              ? usersWithCount
-              : usersWithCount.reverse(),
-          //  ? filterUsers
-          //  : filterUsers.reverse(),
-        });
-      } else {
-        res.status(200).json({
-          message: "No results",
-          users: [],
-        });
-      }
+      res.status(200).json(
+        errorFunction(false, 200, "Get all users successfully", {
+          totalPages,
+          totalUsers: countUsers,
+          users: usersWithCount,
+        })
+      );
     } catch (error) {
       console.log(error);
-      return res.status(500).json(errorFunction(true, 500, error.massage));
+      res.status(500).json(errorFunction(true, 500, "Internal server error"));
     }
   },
 
@@ -172,13 +171,11 @@ const userControllers = {
       const userId = req.params.id;
       // req.body = JSON.parse(req.body.datas);
       if (req.file) {
-        console.log(132, req.file);
         // Lấy đường dẫn tạm thời của ảnh đã tải lên
         const tempFilePath = req.file.path;
 
         //upload ảnh lên Cloudinary
         const result = await uploads(tempFilePath, "avatars");
-        console.log(result);
 
         // Xóa ảnh tạm thời sau khi đã upload lên Cloudinary
         fs.unlinkSync(tempFilePath);
@@ -290,7 +287,7 @@ const userControllers = {
                   errorFunction(
                     false,
                     201,
-                    "Đã huỷ theo giõi tin này!!!",
+                    "Đã huỷ theo dõi tin này!!!",
                     newUser
                   )
                 );
