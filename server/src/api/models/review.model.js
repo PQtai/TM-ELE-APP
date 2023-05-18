@@ -23,6 +23,10 @@ const ReviewSchema = new mongoose.Schema(
       trim: true,
       maxlength: 500,
     },
+    reply: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "reviewReply",
+    },
   },
   { timestamps: true }
 );

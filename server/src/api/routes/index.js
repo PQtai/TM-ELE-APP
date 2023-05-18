@@ -7,6 +7,7 @@ import categoryRouter from "./category.router.js";
 import chatRouter from "./chat.router.js";
 import reviewRouter from "./review.router.js";
 import statisticRouter from "./statistic.router.js";
+import reviewReplyRouter from "./reviewReply.router.js";
 
 const routes = (app) => {
   app.use("/auth", authRouter);
@@ -17,6 +18,7 @@ const routes = (app) => {
   app.use("/chat", chatRouter);
   app.use("/message", messageRouter);
   app.use("/review", reviewRouter);
+  app.use("/review", reviewReplyRouter);
   app.use("/stats", statisticRouter);
 };
 

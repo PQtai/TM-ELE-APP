@@ -9,4 +9,12 @@ router.post(
   reviewUserController.addReviewUser
 );
 
+router.get("/user/:userId", reviewUserController.getReviewsByUser);
+
+router.put(
+  "/edit/:reviewId",
+  authMiddleware.verifyToken,
+  reviewUserController.editReview
+);
+
 export default router;
