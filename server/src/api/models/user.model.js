@@ -71,5 +71,27 @@ const UserSchema = new Schema(
   },
   { timestamps: true }
 );
+
+UserSchema.methods.calculateAverageRating = async function () {
+  try {
+    const reviews = await mongoose.model("review").find({
+      reviewedUser: this._id,
+    });
+
+    if (reviews.length === 0) {
+      this.averageRating = 0;
+    } else {
+      const totalRating = reviews.reduce(
+        (sum, review) => sum + review.rating,
+        0
+      );
+      this.averageRating = (totalRating / reviews.length).toFixed(1);
+    }
+
+    await this.save();
+  } catch (error) {
+    throw new Error("Error calculating average rating");
+  }
+};
 const User = mongoose.model("user", UserSchema);
 export default User;

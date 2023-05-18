@@ -1,5 +1,6 @@
 import { Review, Chat, User } from "../models/index.js";
 import errorFunction from "../utils/errorFunction.js";
+import getReviews from "../helpers/getReviewsByUser.js";
 
 const reviewUserController = {
   addReviewUser: async (req, res) => {
@@ -31,17 +32,8 @@ const reviewUserController = {
       await reviewed.save();
 
       // Tính điểm đánh giá trung bình
-      const reviews = await Review.find({ reviewedUser });
-      const totalRating = reviews.reduce(
-        (sum, review) => sum + review.rating,
-        0
-      );
-      console.log("totalRating :::", totalRating);
-      const averageRating = (totalRating / reviews.length).toFixed(1);
-      console.log(`averageRating ::: ${averageRating}`);
-
-      // Cập nhật trường averageRating của người được đánh giá
-      await User.findByIdAndUpdate(reviewedUser, { averageRating });
+      const user = await User.findById(reviewedUser);
+      await user.calculateAverageRating();
 
       // Cập nhật lại điều kiện đánh giá
       await Chat.findByIdAndUpdate(
@@ -58,25 +50,71 @@ const reviewUserController = {
       return res.status(400).json(errorFunction(true, 400, err.message));
     }
   },
-};
-const addReviewUser = async (req, res) => {
-  const chatId = req.body.chatId;
-  const userId = req.body.userId;
-  const check = await checkMessageCount(chatId, userId);
-  if (check) {
-    console.log(check);
-    return res.send("true");
-  }
-  const { reviewer, reviewedUser, rating, comment } = req.body;
 
-  try {
-    const review = new Review({ reviewer, reviewedUser, rating, comment });
-    await review.save();
-    res.status(201).send(review);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-  return res.send("false");
+  // Get the reviews that the user received
+  getReviewsByUser: async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const reviews = await getReviews(userId);
+
+      return res
+        .status(200)
+        .json(
+          errorFunction(
+            false,
+            200,
+            "Get reviews by user is successfully",
+            reviews
+          )
+        );
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(500)
+        .json(errorFunction(true, 500, "Internal server error"));
+    }
+  },
+
+  // Edit reviewed
+  editReview: async (req, res) => {
+    try {
+      const reviewer = req.user.id;
+      const reviewId = req.params.reviewId;
+      const review = await Review.findOne({ _id: reviewId, reviewer });
+      if (!review) {
+        return res
+          .status(404)
+          .json(errorFunction(true, 404, "Review not found"));
+      }
+      if (review.reply) {
+        return res
+          .status(400)
+          .json(
+            errorFunction(
+              true,
+              400,
+              "Review has been replied, cannot be edited"
+            )
+          );
+      }
+      const { rating, comment } = req.body;
+      review.rating = rating;
+      review.comment = comment;
+      await review.save();
+
+      // Tính lại điểm đánh giá trung bình
+      const user = await User.findById(review.reviewedUser.toString());
+      await user.calculateAverageRating();
+      return res
+        .status(200)
+        .json(errorFunction(false, 200, "Review updated successfully", review));
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(500)
+        .json(errorFunction(true, 500, "Internal server error"));
+    }
+  },
 };
 
 export default reviewUserController;

@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post(
   '/create',
-  authMiddleware.verifyToken,
+  authMiddleware.authIsAdmin,
   validateMiddleware('body', categoryValidation),
   categoryController.addCategory
 );

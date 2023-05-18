@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const ReviewReplySchema = new mongoose.Schema(
   {
-    reviewId: {
+    review: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "review",
       required: true,
@@ -21,7 +21,7 @@ const ReviewReplySchema = new mongoose.Schema(
 );
 
 /*
-reviewId: id của đánh giá cần phản hồi (tham chiếu tới bảng Review)
+review: id của đánh giá cần phản hồi (tham chiếu tới bảng Review, sử dụng mối quan hệ 1-1)
 replyContent: nội dung người được/bị đánh giá phản hồi lại
 createdBy: id của người được/bị đánh giá phản hồi lại (tham chiếu tới bảng User)
 */
