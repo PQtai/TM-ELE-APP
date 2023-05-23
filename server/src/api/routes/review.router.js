@@ -17,4 +17,10 @@ router.put(
   reviewUserController.editReview
 );
 
+router.delete(
+  "/:reviewId",
+  authMiddleware.verifyToken,
+  reviewUserController.delReview
+);
+
 export default router;

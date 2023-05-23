@@ -14,10 +14,10 @@ const ChatSchema = new mongoose.Schema(
         required: true,
       },
     ],
-    isRatingCondition: {
-      type: Boolean,
-      default: false,
-    },
+    // isRatingCondition: {
+    //   type: Boolean,
+    //   default: false,
+    // },
   },
   { timestamps: true }
 );

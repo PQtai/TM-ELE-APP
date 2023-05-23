@@ -1,4 +1,4 @@
-import { Review, Chat, User } from "../models/index.js";
+import { Review, Chat, User, ReplyReview } from "../models/index.js";
 import errorFunction from "../utils/errorFunction.js";
 import getReviews from "../helpers/getReviewsByUser.js";
 
@@ -36,11 +36,11 @@ const reviewUserController = {
       await user.calculateAverageRating();
 
       // Cập nhật lại điều kiện đánh giá
-      await Chat.findByIdAndUpdate(
-        chat.id,
-        { isRatingCondition: false },
-        { new: true }
-      );
+      // await Chat.findByIdAndUpdate(
+      //   chat.id,
+      //   { isRatingCondition: false },
+      //   { new: true }
+      // );
 
       return res
         .status(200)
@@ -113,6 +113,32 @@ const reviewUserController = {
       return res
         .status(500)
         .json(errorFunction(true, 500, "Internal server error"));
+    }
+  },
+  delReview: async (req, res) => {
+    try {
+      const reviewer = req.user.id;
+      const reviewId = req.params.reviewId;
+      const removeReview = await Review.findOneAndRemove({
+        _id: reviewId,
+        reviewer,
+      });
+      if (!removeReview) {
+        return res
+          .status(404)
+          .json(errorFunction(true, 404, "Delete Review Failed"));
+      }
+      await User.findById(removeReview.reviewedUser).calculateAverageRating();
+      await ReplyReview.findByIdAndDelete(removeReview.reply.toString());
+
+      res
+        .status(200)
+        .json(errorFunction(false, 200, "Delete Review Successfully"));
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(500)
+        .json(errorFunction(false, 500, "Something Went Wrong"));
     }
   },
 };
