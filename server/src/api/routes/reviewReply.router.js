@@ -9,4 +9,10 @@ router.post(
   reviewReplyController.addReviewReply
 );
 
+router.delete(
+  "replies/:replyId",
+  authMiddleware.verifyToken,
+  reviewReplyController.deleteReply
+);
+
 export default router;

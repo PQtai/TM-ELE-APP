@@ -38,6 +38,7 @@ const chatControllers = {
       // Duyệt qua từng conversations
       for (let i = 0; i < chats.length; i++) {
         const chat = chats[i];
+        console.log(chat._id);
         // Lấy tin nhắn cuối cùng
         const lastMessage = await Message.findOne({ chatId: chat._id })
           .populate({
@@ -58,9 +59,11 @@ const chatControllers = {
             otherUserId._id
           );
           // Update field isRatingCondition nếu thỏa mãn đk
+          let isRatingCondition = false;
+          // chat.isRatingCondition = true;
           if (isConditionReview) {
-            await Chat.findByIdAndUpdate(chat._id, { isRatingCondition: true });
-            chat.isRatingCondition = true;
+            // await Chat.findByIdAndUpdate(chat._id, { isRatingCondition: true });
+            isRatingCondition = true;
           }
           // Push data vào mảng result
           result.push({
@@ -72,7 +75,7 @@ const chatControllers = {
               read: lastMessage.read,
               createdAt: lastMessage.createdAt,
             },
-            isRatingCondition: chat.isRatingCondition,
+            isRatingCondition,
           });
         }
       }

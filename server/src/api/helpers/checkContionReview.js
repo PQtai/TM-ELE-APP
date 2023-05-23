@@ -19,7 +19,10 @@ const checkMessageCount = async (chatId, yourUserId) => {
 
 // Function kiểm tra reviewerId đã đánh giá reviewedUserId chưa
 const checkIfReviewedBefore = async (reviewerId, reviewedUserId) => {
-  const review = await Review.findOne({ reviewerId, reviewedUserId });
+  const review = await Review.findOne({
+    reviewer: reviewerId,
+    reviewedUser: reviewedUserId,
+  });
   if (review) {
     return true;
   } else {
@@ -37,8 +40,8 @@ const checkConditionReview = async (chatId, yourUserId, reviewedUserId) => {
     senderId: { $ne: yourUserId },
   });
   const reviewedBefore = await Review.findOne({
-    reviewerId: yourUserId,
-    reviewedUserId,
+    reviewer: yourUserId,
+    reviewedUser: reviewedUserId,
   });
 
   if (yourMessageCount >= 2 && otherMessageCount >= 2 && !reviewedBefore) {

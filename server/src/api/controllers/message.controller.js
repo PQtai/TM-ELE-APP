@@ -66,7 +66,8 @@ const messageController = {
       const messages = await Message.find({ chatId, currentUser })
         .sort({ createdAt: -1 })
         .limit(pageSize)
-        .skip(skip);
+        .skip(skip)
+        .populate("postId", "title images price");
 
       if (!messages) {
         return res
