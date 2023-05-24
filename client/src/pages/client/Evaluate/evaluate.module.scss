@@ -1,0 +1,12 @@
+.evaluate {
+    max-width: var(--default-layout-width);
+    padding: 0 30px;
+    margin: auto;
+    overflow: hidden;
+    min-height: 600px;
+    .evaluateEdit {
+        min-width: 100%;
+        min-height: 300px;
+        font-size: 2rem;
+    }
+}

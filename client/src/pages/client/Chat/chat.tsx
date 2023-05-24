@@ -198,8 +198,8 @@ const Chat = () => {
                                         />
                                         <p>
                                             {currChat.lastName && currChat.firstName
-                                                ? currChat.lastName + ' ' + currChat.firstName
-                                                : currChat.phone}
+                                                ? currChat.lastName && currChat.firstName
+                                                : 'Người dùng chưa cung cấp tên'}
                                         </p>
                                     </div>
                                     <FontAwesomeIcon

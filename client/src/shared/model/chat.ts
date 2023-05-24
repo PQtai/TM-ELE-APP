@@ -7,6 +7,7 @@ export interface IMemberCreateChat {
 export interface IDataChat {
     chatId: string;
     members: IMemberCreateChat[];
+    isRatingCondition: boolean;
     lastMessage: {
         senders: IMemberCreateChat;
         text: string;
