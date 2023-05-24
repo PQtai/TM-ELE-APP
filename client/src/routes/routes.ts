@@ -20,33 +20,35 @@ import PostFavourite from '~/pages/client/PostFavourite';
 import EditProfile from '~/pages/client/EditProfile';
 import ForgotPassword from '~/pages/client/ForgotPassword';
 import PostDetail from '~/pages/client/PostDetail';
+import Evaluate from '~/pages/client/Evaluate/evaluate';
 
 // Public routes
 const publicRoutes: IRoutes[] = [
-   { path: config.routes.home, component: Home },
-   { path: config.routes.login, component: Login, layout: Auth },
-   { path: config.routes.register, component: Register, layout: Auth },
-   { path: config.routes.verifyEmailSuccess, component: VerifiEmailSuccess, layout: NavOnly },
-   { path: config.routes.userInfo, component: UserInfo },
-   { path: config.routes.listPostSearch, component: ListPostSearch },
-   { path: config.routes.fogotPasswords, component: ForgotPassword },
-   { path: config.routes.postDetail, component: PostDetail },
+    { path: config.routes.home, component: Home },
+    { path: config.routes.login, component: Login, layout: Auth },
+    { path: config.routes.register, component: Register, layout: Auth },
+    { path: config.routes.verifyEmailSuccess, component: VerifiEmailSuccess, layout: NavOnly },
+    { path: config.routes.userInfo, component: UserInfo },
+    { path: config.routes.listPostSearch, component: ListPostSearch },
+    { path: config.routes.fogotPasswords, component: ForgotPassword },
+    { path: config.routes.postDetail, component: PostDetail },
 ];
 
 const privateRoutesUser: IRoutes[] = [
-   { path: config.routes.profile, component: Profile },
-   { path: config.routes.chat, component: Chat },
-   { path: config.routes.post, component: PostPage, layout: NavOnly },
-   { path: config.routes.managePosts, component: ManagePosts },
-   { path: config.routes.postFavourite, component: PostFavourite },
-   { path: config.routes.editProfile, component: EditProfile },
+    { path: config.routes.profile, component: Profile },
+    { path: config.routes.chat, component: Chat },
+    { path: config.routes.post, component: PostPage, layout: NavOnly },
+    { path: config.routes.managePosts, component: ManagePosts },
+    { path: config.routes.postFavourite, component: PostFavourite },
+    { path: config.routes.editProfile, component: EditProfile },
+    { path: config.routes.evaluateUser, component: Evaluate },
 ];
 
 const privateRoutesAdmin: IRoutes[] = [
-   { path: config.routes.homeAdmin, component: Overview },
-   { path: config.routes.postManager, component: PostManager },
-   { path: config.routes.accountManager, component: AccountManager },
-   { path: config.routes.categoryManager, component: Category },
+    { path: config.routes.homeAdmin, component: Overview },
+    { path: config.routes.postManager, component: PostManager },
+    { path: config.routes.accountManager, component: AccountManager },
+    { path: config.routes.categoryManager, component: Category },
 ];
 
 export { publicRoutes, privateRoutesAdmin, privateRoutesUser };

@@ -13,6 +13,8 @@ import SimpleBackdrop from '~/components/Loading/Loading';
 import { setFakePostChat } from '../Chat/chat.reducer';
 import { useAppDispatch } from '~/config/store';
 const PostDetail = () => {
+    const [lat, setLatitude] = useState<number>(0);
+    const [lng, setLongitude] = useState<number>(0);
     const [indexDisplayImg, setIndexDisplayImg] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const dispatch = useAppDispatch();
@@ -48,6 +50,35 @@ const PostDetail = () => {
             }
         }
     };
+
+    //  console.log(center);
+
+    useEffect(() => {
+        if (dataPost?.address.wards) {
+            const getCoordinates = async (address: string) => {
+                try {
+                    const response = await axios.get('https://nominatim.openstreetmap.org/search', {
+                        params: {
+                            q: address,
+                            format: 'json',
+                            limit: 1,
+                        },
+                    });
+
+                    if (response.data.length > 0) {
+                        const { lat, lon } = response.data[0];
+                        // setCenter({ lat: Number(lat), lng: Number(lon) });
+                        setLatitude(lat);
+                        setLongitude(lon);
+                    }
+                } catch (error: any) {
+                    console.error('Error retrieving coordinates:', error.message);
+                    throw error;
+                }
+            };
+            getCoordinates(dataPost.address.wards);
+        }
+    }, [dataPost?.address.wards]);
     return (
         <div className={styles.postDetailWrapp}>
             <div className={styles.postDetail}>
@@ -111,17 +142,22 @@ const PostDetail = () => {
                                                     dataPost?.userId.phone}
                                             </h4>
                                         </div>
-                                        <button className={styles.detailUser}>
+                                        <button
+                                            onClick={() => {
+                                                navigate(`/user/${dataPost?.userId._id}`);
+                                            }}
+                                            className={styles.detailUser}
+                                        >
                                             Xem trang <KeyboardArrowRightIcon />
                                         </button>
                                     </div>
                                     <div className={styles.contact}>
                                         <h4>Liên hệ với chủ tin</h4>
                                         <div className={styles.messSugges}>
+                                            {/* <button>Phòng này còn không</button>
                                             <button>Phòng này còn không</button>
                                             <button>Phòng này còn không</button>
-                                            <button>Phòng này còn không</button>
-                                            <button>Phòng này còn không</button>
+                                            <button>Phòng này còn không</button> */}
                                         </div>
                                         <button
                                             onClick={() => {
@@ -132,13 +168,29 @@ const PostDetail = () => {
                                         >
                                             Chat với chủ tin
                                         </button>
+                                        <p>
+                                            <span>sdt : {dataPost?.userId.phone}</span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                địa chỉ tin : {dataPost?.address.province}
+                                                {dataPost?.address.province}
+                                                {dataPost?.address.wards}
+                                                {dataPost?.address.addressDetails}
+                                            </span>
+                                        </p>
+                                        <div>
+                                            <h4>Mô tả</h4>
+                                            <p>{dataPost?.description}</p>
+                                        </div>
+                                        <h4>Giá : {dataPost?.price}</h4>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </Grid>
                 </Grid>
-                <Map />
+                {lat && lng && <Map center={{ lat, lng }} />}
             </div>
             {isLoading && <SimpleBackdrop />}
         </div>
