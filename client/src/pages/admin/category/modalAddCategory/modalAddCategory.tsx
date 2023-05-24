@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import ButtonCustom from '~/components/Button/ButtonCustom';
 import styles from './modalAddCategory.module.scss';
 import { useAppDispatch } from '~/config/store';
 import { createCategory } from '../category.reducer';
+import ButtonCustom from '~/components/Button/ButtonCustom';
+import { StatusType } from '~/shared/model/global';
 const ModalAddCategory = () => {
     const [title, setTitle] = useState<string>('');
     const dispatch = useAppDispatch();
@@ -35,7 +36,7 @@ const ModalAddCategory = () => {
                             );
                         }
                     }}
-                    primaryClient
+                    statusType={StatusType.PrimaryClient}
                     title="Thêm"
                 />
             </div>

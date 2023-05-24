@@ -16,6 +16,7 @@ const routes = {
     managePosts: '/manage/posts?/:options',
     postFavourite: '/post-favourite',
     editProfile: '/edit/profile',
+    evaluateUser: '/user/:reviewedUser/evaluate',
 
     //    adminClient
     homeAdmin: '/admin',
