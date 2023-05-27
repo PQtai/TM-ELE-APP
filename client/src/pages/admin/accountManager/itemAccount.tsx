@@ -72,7 +72,7 @@ const ItemAccount = ({ data }: IPropsItemAcc) => {
             </div>
             <div className={styles.itemBody}>
                 <div className={styles.bodyComment}>
-                    <BasicRating readOnly />
+                    <BasicRating readOnly sumRating={data.averageRating} />
                     <span className={styles.totalComment}>{data.reviewCount} bình luận</span>
                 </div>
                 <div className={styles.bodyPosts}>{data.postCount} bài đăng</div>

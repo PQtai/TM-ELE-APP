@@ -1,8 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
-import styles from './Rating.module.scss';
-import { makeStyles } from '@material-ui/core/styles';
 
 interface IPropsRating {
     readOnly?: boolean;
@@ -12,7 +10,7 @@ interface IPropsRating {
 
 export default function BasicRating({
     readOnly = false,
-    sumRating = 3.5,
+    sumRating,
     handelSetRating,
 }: IPropsRating) {
     const [value, setValue] = React.useState<number | null>(null);

@@ -76,7 +76,7 @@ const AccountManagerSlice = createSlice({
             .addMatcher(isFulfilled(getAccount), (state, action) => {
                 state.infoState.infoAccounts = action.payload.data.data;
                 state.infoState.loading = false;
-                state.infoState.totalItems = action.payload.data.data.totalPage;
+                state.infoState.totalItems = action.payload.data.data.totalPages;
             })
             .addMatcher(isPending(getAccount), (state) => {
                 state.infoState.loading = true;

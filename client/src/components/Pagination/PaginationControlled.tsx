@@ -18,6 +18,8 @@ export default function PaginationControlled({ totalPages }: IPropsTotalPage) {
         dispatch(setPageNumber(value));
     };
 
+    console.log('totalPages', totalPages);
+
     return (
         <div className={styles.pagination}>
             <Stack spacing={2}>
