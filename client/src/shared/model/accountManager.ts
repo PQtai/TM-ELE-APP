@@ -17,7 +17,7 @@ export interface IAccountManager {
 }
 
 export interface IDataFindAccResponse {
-    totalPage: number;
+    totalPages: number;
     totalUsers: number;
     users: IAccountManager[];
 }

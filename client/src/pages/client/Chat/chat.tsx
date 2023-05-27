@@ -14,7 +14,7 @@ import getUserId from '~/utils/getUserId';
 import { IListDataMess, IResultResponseDataMess } from '~/shared/model/message';
 import { SERVER_API_URL } from '~/config/constants';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
 
 export interface IDataCreateMess {
@@ -36,6 +36,7 @@ interface INewListDataMess extends IListDataMess {
 const Chat = () => {
     // const role = useAppSelector((state) => state.login.infoState.role);
     const socket = React.useMemo(() => io('http://localhost:3000'), []);
+    const navigate = useNavigate();
     const currUser = getUserId();
     useEffect(() => {
         socket.emit('new-user-add', currUser);
@@ -188,7 +189,12 @@ const Chat = () => {
                             </div>
                         ) : (
                             <>
-                                <div className={styles.chatHead}>
+                                <div
+                                    onClick={() => {
+                                        navigate(`/user/${currChat._id}`);
+                                    }}
+                                    className={styles.chatHead}
+                                >
                                     <div className={styles.chatHeadWrap}>
                                         <div
                                             style={{

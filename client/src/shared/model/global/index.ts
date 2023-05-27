@@ -32,5 +32,5 @@ export interface IResponseData<T> {
     message: string;
     status: string;
     statusCode: number;
-    metadata?: T;
+    data?: T;
 }

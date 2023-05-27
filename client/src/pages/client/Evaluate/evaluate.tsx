@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ButtonCustom from '~/components/Button/ButtonCustom';
 import BasicRating from '~/components/Rating/Rating';
 import styles from './evaluate.module.scss';
 import { StatusType } from '~/shared/model/global';
-import { red } from '@mui/material/colors';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '~/config/store';
+import { createEvaluate } from './evaluate.reducer';
+import { setInfoAlert } from '~/components/Alerts/Alerts.reducer';
 const Evaluate = () => {
+    const { reviewedUser } = useParams();
+    const navigate = useNavigate();
+    const infoCreateEvaluate = useAppSelector((state) => state.reviewSlice.infoReview);
+    const dispatch = useAppDispatch();
     const [infoEvaluate, setInfoEvaluate] = useState<{
         rating?: number;
         comment: string;
@@ -12,6 +19,22 @@ const Evaluate = () => {
         rating: undefined,
         comment: '',
     });
+    useEffect(() => {
+        if (infoCreateEvaluate.data) {
+            dispatch(
+                setInfoAlert({
+                    isOpen: true,
+                    infoAlert: {
+                        type: 'Success',
+                        duration: 2000,
+                        message: infoCreateEvaluate.mess,
+                        title: 'Thành công',
+                    },
+                }),
+            );
+            navigate('/');
+        }
+    }, [infoCreateEvaluate.data]);
     const handelSetRating = (rating: number) => {
         setInfoEvaluate((pre) => {
             return {
@@ -19,6 +42,17 @@ const Evaluate = () => {
                 rating,
             };
         });
+    };
+    const handleEvaluate = () => {
+        if (infoEvaluate.rating && infoEvaluate.comment && reviewedUser) {
+            dispatch(
+                createEvaluate({
+                    comment: infoEvaluate.comment,
+                    rating: infoEvaluate.rating,
+                    reviewedUser,
+                }),
+            );
+        }
     };
     return (
         <div className={styles.evaluateWrap}>
@@ -58,6 +92,7 @@ const Evaluate = () => {
                             : StatusType.Disabled
                     }
                     className={styles.evaluateBtn}
+                    onClick={handleEvaluate}
                     title="Gửi"
                 />
             </div>

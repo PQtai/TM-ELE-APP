@@ -14,6 +14,7 @@ import postListSearchSlice from '~/pages/client/ListPostSearch/listPostSearch.re
 import updateUserSlice from '~/pages/client/EditProfile/editProfile.reducer';
 import listChatSlice from '~/pages/client/Chat/chat.reducer';
 import listCategorySlice from '~/pages/admin/category/category.reducer';
+import reviewSlice from '~/pages/client/Evaluate/evaluate.reducer';
 
 const rootReducer = {
     accountManager,
@@ -32,6 +33,7 @@ const rootReducer = {
     updateUserSlice,
     listChatSlice,
     listCategorySlice,
+    reviewSlice,
 };
 
 export default rootReducer;
