@@ -23,6 +23,7 @@ const routes = {
     postManager: '/admin/manage/post',
     accountManager: '/admin/manage/account',
     categoryManager: '/admin/manage/category',
+    statistic: '/admin/manage/statistic',
 };
 
 export default routes;

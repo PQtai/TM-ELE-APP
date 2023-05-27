@@ -1,0 +1,42 @@
+.titleStatistc{
+    color: #3d3d44;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+.totalUsers {
+    position: relative;
+    width: 200px;
+    height: 80px;
+    padding: 12px 0 0 20px;
+    margin-bottom: 30px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #3d3d44;
+    background-color: var(--white);
+    border-radius: 4px;
+    box-shadow:0px 1px 5px rgba(0, 0, 0, 0.2);
+    border-top: 3px solid var(--primary);
+}
+.dataTotalUsers{
+    font-size: 1.8rem;
+    padding-top: 6px;
+    color:var(--black); ;
+}
+.tableCellHead{
+    font-size: 1.4rem !important;
+    font-weight: 600 !important;
+    font-family: "Quicksand", sans-serif!important;
+    &:nth-child(2){
+        text-align: center;
+    }
+}
+
+.tableCellBody {
+    font-family: "Quicksand", sans-serif!important;
+    font-size: 1.4rem!important;
+    font-weight: 600 !important;
+    &:nth-child(2){
+        text-align: center;
+    }
+}

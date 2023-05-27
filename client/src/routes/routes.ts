@@ -21,6 +21,7 @@ import EditProfile from '~/pages/client/EditProfile';
 import ForgotPassword from '~/pages/client/ForgotPassword';
 import PostDetail from '~/pages/client/PostDetail';
 import Evaluate from '~/pages/client/Evaluate/evaluate';
+import Statistic from '~/pages/admin/statistic/statistic';
 
 // Public routes
 const publicRoutes: IRoutes[] = [
@@ -49,6 +50,7 @@ const privateRoutesAdmin: IRoutes[] = [
     { path: config.routes.postManager, component: PostManager },
     { path: config.routes.accountManager, component: AccountManager },
     { path: config.routes.categoryManager, component: Category },
+    { path: config.routes.statistic, component: Statistic },
 ];
 
 export { publicRoutes, privateRoutesAdmin, privateRoutesUser };
