@@ -1,14 +1,14 @@
-import { User, Post, Review } from '../models/index.js';
-import errorFunction from '../utils/errorFunction.js';
-import jwt from 'jsonwebtoken';
-import { encryptionPassword } from '../utils/encryption.js';
-import { response } from 'express';
-import bycrypt from 'bcryptjs';
-import nodemailer from 'nodemailer';
-import mailer from '../utils/mailer.js';
-import generateToken from '../utils/generateToken.js';
-import uploads from '../utils/cloudinary.js';
-import fs from 'fs';
+import { User, Post, Review } from "../models/index.js";
+import errorFunction from "../utils/errorFunction.js";
+import jwt from "jsonwebtoken";
+import { encryptionPassword } from "../utils/encryption.js";
+import { response } from "express";
+import bycrypt from "bcryptjs";
+import nodemailer from "nodemailer";
+import mailer from "../utils/mailer.js";
+import generateToken from "../utils/generateToken.js";
+import uploads from "../utils/cloudinary.js";
+import fs from "fs";
 
 const userControllers = {
   // GET USER BY ID
@@ -29,37 +29,37 @@ const userControllers = {
         res
           .status(200)
           .json(
-            errorFunction(false, 200, 'Get user successfully', { ...others })
+            errorFunction(false, 200, "Get user successfully", { ...others })
           );
       } else {
         res.status(204).send();
       }
     } catch (error) {
-      res.status(500).json(errorFunction(true, 500, 'Bad Request'));
+      res.status(500).json(errorFunction(true, 500, "Bad Request"));
     }
   },
 
   getCurrentUser: async (req, res) => {
     try {
       User.findById(req.params.id)
-        .select('-password -role')
+        .select("-password -role")
         .populate({
-          path: 'favourite',
+          path: "favourite",
           populate: {
-            path: 'userId',
-            select: 'phone lastName avatar firstName',
+            path: "userId",
+            select: "phone lastName avatar firstName",
           },
         })
         .then((user) => {
           res
             .status(200)
             .json(
-              errorFunction(false, 200, 'Get current user successfully', user)
+              errorFunction(false, 200, "Get current user successfully", user)
             );
         });
     } catch (error) {
       console.log(error);
-      res.status(500).json(errorFunction(true, 500, 'Bad Request'));
+      res.status(500).json(errorFunction(true, 500, "Bad Request"));
     }
   },
 
@@ -70,22 +70,20 @@ const userControllers = {
       const {
         pageSize = 12,
         pageNumber = 1,
-        role = '',
-        phone = '',
-        email = '',
+        role = "",
+        emailOrPhone = "",
       } = req.query;
 
       const filter = {};
-      if (role !== '') {
+      if (role !== "") {
         filter.role = { $regex: role };
       }
-      if (phone !== '') {
-        filter.phone = { $regex: phone, $options: 'i' };
+      if (emailOrPhone !== "") {
+        filter.$or = [
+          { phone: { $regex: emailOrPhone, $options: "i" } },
+          { email: { $regex: emailOrPhone, $options: "i" } },
+        ];
       }
-      if (email !== '') {
-        filter.email = { $regex: email, $options: 'i' };
-      }
-
       const countUsers = await User.countDocuments(filter);
 
       const totalPages = Math.ceil(countUsers / pageSize);
@@ -102,7 +100,7 @@ const userControllers = {
         { $match: { reviewedUser: { $in: userIds } } },
         {
           $group: {
-            _id: '$reviewedUser',
+            _id: "$reviewedUser",
             count: { $sum: 1 },
           },
         },
@@ -118,7 +116,7 @@ const userControllers = {
         { $match: { userId: { $in: userIds } } },
         {
           $group: {
-            _id: '$userId',
+            _id: "$userId",
             count: { $sum: 1 },
           },
         },
@@ -154,7 +152,7 @@ const userControllers = {
       });
 
       res.status(200).json(
-        errorFunction(false, 200, 'Get all users successfully', {
+        errorFunction(false, 200, "Get all users successfully", {
           totalPages,
           totalUsers: countUsers,
           users: usersWithCount,
@@ -162,7 +160,7 @@ const userControllers = {
       );
     } catch (error) {
       console.log(error);
-      res.status(500).json(errorFunction(true, 500, 'Internal server error'));
+      res.status(500).json(errorFunction(true, 500, "Internal server error"));
     }
   },
 
@@ -177,7 +175,7 @@ const userControllers = {
         const tempFilePath = req.file.path;
 
         //upload ảnh lên Cloudinary
-        const result = await uploads(tempFilePath, 'avatars');
+        const result = await uploads(tempFilePath, "avatars");
 
         // Xóa ảnh tạm thời sau khi đã upload lên Cloudinary
         fs.unlinkSync(tempFilePath);
@@ -200,7 +198,7 @@ const userControllers = {
                   errorFunction(
                     false,
                     200,
-                    'Cập nhật thông tin cá nhân thành công',
+                    "Cập nhật thông tin cá nhân thành công",
                     data
                   )
                 );
@@ -211,7 +209,7 @@ const userControllers = {
                   errorFunction(
                     false,
                     204,
-                    'This User Id have not in the database.'
+                    "This User Id have not in the database."
                   )
                 );
             }
@@ -223,7 +221,7 @@ const userControllers = {
         if (isBodyEmpty === 0) {
           return res
             .status(403)
-            .send(errorFunction(false, 403, 'Body request can not empty!'));
+            .send(errorFunction(false, 403, "Body request can not empty!"));
         }
         User.findByIdAndUpdate(userId, req.body, { new: true }).then((data) => {
           if (data) {
@@ -233,7 +231,7 @@ const userControllers = {
                 errorFunction(
                   false,
                   200,
-                  'Cập nhật thông tin cá nhân thành công'
+                  "Cập nhật thông tin cá nhân thành công"
                 )
               );
           } else {
@@ -243,7 +241,7 @@ const userControllers = {
                 errorFunction(
                   false,
                   204,
-                  'This User Id have not in the database.'
+                  "This User Id have not in the database."
                 )
               );
           }
@@ -251,7 +249,7 @@ const userControllers = {
       }
     } catch (error) {
       console.log(197, error);
-      return res.status(500).json(errorFunction(true, 500, 'Bad Request'));
+      return res.status(500).json(errorFunction(true, 500, "Bad Request"));
     }
   },
 
@@ -272,7 +270,7 @@ const userControllers = {
                   errorFunction(
                     false,
                     201,
-                    'Tin đã được đưa vào danh sách theo dõi!!!',
+                    "Tin đã được đưa vào danh sách theo dõi!!!",
                     newUser
                   )
                 );
@@ -289,7 +287,7 @@ const userControllers = {
                   errorFunction(
                     false,
                     201,
-                    'Đã huỷ theo dõi tin này!!!',
+                    "Đã huỷ theo dõi tin này!!!",
                     newUser
                   )
                 );
@@ -299,7 +297,7 @@ const userControllers = {
         });
       }
     } catch (error) {
-      return res.status(500).json(errorFunction(true, 500, 'Bad Request'));
+      return res.status(500).json(errorFunction(true, 500, "Bad Request"));
     }
   },
 
@@ -312,45 +310,45 @@ const userControllers = {
       if (!user) {
         return res
           .status(404)
-          .json(errorFunction(false, 404, 'User not found'));
+          .json(errorFunction(false, 404, "User not found"));
       }
       if (user.isLocked === true) {
         return res
           .status(406)
-          .json(errorFunction(false, 406, 'The user has been locked', user));
+          .json(errorFunction(false, 406, "The user has been locked", user));
       }
       user.isLocked = true;
       await user.save();
 
       mailer.sendMail(
         user.email,
-        'THÔNG BÁO VỀ VIỆC KHÓA TÀI KHOẢN',
-        'Thật đáng tiếc!',
+        "THÔNG BÁO VỀ VIỆC KHÓA TÀI KHOẢN",
+        "Thật đáng tiếc!",
         '<div style=" color: #721c24; padding: 1rem;">' +
           '<h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Tài khoản của bạn đã bị khóa</h2>' +
           '<h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Thông tin tài khoản bị khóa</h3>' +
           '<ul style="list-style-type: none; padding: 0; margin: 0;">' +
           '<li style="font-weight: bold;">Email:</li>' +
-          '<li>' +
+          "<li>" +
           user.email +
-          '</li>' +
+          "</li>" +
           '<li style="font-weight: bold;">Số điện thoại:</li>' +
-          '<li>' +
+          "<li>" +
           user.phone +
-          '</li>' +
-          '</ul>' +
+          "</li>" +
+          "</ul>" +
           '<h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Thông tin liên hệ: </h3>' +
           '<ul style="list-style-type: none; padding: 0; margin: 0;">' +
           '<li style="font-weight: bold;">Hotline: 0934968108</li>' +
           '<li style="font-weight: bold;">Email: HI.U@abc.com or phamquoctai@deptrai.com</li>' +
-          '</ul>' +
-          '</div>'
+          "</ul>" +
+          "</div>"
       );
 
       res
         .status(200)
         .json(
-          errorFunction(false, 200, 'User locked successfully!!!', user.phone)
+          errorFunction(false, 200, "User locked successfully!!!", user.phone)
         );
     } catch (err) {
       next(err);
@@ -364,7 +362,7 @@ const userControllers = {
       const existingUser = await User.findById(userId);
       if (!existingUser) {
         res.status(403);
-        return res.json(errorFunction(false, 403, 'User is not exist'));
+        return res.json(errorFunction(false, 403, "User is not exist"));
       } else {
         // Compare oldPassword vs newPassword in DB
         const encryptedPassword = await bycrypt.compareSync(
@@ -384,7 +382,7 @@ const userControllers = {
             if (!data) {
               return res
                 .status(404)
-                .json(errorFunction(false, 404, 'Bad request'));
+                .json(errorFunction(false, 404, "Bad request"));
             } else {
               res.status(200);
               return res.json(
@@ -399,13 +397,13 @@ const userControllers = {
         } else {
           res.status(403);
           return res.json(
-            errorFunction(false, 403, 'Password does not match!')
+            errorFunction(false, 403, "Password does not match!")
           );
         }
       }
     } catch (error) {
       res.status(400);
-      return res.json(errorFunction(false, 400, 'Bad request'));
+      return res.json(errorFunction(false, 400, "Bad request"));
     }
   },
 
@@ -417,7 +415,7 @@ const userControllers = {
       }).lean(true);
       if (!existingUser) {
         res.status(403);
-        return res.json(errorFunction(false, 403, 'User does not exists!'));
+        return res.json(errorFunction(false, 403, "User does not exists!"));
       } else {
         // Random a new password
         const randomPassword = Math.random().toString(36).slice(2, 10);
@@ -436,21 +434,21 @@ const userControllers = {
           if (!data) {
             return res
               .status(404)
-              .json(errorFunction(false, 404, 'Bad request'));
+              .json(errorFunction(false, 404, "Bad request"));
           } else {
             mailer.sendMail(
               req.body.email,
-              'Cung cấp lại mật khẩu Omoday',
-              'Đừng quên nữa nha :>',
-              '<p>Đây là email tự động được gửi từ Omoday. Mật khẩu của bạn đã được cập nhật.</p><ul><li>Username: ' +
+              "Cung cấp lại mật khẩu Omoday",
+              "Đừng quên nữa nha :>",
+              "<p>Đây là email tự động được gửi từ Omoday. Mật khẩu của bạn đã được cập nhật.</p><ul><li>Username: " +
                 existingUser.phone +
-                '</li><li>Email: ' +
+                "</li><li>Email: " +
                 existingUser.email +
-                '</li><li>Password: ' +
+                "</li><li>Password: " +
                 randomPassword +
-                '</li></ul>' +
-                '<p>Để đảm bảo an toàn thông tin cá nhân, vui lòng đổi mật khẩu.</p>' +
-                '<p>Trân trọng!</p>'
+                "</li></ul>" +
+                "<p>Để đảm bảo an toàn thông tin cá nhân, vui lòng đổi mật khẩu.</p>" +
+                "<p>Trân trọng!</p>"
             );
 
             return res
@@ -466,7 +464,7 @@ const userControllers = {
         });
       }
     } catch (error) {
-      res.json(errorFunction(true, 404, 'Bad request'));
+      res.json(errorFunction(true, 404, "Bad request"));
     }
   },
 };
