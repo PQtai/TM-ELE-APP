@@ -68,6 +68,12 @@ const UserSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    reviewsGiven: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "review",
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -9,6 +9,17 @@ router.post(
   reviewUserController.addReviewUser
 );
 
+router.get(
+  "/eligible-users",
+  authMiddleware.verifyToken,
+  reviewUserController.getUsersForReview
+);
+
+router.get(
+  "/reviewed-users",
+  authMiddleware.verifyToken,
+  reviewUserController.getUsersReviewedByUser
+);
 router.get("/user/:userId", reviewUserController.getReviewsByUser);
 
 router.put(
