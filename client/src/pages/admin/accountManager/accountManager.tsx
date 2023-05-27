@@ -15,6 +15,7 @@ import { StatusType } from '~/shared/model/global';
 const AccountManager = () => {
     const [activeSearch, setActiveSearch] = useState(false);
     const infoAccounts = useAppSelector((state) => state.accountManager.infoState.infoAccounts);
+    console.log('infoAccounts', infoAccounts);
 
     const handleSearch = () => {
         if (!activeSearch) {
@@ -66,7 +67,7 @@ const AccountManager = () => {
                     </div>
                 </div>
             </div>
-            <PaginationControlled totalPages={infoAccounts?.totalPage} />
+            <PaginationControlled totalPages={infoAccounts?.totalPages} />
             <ListAccount />
         </div>
     );

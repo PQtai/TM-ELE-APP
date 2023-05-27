@@ -70,22 +70,20 @@ const userControllers = {
       const {
         pageSize = 12,
         pageNumber = 1,
-        role = '',
-        phone = '',
-        email = '',
+        role = "",
+        emailOrPhone = "",
       } = req.query;
 
       const filter = {};
       if (role !== '') {
         filter.role = { $regex: role };
       }
-      if (phone !== '') {
-        filter.phone = { $regex: phone, $options: 'i' };
+      if (emailOrPhone !== "") {
+        filter.$or = [
+          { phone: { $regex: emailOrPhone, $options: "i" } },
+          { email: { $regex: emailOrPhone, $options: "i" } },
+        ];
       }
-      if (email !== '') {
-        filter.email = { $regex: email, $options: 'i' };
-      }
-
       const countUsers = await User.countDocuments(filter);
 
       const totalPages = Math.ceil(countUsers / pageSize);
