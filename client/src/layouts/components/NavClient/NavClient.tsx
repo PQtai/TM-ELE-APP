@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ButtonCustom from '~/components/Button/ButtonCustom';
 import Logo from '~/components/Logo/Logo';
 import styles from './NavClient.module.scss';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
@@ -24,6 +23,8 @@ import { isObjEmpty } from '~/utils/checkObjEmpty';
 import axios from 'axios';
 import { SERVER_API_URL } from '~/config/constants';
 import SimpleBackdrop from '~/components/Loading/Loading';
+import ButtonCustom from '~/components/Button/ButtonCustom';
+import { StatusType } from '~/shared/model/global';
 const NavClient = () => {
     const apiUrl = SERVER_API_URL;
     const [loadingLogout, setLoadingLogout] = useState<boolean>(false);
@@ -95,7 +96,7 @@ const NavClient = () => {
                         onClick={() => {
                             navigate('/chat/-1');
                         }}
-                        transparent
+                        statusType={StatusType.Transparent}
                         className={styles.navOptions}
                         title="Chat"
                         leftIcon={<ChatOutlinedIcon />}
@@ -104,20 +105,20 @@ const NavClient = () => {
                         onClick={() => {
                             navigate('/manage/posts');
                         }}
-                        transparent
+                        statusType={StatusType.Transparent}
                         className={styles.navOptions}
                         title="Quản lý tin"
                         leftIcon={<MarkAsUnreadOutlinedIcon />}
                     />
                     <ButtonCustom
-                        transparent
+                        statusType={StatusType.Transparent}
                         className={styles.navOptions}
                         title="Thông báo"
                         leftIcon={<NotificationsNoneIcon />}
                     />
                     <div className={styles.wrapInfoUser}>
                         <ButtonCustom
-                            transparent
+                            statusType={StatusType.Transparent}
                             className={`${styles.navOptions} ${styles.infoUser}`}
                             title={
                                 !userName && typeof userName === 'object'
@@ -149,13 +150,13 @@ const NavClient = () => {
                                     }}
                                     leftIcon={<FavoriteBorderIcon />}
                                     className={styles.btnOption}
-                                    transparent
+                                    statusType={StatusType.Transparent}
                                     title="Tin đăng đã lưu"
                                 />
                                 <ButtonCustom
                                     leftIcon={<StarOutlineIcon />}
                                     className={styles.btnOption}
-                                    transparent
+                                    statusType={StatusType.Transparent}
                                     title="Đánh giá từ tôi"
                                 />
                             </div>
@@ -164,7 +165,7 @@ const NavClient = () => {
                                 <ButtonCustom
                                     leftIcon={<BookmarksOutlinedIcon />}
                                     className={styles.btnOption}
-                                    transparent
+                                    statusType={StatusType.Transparent}
                                     title="Lịch sử giao dịch"
                                 />
                             </div>
@@ -173,7 +174,7 @@ const NavClient = () => {
                                 <ButtonCustom
                                     leftIcon={<SportsEsportsOutlinedIcon />}
                                     className={styles.btnOption}
-                                    transparent
+                                    statusType={StatusType.Transparent}
                                     title="Vòng quay may mắn"
                                 />
                             </div>
@@ -185,13 +186,13 @@ const NavClient = () => {
                                     }}
                                     leftIcon={<SettingsIcon />}
                                     className={styles.btnOption}
-                                    transparent
+                                    statusType={StatusType.Transparent}
                                     title="Cài đặt tài khoản"
                                 />
                                 <ButtonCustom
                                     leftIcon={<ContactSupportIcon />}
                                     className={styles.btnOption}
-                                    transparent
+                                    statusType={StatusType.Transparent}
                                     title="Trợ giúp"
                                 />
 
@@ -204,7 +205,7 @@ const NavClient = () => {
                                         }}
                                         leftIcon={<LogoutIcon />}
                                         className={styles.btnOption}
-                                        transparent
+                                        statusType={StatusType.Transparent}
                                         title="Đăng xuất"
                                     />
                                 ) : null}

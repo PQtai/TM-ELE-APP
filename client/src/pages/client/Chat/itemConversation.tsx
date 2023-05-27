@@ -27,10 +27,22 @@ const ItemConversation = ({ dataChat }: IPropDataChat) => {
             />
             <div className={styles.infoConversation}>
                 <h4 className={styles.conversationName}>
-                    {dataChat.members[0].lastName} {dataChat.members[0].firstName}
+                    {dataChat.members[0].lastName && dataChat.members[0].firstName
+                        ? dataChat.members[0].lastName && dataChat.members[0].firstName
+                        : 'Người dùng chưa cung cấp tên'}
                 </h4>
                 <span className={styles.conversationLastMess}>{dataChat.lastMessage.text}</span>
-                <button className={styles.conversationEvaluate}>Viết đánh giá</button>
+                {dataChat.isRatingCondition ? (
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/user/${dataChat.members[0]._id}/evaluate`);
+                        }}
+                        className={styles.conversationEvaluate}
+                    >
+                        Viết đánh giá
+                    </button>
+                ) : null}
             </div>
         </div>
     );
