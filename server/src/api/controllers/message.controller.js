@@ -1,4 +1,4 @@
-import { Chat, Message } from "../models/index.js";
+import { Chat, Message, Post } from "../models/index.js";
 import errorFunction from "../utils/errorFunction.js";
 import uploads from "../utils/cloudinary.js";
 import fs from "fs";
@@ -35,17 +35,29 @@ const messageController = {
         text,
         postId,
       };
+
       if (listImg.length > 0) {
         messageBody.images = listImg;
       }
 
       const newMessage = await Message.create(messageBody);
+      const post = await Post.findById(postId);
+      let dataPost = {};
+      if (post) {
+        dataPost = {
+          postId,
+          price: post.price,
+          title: post.title,
+          images: post.images,
+        };
+      }
 
-      return res
-        .status(201)
-        .json(
-          errorFunction(false, 201, "Create message successfully", newMessage)
-        );
+      return res.status(201).json(
+        errorFunction(false, 201, "Create message successfully", {
+          ...newMessage.toObject(),
+          dataPost,
+        })
+      );
     } catch (error) {
       return res.status(500).json(errorFunction(true, 500, error.message));
     }
@@ -67,7 +79,7 @@ const messageController = {
         .sort({ createdAt: -1 })
         .limit(pageSize)
         .skip(skip)
-        .populate("postId", "title images price");
+        .populate("postId", "_id price images title");
 
       if (!messages) {
         return res
