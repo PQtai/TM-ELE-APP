@@ -31,9 +31,13 @@ const NavClient = () => {
     const navigate = useNavigate();
     const dataLogin = useAppSelector((state) => state.login.infoState.data);
     let userName = localStorage.getItem('userName');
+    let avatar = localStorage.getItem('avatar');
+    let sumRating = localStorage.getItem('sumRating');
     const dispatch = useAppDispatch();
-    if (typeof userName === 'string') {
+    if (typeof userName === 'string' && avatar && sumRating) {
         userName = JSON.parse(userName);
+        avatar = JSON.parse(avatar);
+        sumRating = JSON.parse(sumRating);
     }
     console.log(dataLogin);
     const handleGetNameChildren = () => {
@@ -125,19 +129,33 @@ const NavClient = () => {
                                     ? 'Tài khoản'
                                     : dataLogin?.lastName || userName
                             }
-                            leftIcon={<AccountCircleIcon />}
+                            leftIcon={
+                                avatar ? (
+                                    <img
+                                        style={{
+                                            width: '30px',
+                                            height: '30px',
+                                            borderRadius: '50%',
+                                        }}
+                                        src={avatar}
+                                        alt="avatar"
+                                    />
+                                ) : (
+                                    <AccountCircleIcon />
+                                )
+                            }
                             rightIcon={<ExpandMoreIcon />}
                         ></ButtonCustom>
                         <div className={styles.ListInfoCustom}>
                             <div className={styles.infoHeader}>
-                                <img className={styles.avatar} src={logo} alt="avatar-user" />
+                                {avatar && (
+                                    <img className={styles.avatar} src={avatar} alt="avatar-user" />
+                                )}
                                 <div className={styles.infoName}>
                                     {handleGetNameChildren()}
                                     {dataLogin?.phone && (
                                         <div className={styles.comment}>
-                                            <span className={styles.star}>4.5</span>
-                                            <BasicRating readOnly sumRating={4.5} />
-                                            <span className={styles.sumCmt}>(11)</span>
+                                            <BasicRating readOnly sumRating={Number(sumRating)} />
                                         </div>
                                     )}
                                 </div>

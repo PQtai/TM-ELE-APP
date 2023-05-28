@@ -73,13 +73,22 @@ const LoginSlice = createSlice({
                 state.infoState.mess = action.payload.data.message;
                 state.infoState.error = action.payload.data.is_error;
                 state.infoState.data = action.payload.data.data.user;
-                const { lastName, _id, role, phone } = action.payload.data.data.user;
+                const { lastName, firstName, _id, avatar, role, phone } =
+                    action.payload.data.data.user;
                 state.infoState.role = role;
 
                 localStorage.setItem('token', JSON.stringify(action.payload.data.data.accessToken));
-                localStorage.setItem('userName', JSON.stringify(lastName || phone));
+                localStorage.setItem(
+                    'userName',
+                    JSON.stringify(lastName && firstName ? lastName + ' ' + firstName : phone),
+                );
+                localStorage.setItem(
+                    'sumRating',
+                    JSON.stringify(action.payload.data.data.user.averageRating),
+                );
                 localStorage.setItem('role', JSON.stringify(role));
                 localStorage.setItem('userId', JSON.stringify(_id));
+                localStorage.setItem('avatar', JSON.stringify(avatar));
             })
             .addMatcher(isPending(loginAccount), (state) => {
                 state.infoState.loading = true;

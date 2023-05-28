@@ -22,18 +22,12 @@ export default function Map({ center }: IPropsMap) {
     };
 
     return (
-        <MapContainer style={{ height: '500px', width: '500px' }} center={center} zoom={13}>
+        <MapContainer style={{ height: '500px', width: '100%' }} center={center} zoom={13}>
             <TileLayer
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             <GeoJSON data={geojsonData} style={{ fillColor: 'red', color: 'blue' }} />
-            {/* <LocationMarker />
-            <Marker position={[59.43046, 24.728563]}>
-                <Popup>
-                    A pretty CSS3 popup. <br /> Easily customizable.
-                </Popup>
-            </Marker> */}
         </MapContainer>
     );
 }

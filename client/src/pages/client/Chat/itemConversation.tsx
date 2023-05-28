@@ -1,12 +1,13 @@
 import React from 'react';
 import styles from './chat.module.scss';
 import { IDataChat } from '~/shared/model/chat';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 export interface IPropDataChat {
     dataChat: IDataChat;
 }
 const ItemConversation = ({ dataChat }: IPropDataChat) => {
     const navigate = useNavigate();
+    const { chatId } = useParams();
     const handleFindListMess = (chatId: string) => {
         if (chatId) {
             navigate(`/chat/${chatId}`);
@@ -17,7 +18,7 @@ const ItemConversation = ({ dataChat }: IPropDataChat) => {
             onClick={() => {
                 handleFindListMess(dataChat.chatId);
             }}
-            className={styles.itemConversation}
+            className={`${styles.itemConversation} ${chatId === dataChat.chatId && styles.active}`}
         >
             <div
                 className={styles.imgConversation}

@@ -152,6 +152,9 @@ const listChatSlice = createSlice({
                 mess: '',
             };
         },
+        resetFakePostChat(state) {
+            state.fakePostChat = undefined;
+        },
         resetInfoListMess(state) {
             state.datasMess = {
                 countMessages: 20,
@@ -167,6 +170,7 @@ const listChatSlice = createSlice({
     },
 });
 
-export const { resetInfoListChat, resetInfoListMess, setFakePostChat } = listChatSlice.actions;
+export const { resetInfoListChat, resetInfoListMess, resetFakePostChat, setFakePostChat } =
+    listChatSlice.actions;
 
 export default listChatSlice.reducer;

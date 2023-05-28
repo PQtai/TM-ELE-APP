@@ -12,18 +12,24 @@ import { getAccount } from './accountManager.reducer';
 import ListAccount from './listAccount';
 import ButtonCustom from '~/components/Button/ButtonCustom';
 import { StatusType } from '~/shared/model/global';
+import { useDebounce } from '~/hooks';
 const AccountManager = () => {
-    const [activeSearch, setActiveSearch] = useState(false);
     const infoAccounts = useAppSelector((state) => state.accountManager.infoState.infoAccounts);
-    console.log('infoAccounts', infoAccounts);
+    const dispatch = useAppDispatch();
+    const [searchValue, setSearchValue] = useState<string>('');
 
-    const handleSearch = () => {
-        if (!activeSearch) {
-            setActiveSearch((prev) => !prev);
-        } else {
-            // call api
-        }
-    };
+    const debouncedValue = useDebounce(searchValue, 500);
+
+    useEffect(() => {
+        // if (debouncedValue) {
+        dispatch(
+            getAccount({
+                role: 'user',
+                phone: debouncedValue,
+            }),
+        );
+        // }
+    }, [debouncedValue]);
     return (
         <div className={styles.wrapperAccountManager}>
             <div className={styles.wrapBanner}>
@@ -46,29 +52,30 @@ const AccountManager = () => {
                             <p>Bạn là Admin</p>
                         </div>
                     </div>
-                    {activeSearch && (
-                        <div className={styles.searchAccount}>
-                            <input
-                                type="text"
-                                className={styles.searchInput}
-                                placeholder="Nhập số điện thoại cần tìm"
-                            />
-                        </div>
-                    )}
+                    <div className={styles.searchAccount}>
+                        <input
+                            onChange={(e) => {
+                                setSearchValue(e.target.value);
+                            }}
+                            type="text"
+                            className={styles.searchInput}
+                            placeholder="Nhập số điện thoại hoặc email cần tìm"
+                        />
+                    </div>
                     <div className={styles.accountRight}>
-                        <ButtonCustom
+                        {/* <ButtonCustom
                             statusType={StatusType.Active}
                             title="Tìm kiếm"
                             onClick={handleSearch}
                             leftIcon={<SearchIcon />}
-                        />
+                        /> */}
                         <ButtonCustom title="Thấp" leftIcon={<StarRateIcon />} />
                         <ButtonCustom title="Cao" leftIcon={<StarRateIcon />} />
                     </div>
                 </div>
             </div>
             <PaginationControlled totalPages={infoAccounts?.totalPages} />
-            <ListAccount />
+            <ListAccount valueSearch={searchValue} />
         </div>
     );
 };

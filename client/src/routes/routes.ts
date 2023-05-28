@@ -19,8 +19,9 @@ import { IRoutes } from '~/shared/model/global';
 import PostFavourite from '~/pages/client/PostFavourite';
 import EditProfile from '~/pages/client/EditProfile';
 import ForgotPassword from '~/pages/client/ForgotPassword';
-import PostDetail from '~/pages/client/PostDetail';
+// import PostDetail from '~/pages/client/PostDetail';
 import Evaluate from '~/pages/client/Evaluate/evaluate';
+import PostDetail from '~/pages/client/PostDetailCoop';
 
 // Public routes
 const publicRoutes: IRoutes[] = [

@@ -46,9 +46,8 @@ const initialState: IInitalState = {
 export interface IAccountManagerParams {
     pageSize?: number;
     pageNumber?: number;
-    role?: string;
-    userByColumn?: any;
-    userByDirection?: string;
+    role: 'user';
+    phone?: string;
 }
 
 // root api

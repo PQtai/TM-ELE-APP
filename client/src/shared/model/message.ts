@@ -1,3 +1,5 @@
+import { IDataPost } from './post';
+
 export interface IImgsMess {
     url: string;
     contentType: string;
@@ -9,6 +11,7 @@ export interface IListDataMess {
     senderId: string;
     text: string;
     images?: IImgsMess[] | [];
+    postId?: IDataPost;
     read: false;
     createdAt: string;
     updatedAt: string;

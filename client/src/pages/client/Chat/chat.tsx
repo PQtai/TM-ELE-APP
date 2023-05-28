@@ -5,7 +5,7 @@ import ItemConversation from './itemConversation';
 import { Grid } from '@mui/material';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import { useAppDispatch, useAppSelector } from '~/config/store';
-import { getListChat, getListMessChat, resetInfoListMess } from './chat.reducer';
+import { getListChat, getListMessChat, resetFakePostChat, resetInfoListMess } from './chat.reducer';
 import { IDataChat, IMemberCreateChat } from '~/shared/model/chat';
 import { isObjEmpty } from '~/utils/checkObjEmpty';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,6 +16,8 @@ import { SERVER_API_URL } from '~/config/constants';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
+import ItemPostCustom from '~/components/ItemPostCustom';
+import PostInMess from './postInMess/postInMess';
 
 export interface IDataCreateMess {
     chatId?: string;
@@ -56,6 +58,7 @@ const Chat = () => {
     const [receivedMessage, setReceivedMessage] = useState<INewListDataMess | null>(null);
 
     const [currChat, setCurrChat] = useState<ICurrChat>({} as ICurrChat);
+    console.log(infoPostFake?._id);
 
     useEffect(() => {
         if (infoPostFake) {
@@ -117,13 +120,13 @@ const Chat = () => {
             }
         });
         handleAddLastMess(chatId, dataCreateMess.text);
+        // dispatch(resetFakePostChat());
         socket.emit('send-message', dataCreateMess);
     };
 
     // Get the message from socket server
     useEffect(() => {
         socket.on('receive-message', (data) => {
-            console.log('data', data);
             setReceivedMessage(data);
         });
     }, []);
@@ -145,8 +148,6 @@ const Chat = () => {
 
     useEffect(() => {
         if (chatId !== '-1') {
-            console.log('concac');
-
             const conversationChat = listDataChat?.find((data) => {
                 return data.chatId === chatId;
             });
@@ -216,6 +217,8 @@ const Chat = () => {
                                 <div className={styles.chatBox}>
                                     {newListDataMess &&
                                         [...newListDataMess].reverse().map((dataMessage, index) => {
+                                            console.log(!!dataMessage.postId);
+
                                             return (
                                                 <div
                                                     className={`${
@@ -225,6 +228,9 @@ const Chat = () => {
                                                     }`}
                                                     key={index}
                                                 >
+                                                    {dataMessage.postId && (
+                                                        <PostInMess data={dataMessage.postId} />
+                                                    )}
                                                     {dataMessage.text && <p>{dataMessage.text}</p>}
                                                     {dataMessage.images?.length
                                                         ? dataMessage.images.map(
@@ -244,6 +250,7 @@ const Chat = () => {
                                                 </div>
                                             );
                                         })}
+                                    {infoPostFake && <PostInMess data={infoPostFake} />}
                                 </div>
                                 <div className={styles.chatInput}>
                                     <button>
@@ -261,6 +268,7 @@ const Chat = () => {
                                                     chatId,
                                                     receiverId: currChat._id,
                                                     text: inputElement.current.value,
+                                                    postId: infoPostFake?._id,
                                                 });
                                                 inputElement.current.value = '';
                                             }
@@ -277,6 +285,8 @@ const Chat = () => {
                                                     text: inputElement.current.value,
                                                     postId: infoPostFake?._id,
                                                 };
+                                                console.log('dataRequest', dataRequest);
+
                                                 if (chatId !== '-1') {
                                                     dataRequest.chatId = chatId;
                                                 }

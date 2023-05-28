@@ -14,6 +14,7 @@ import { isObjEmpty } from '~/utils/checkObjEmpty';
 import ButtonCustom from '~/components/Button/ButtonCustom';
 import { StatusType } from '~/shared/model/global';
 import ItemPostCustom from '~/components/ItemPostCustom';
+import EmptyData from '~/components/EmptyData/EmptyData';
 const UserInfo = () => {
     const userData = useAppSelector((state) => state.userDetailSlice.infoUserDetail.user);
     const postsUser = useAppSelector((state) => state.userDetailSlice.postsUser.posts);
@@ -125,7 +126,7 @@ const UserInfo = () => {
                                 );
                             })
                         ) : (
-                            <div>Khoong co dataa</div>
+                            <EmptyData value="Chưa có tin đăng để hiển thị" />
                         )}
                     </div>
                 </div>

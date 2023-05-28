@@ -56,7 +56,7 @@ const reviewSlice = createSlice({
                 state.infoReview.data = action.payload.data.data;
                 state.infoReview.error = false;
                 state.infoReview.loading = false;
-                state.infoReview.status = action.payload.data.message;
+                state.infoReview.mess = action.payload.data.message;
             })
             .addMatcher(isPending(createEvaluate), (state, action) => {
                 state.infoReview.data = undefined;

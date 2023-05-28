@@ -1,208 +1,246 @@
 .postManager {
-   background-color: #ffffff;
-   .postTitle {
-      padding-left: 10px;
-      padding-top: 20px;
-   }
-   .postSearch {
-      padding: 20px 10px;
-      > label {
-         font-size: 1.6rem;
-         font-weight: 500;
-         margin-right: 20px;
-      }
-      > input {
-         font-size: 1.8rem;
-         padding: 4px;
-         border-bottom: 0.5px solid #ccc;
-      }
-   }
-   .tableInfoPosts {
-      margin-bottom: 100px;
-      .tableLeft {
-         .tableLeftItem {
-            padding: 10px;
-            margin: 6px 0;
+    background-color: #ffffff;
+    .postTitle {
+        padding-left: 10px;
+        padding-top: 20px;
+    }
+    .postSearch {
+        padding: 20px 10px;
+        > label {
+            font-size: 1.6rem;
             font-weight: 500;
-            cursor: pointer;
-            &:hover {
-               background-color: var(--background-btn-default);
+            margin-right: 20px;
+        }
+        > input {
+            font-size: 1.8rem;
+            padding: 4px;
+            border-bottom: 0.5px solid #ccc;
+        }
+    }
+    .tableInfoPosts {
+        margin-bottom: 100px;
+        .tableLeft {
+            .tableLeftItem {
+                padding: 10px;
+                margin: 6px 0;
+                font-weight: 500;
+                cursor: pointer;
+                &:hover {
+                    background-color: var(--background-btn-default);
+                }
             }
-         }
-         .tableLeftItem.active {
-            background-color: var(--primary);
-         }
-      }
-      .listsPost {
-         max-height: 500px;
-         overflow-y: scroll;
-         padding: 20px 0;
-         .itemPost {
-            background-color: #ffffff;
-            padding: 10px;
-            border-radius: 6px;
-            display: flex;
-            position: relative;
-            .itemPost + .itemPost {
-               margin-bottom: 20px;
+            .tableLeftItem.active {
+                background-color: var(--primary);
             }
-            .imgPost {
-               background-repeat: no-repeat;
-               background-size: cover;
-               background-position: center;
-               width: 120px;
-               height: 120px;
-               border-radius: 10px;
-               position: relative;
+        }
+        .listsPost {
+            max-height: 500px;
+            overflow-y: scroll;
+            padding: 20px 0;
+            .itemPost {
+                background-color: #ffffff;
+                padding: 10px;
+                border-radius: 6px;
+                display: flex;
+                position: relative;
+                .itemPost + .itemPost {
+                    margin-bottom: 20px;
+                }
+                .imgPost {
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    width: 120px;
+                    height: 120px;
+                    border-radius: 10px;
+                    position: relative;
+                }
+                .itemPostRightWrap {
+                    display: flex;
+                    flex: 1;
+                    justify-content: space-between;
+                    padding-right: 40px;
+                    .itemPostRight {
+                        display: flex;
+                        width: calc(100% / 3);
+                        flex-direction: column;
+                        margin-left: 20px;
+                        margin-top: 10px;
+                        //   justify-content: space-around;
+                    }
+                    .itemBtnDetail {
+                        width: 50%;
+                        padding: 10px 20px;
+                        background-color: var(--background-btn-admin);
+                        color: #ffffff;
+                    }
+                }
             }
-            .itemPostRightWrap {
-               display: flex;
-               flex: 1;
-               justify-content: space-between;
-               padding-right: 40px;
-               .itemPostRight {
-                  display: flex;
-                  width: calc(100% / 3);
-                  flex-direction: column;
-                  margin-left: 20px;
-                  margin-top: 10px;
-                  //   justify-content: space-around;
-               }
-               .itemBtnDetail {
-                  width: 50%;
-                  padding: 10px 20px;
-                  background-color: var(--background-btn-admin);
-                  color: #ffffff;
-               }
-            }
-         }
-      }
-   }
+        }
+    }
 }
 .postDetailAdmin {
-   border-radius: 6px;
+    border-radius: 6px;
 
-   width: calc(100vw - 200px);
-   background-color: #f0f2f5;
-   height: 96vh;
-   display: flex;
-   overflow: hidden;
-   .detailLeft {
-      margin: auto;
-      height: calc(100% - 20px);
-      padding-top: 20px;
-      padding-bottom: 20px;
-      overflow-y: scroll;
-      .wrapImg {
-         overflow: hidden;
-         .wrapImgBackground {
-            background-color: rgba(155, 155, 155, 0.5);
-            padding: 20px;
-            .imgCurr {
-               background-position: center;
-               background-size: 100% 100%;
-               background-repeat: no-repeat;
-               padding-top: 50%;
-               width: 100%;
-            }
-         }
-         .childrenImg {
-            background-color: #ffffff;
-            padding: 10px;
-            height: 190px;
+    width: calc(100vw - 200px);
+    background-color: #f0f2f5;
+    height: 96vh;
+    display: flex;
+    overflow: hidden;
+    .detailLeft {
+        margin: auto;
+        height: calc(100% - 20px);
+        padding-top: 20px;
+        padding-bottom: 20px;
+        overflow-y: scroll;
+        .wrapImg {
             overflow: hidden;
-            .imgItemWrap {
-               height: 170px;
-               padding: 10px;
-               .imgItem {
-                  background-position: center;
-                  background-size: cover;
-                  background-repeat: no-repeat;
-                  width: 100%;
-                  height: 100%;
-               }
+            .wrapImgBackground {
+                background-color: rgba(155, 155, 155, 0.5);
+                padding: 20px;
+                .imgCurr {
+                    background-position: center;
+                    background-size: 100% 100%;
+                    background-repeat: no-repeat;
+                    padding-top: 50%;
+                    width: 100%;
+                }
             }
-         }
-      }
-      .infoDetail {
-         background-color: #ffffff;
-         padding: 0 20px;
-         > p {
-            margin: 20px 0;
-            font-size: 1.8rem;
-            .findMap {
-               margin-left: 6px;
-               cursor: pointer;
-               font-weight: 700;
-               color: var(--background-btn-admin);
+            .childrenImg {
+                background-color: #ffffff;
+                padding: 10px;
+                height: 190px;
+                overflow: hidden;
+                .imgItemWrap {
+                    height: 170px;
+                    padding: 10px;
+                    .imgItem {
+                        background-position: center;
+                        background-size: cover;
+                        background-repeat: no-repeat;
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
             }
-         }
-         .infoAddress {
-            display: flex;
-            justify-content: space-between;
-            .btnFavoriPost {
-               display: flex;
-               align-items: center;
-               > span {
-                  margin-left: 16px;
-                  font-size: 1.8rem;
-               }
-               > svg {
-                  color: red;
-                  font-size: 1.8rem;
-               }
-            }
-         }
-         .infoDesciprtion {
-            height: 200px;
-         }
-      }
-   }
-   .detailRight {
-      .userWrap {
-         padding: 14px 14px 14px 0;
-         .userHead {
+        }
+        .infoDetail {
             background-color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            .avatar {
-               width: 60px;
-               height: 60px;
-               border-radius: 50%;
-               margin: 20px;
-            }
-            > svg {
-               height: 100px;
-               width: 100px;
-               color: #989494;
-               padding: 10px;
-            }
-            .detailUser {
-               padding: 10px;
-               margin-right: 10px;
-               border-radius: 4px;
-               color: var(--text-color);
-               background-color: var(--primary);
-            }
-         }
-         .contact {
-            margin: 14px 0;
-            background-color: #ffffff;
+            padding: 0 20px;
             > p {
-               padding: 10px;
+                margin: 20px 0;
+                font-size: 1.8rem;
+                .findMap {
+                    margin-left: 6px;
+                    cursor: pointer;
+                    font-weight: 700;
+                    color: var(--background-btn-admin);
+                }
             }
-         }
-         .status {
-            .selectStatus {
-               flex: 1;
-               width: 100%;
-               margin: 20px 0;
-               border: 0.5px solid #ccc;
-               outline: none;
-               padding: 10px;
+            .infoAddress {
+                display: flex;
+                justify-content: space-between;
+                .btnFavoriPost {
+                    display: flex;
+                    align-items: center;
+                    > span {
+                        margin-left: 16px;
+                        font-size: 1.8rem;
+                    }
+                    > svg {
+                        color: red;
+                        font-size: 1.8rem;
+                    }
+                }
             }
-         }
-      }
-   }
+            .infoDesciprtion {
+                height: 200px;
+            }
+        }
+    }
+    .detailRight {
+        .userWrap {
+            padding: 14px 14px 14px 0;
+            .userHead {
+                background-color: #ffffff;
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                .avatar {
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    margin: 20px;
+                }
+                > svg {
+                    height: 100px;
+                    width: 100px;
+                    color: #989494;
+                    padding: 10px;
+                }
+                > a {
+                    margin-left: 10px;
+                }
+                .detailUser {
+                    padding: 10px;
+                    margin-right: 10px;
+                    border-radius: 4px;
+                    color: var(--text-color);
+                    background-color: var(--primary);
+                }
+            }
+            .contact {
+                margin: 14px 0;
+                background-color: #ffffff;
+                display: flex;
+                flex-direction: column;
+                padding: 20px 0;
+                > p {
+                    padding: 10px;
+                }
+                .contactSafely {
+                    display: flex;
+                    align-items: center;
+                    width: 90%;
+                    margin: auto;
+                }
+                .contactMessBtn,
+                .contactPhoneBtn {
+                    background-color: green;
+                    display: flex;
+                    width: 80%;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 10px;
+                    font-weight: 600;
+                    color: #fff;
+                    margin: auto;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                    border-radius: 4px;
+                    font-size: 1.5rem;
+                    > img {
+                        display: block;
+                        width: 20px;
+                        height: 20px;
+                    }
+                }
+                .contactMessBtn {
+                    background-color: transparent;
+                    border: 0.7px solid green;
+                    color: green;
+                }
+            }
+            .status {
+                .selectStatus {
+                    flex: 1;
+                    width: 100%;
+                    margin: 20px 0;
+                    border: 0.5px solid #ccc;
+                    outline: none;
+                    padding: 10px;
+                }
+            }
+        }
+    }
 }

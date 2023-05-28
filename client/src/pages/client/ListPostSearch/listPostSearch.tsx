@@ -15,6 +15,8 @@ import { setDisplayOverlay } from '~/components/Overlay/overlay.reducer';
 import ModalTypePost from './modalTypePost';
 import ModalCategory from './modalCategory';
 import ModalPriceAndArea from '~/components/ModalPriceAndArea/ModalPriceAndArea';
+import EmptyData from '~/components/EmptyData/EmptyData';
+import PostSafely from '~/components/PostSafely/PostSafely';
 interface IStateFilter {
     address: IStateAddress;
 }
@@ -230,14 +232,14 @@ const ListPostSearch = () => {
                                     ) : loadingFilter ? (
                                         <div>Loading</div>
                                     ) : (
-                                        <div>khong co data</div>
+                                        <EmptyData value="Không tìm thấy tin đăng nào" />
                                     )}
                                 </Grid>
                             </div>
                         </div>
                     </Grid>
                     <Grid item md={4}>
-                        hello
+                        <PostSafely />
                     </Grid>
                 </Grid>
             </div>

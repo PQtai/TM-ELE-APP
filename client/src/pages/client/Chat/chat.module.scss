@@ -61,6 +61,9 @@
                     }
                 }
             }
+            .itemConversation.active {
+                background-color: rgba(185, 185, 185, 0.25);
+            }
         }
         .chatRight {
             position: relative;
@@ -129,6 +132,9 @@
                 margin-top: 70px;
                 min-height: 450px;
                 max-height: 450px;
+                display: flex;
+                flex-direction: column;
+
                 .messIsCurrUser,
                 .messIsSenderUser {
                     display: flex;
@@ -136,7 +142,7 @@
                 }
                 .messIsCurrUser {
                     align-items: end;
-                    p {
+                    > p {
                         background-color: var(--primary);
                     }
                 }
