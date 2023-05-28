@@ -21,7 +21,7 @@ import EditProfile from '~/pages/client/EditProfile';
 import ForgotPassword from '~/pages/client/ForgotPassword';
 // import PostDetail from '~/pages/client/PostDetail';
 import Evaluate from '~/pages/client/Evaluate/evaluate';
-import PostDetail from '~/pages/client/PostDetailCoop';
+import PostDetail from '~/pages/client/PostDetail';
 
 // Public routes
 const publicRoutes: IRoutes[] = [

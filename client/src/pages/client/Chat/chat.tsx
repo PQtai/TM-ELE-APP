@@ -260,6 +260,7 @@ const Chat = () => {
                                                                             ? 'auto'
                                                                             : ''
                                                                     }}`,
+                                                                    width: '40%',
                                                                 }}
                                                             >
                                                                 <PostInMess
@@ -295,7 +296,16 @@ const Chat = () => {
                                                 </div>
                                             );
                                         })}
-                                    {infoPostFake && <PostInMess data={infoPostFake} />}
+                                    {infoPostFake && (
+                                        <div
+                                            style={{
+                                                marginLeft: 'auto',
+                                                width: '40%',
+                                            }}
+                                        >
+                                            <PostInMess data={infoPostFake} />
+                                        </div>
+                                    )}
                                 </div>
                                 <div className={styles.chatInput}>
                                     <button>
