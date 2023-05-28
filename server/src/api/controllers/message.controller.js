@@ -55,7 +55,7 @@ const messageController = {
       return res.status(201).json(
         errorFunction(false, 201, "Create message successfully", {
           ...newMessage.toObject(),
-          dataPost,
+          postId: dataPost,
         })
       );
     } catch (error) {
