@@ -121,7 +121,11 @@ const Chat = () => {
         });
         handleAddLastMess(chatId, dataCreateMess.text);
         // dispatch(resetFakePostChat());
-        socket.emit('send-message', dataCreateMess);
+        socket.emit('send-message', {
+            ...dataCreateMess,
+            postId: response.data.data.postId,
+        });
+        dispatch(resetFakePostChat());
     };
 
     // Get the message from socket server
@@ -144,7 +148,8 @@ const Chat = () => {
     }, [receivedMessage]);
 
     console.log(currChat);
-    console.log(newListDataChat);
+    console.log('newListDataChat', newListDataChat);
+    console.log('newListDataMess', newListDataMess);
 
     useEffect(() => {
         if (chatId !== '-1') {
@@ -161,6 +166,16 @@ const Chat = () => {
             dispatch(resetInfoListMess());
         };
     }, []);
+    const messageContainerRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        const messageContainer = messageContainerRef.current;
+        if (messageContainer) {
+            const lastMessage = messageContainer.lastElementChild as HTMLElement;
+            if (lastMessage) {
+                lastMessage.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }, [newListDataMess]);
     return (
         <div className={styles.chatWrapp}>
             <div className={styles.chat}>
@@ -214,7 +229,7 @@ const Chat = () => {
                                         icon={faEllipsisVertical}
                                     />
                                 </div>
-                                <div className={styles.chatBox}>
+                                <div ref={messageContainerRef} className={styles.chatBox}>
                                     {newListDataMess &&
                                         [...newListDataMess].reverse().map((dataMessage, index) => {
                                             console.log(!!dataMessage.postId);
@@ -228,10 +243,40 @@ const Chat = () => {
                                                     }`}
                                                     key={index}
                                                 >
-                                                    {dataMessage.postId && (
-                                                        <PostInMess data={dataMessage.postId} />
+                                                    {dataMessage.postId &&
+                                                        Object.values(dataMessage.postId).length >
+                                                            0 && (
+                                                            <div
+                                                                style={{
+                                                                    marginLeft: `${
+                                                                        dataMessage.senderId ===
+                                                                        currUser
+                                                                            ? 'auto'
+                                                                            : ''
+                                                                    }}`,
+                                                                    marginRight: `${
+                                                                        dataMessage.senderId !==
+                                                                        currUser
+                                                                            ? 'auto'
+                                                                            : ''
+                                                                    }}`,
+                                                                }}
+                                                            >
+                                                                <PostInMess
+                                                                    data={dataMessage.postId}
+                                                                />
+                                                            </div>
+                                                        )}
+                                                    {dataMessage.text && (
+                                                        <p
+                                                            style={{
+                                                                maxWidth: '50%',
+                                                                lineHeight: '2.6rem',
+                                                            }}
+                                                        >
+                                                            {dataMessage.text}
+                                                        </p>
                                                     )}
-                                                    {dataMessage.text && <p>{dataMessage.text}</p>}
                                                     {dataMessage.images?.length
                                                         ? dataMessage.images.map(
                                                               (image, indexImg) => {

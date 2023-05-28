@@ -47,7 +47,7 @@ export interface IAccountManagerParams {
     pageSize?: number;
     pageNumber?: number;
     role: 'user';
-    phone?: string;
+    emailOrPhone?: string;
 }
 
 // root api

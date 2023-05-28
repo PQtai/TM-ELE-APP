@@ -25,7 +25,7 @@ const AccountManager = () => {
         dispatch(
             getAccount({
                 role: 'user',
-                phone: debouncedValue,
+                emailOrPhone: debouncedValue,
             }),
         );
         // }
@@ -63,12 +63,6 @@ const AccountManager = () => {
                         />
                     </div>
                     <div className={styles.accountRight}>
-                        {/* <ButtonCustom
-                            statusType={StatusType.Active}
-                            title="Tìm kiếm"
-                            onClick={handleSearch}
-                            leftIcon={<SearchIcon />}
-                        /> */}
                         <ButtonCustom title="Thấp" leftIcon={<StarRateIcon />} />
                         <ButtonCustom title="Cao" leftIcon={<StarRateIcon />} />
                     </div>

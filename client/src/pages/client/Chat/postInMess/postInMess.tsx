@@ -10,6 +10,8 @@ interface IDataPropsPost {
 }
 
 const PostInMess = ({ data }: IDataPropsPost) => {
+    console.log('data', data);
+
     return (
         <div className={styles.messPostWrapper}>
             <div

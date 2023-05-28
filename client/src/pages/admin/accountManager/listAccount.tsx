@@ -21,7 +21,7 @@ const ListAccount = ({ valueSearch }: IPropsListAcc) => {
             getAccount({
                 pageNumber: infoFilter.pageNumber,
                 role: 'user',
-                phone: valueSearch,
+                emailOrPhone: valueSearch,
             }),
         );
     }, [dispatch, infoFilter.pageNumber]);

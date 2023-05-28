@@ -9,7 +9,7 @@ import { useAppDispatch } from '~/config/store';
 import { IParamsPostEditStatus, updateStatusPost } from './postManager.reducer';
 import ButtonCustom from '~/components/Button/ButtonCustom';
 import { StatusType } from '~/shared/model/global';
-import { Link, NavigateFunction, useNavigate } from 'react-router-dom';
+import { Link, NavigateFunction } from 'react-router-dom';
 import messContact from '~/assets/images/chat_green.jpg';
 import safely from '~/assets/images/safely.jpg';
 import axios from 'axios';
@@ -18,6 +18,7 @@ import images from '~/assets/images/svg';
 import { setFakePostChat } from '~/pages/client/Chat/chat.reducer';
 import { SERVER_API_URL } from '~/config/constants';
 import SimpleBackdrop from '~/components/Loading/Loading';
+import { resetPostDetail } from './postManager.reducer';
 
 interface IPropDataDetail {
     data?: IDataPost;
@@ -78,7 +79,11 @@ const PostDetailAdmin = ({ data, navigate }: IPropDataDetail) => {
         setPostStatus(Number(e.target.value));
     };
     const handleSubmitAction = async () => {
-        if (data && postStatus) {
+        console.log(data);
+        console.log(postStatus);
+
+        if (data && typeof postStatus === 'number') {
+            console.log('concac');
             const dataUpdate: IParamsPostEditStatus = {
                 postId: data._id,
                 code: postStatus,
@@ -121,6 +126,14 @@ const PostDetailAdmin = ({ data, navigate }: IPropDataDetail) => {
             scrollToElementRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     };
+    useEffect(() => {
+        setMessRejected('');
+    }, [postStatus]);
+    useEffect(() => {
+        return () => {
+            dispatch(resetPostDetail());
+        };
+    }, []);
     return (
         <div
             onClick={(e) => {
@@ -287,16 +300,24 @@ const PostDetailAdmin = ({ data, navigate }: IPropDataDetail) => {
                                         <></>
                                     )}
                                     {postStatus === 0 && !messRejected ? (
-                                        <p>Vui lòng nhập lý do từ chối</p>
+                                        <p
+                                            style={{
+                                                color: 'red',
+                                            }}
+                                        >
+                                            Vui lòng nhập lý do từ chối
+                                        </p>
                                     ) : (
                                         <></>
                                     )}
                                 </div>
                                 <ButtonCustom
                                     statusType={
-                                        postStatus === 2 || (postStatus === 0 && !messRejected)
-                                            ? StatusType.Disabled && StatusType.Primary
-                                            : undefined
+                                        postStatus === 2 || postStatus === 1
+                                            ? StatusType.Primary
+                                            : postStatus === 0 && !messRejected
+                                            ? StatusType.Disabled
+                                            : StatusType.Primary
                                     }
                                     onClick={handleSubmitAction}
                                     title="Cập nhật"
